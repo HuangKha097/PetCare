@@ -1,17 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, ArrowRight, Truck, Gift, Zap, Star, Stethoscope, Scissors, Heart, ShieldCheck } from 'lucide-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDog, faCat, faBone, faFutbol, faRibbon } from '@fortawesome/free-solid-svg-icons';
+import { ShoppingCart, ArrowRight, Truck, Gift, Zap, Star, Stethoscope, Scissors, Heart, ShieldCheck, Dog, Cat, Bone, Gamepad2, Tag } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import Button from '../components/Button';
+import { doctors } from './DoctorDetail';
 
 const categories = [
-  { name: 'Dog', icon: faDog },
-  { name: 'Cat', icon: faCat },
-  { name: 'Food', icon: faBone },
-  { name: 'Toys', icon: faFutbol },
-  { name: 'Accessories', icon: faRibbon },
+  { name: 'Dog', icon: Dog },
+  { name: 'Cat', icon: Cat },
+  { name: 'Food', icon: Bone },
+  { name: 'Toys', icon: Gamepad2 },
+  { name: 'Accessories', icon: Tag },
 ];
 
 const popularProducts = [
@@ -21,11 +20,7 @@ const popularProducts = [
   { id: 4, name: 'Natural Grain-Free Treats', price: 12.99, rating: 4.6, image_url: 'https://images.unsplash.com/photo-1623366302587-bca9fbcf9f46?w=500&auto=format&fit=crop&q=60' },
 ];
 
-const doctors = [
-  { id: 1, name: 'Dr. Sarah Jenkins', specialty: 'Feline Specialist', image_url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&auto=format&fit=crop&q=60', description: 'Expert in feline internal medicine with over 10 years of experience.' },
-  { id: 2, name: 'Dr. Michael Chen', specialty: 'Orthopedic Surgeon', image_url: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500&auto=format&fit=crop&q=60', description: 'Specializes in advanced orthopedic procedures and rehabilitation.' },
-  { id: 3, name: 'Dr. Emily Carter', specialty: 'General Pet Health', image_url: 'https://images.unsplash.com/photo-1594824436998-052204c35b3e?w=500&auto=format&fit=crop&q=60', description: 'Dedicated to preventative care and wellness for all breeds.' },
-];
+
 
 const services = [
   { id: 1, title: 'Vet Consultations', icon: <Stethoscope size={32} />, desc: 'Expert medical advice for your furry friends.' },
@@ -49,12 +44,12 @@ const Home = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <Link to="/shop">
-                <Button className="w-full sm:w-auto text-lg">
+                <Button className="w-full sm:w-auto px-8 py-3.5 text-base">
                   Shop Now
                 </Button>
               </Link>
               <Link to="/categories">
-                <Button variant="outline" className="px-10 py-2.5 text-lg w-full sm:w-auto">
+                <Button variant="outline" className="px-8 py-3.5 text-base w-full sm:w-auto">
                   Browse Categories
                 </Button>
               </Link>
@@ -85,14 +80,17 @@ const Home = () => {
         <div className="max-w-7xl mx-auto">
           <h3 className="text-2xl font-bold mb-10 text-center md:text-left">Shop by Department</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-            {categories.map((cat, i) => (
-              <Link key={i} to="/shop" className="group flex flex-col items-center gap-4 bg-surface-container-low p-8 rounded-xl transition-all hover:bg-primary-container hover:scale-105 shadow-sm">
-                <div className="text-5xl group-hover:scale-110 transition-transform text-primary-dark">
-                  <FontAwesomeIcon icon={cat.icon} />
-                </div>
-                <span className="font-bold text-on-surface">{cat.name}</span>
-              </Link>
-            ))}
+            {categories.map((cat, i) => {
+              const Icon = cat.icon;
+              return (
+                <Link key={i} to="/shop" className="group flex flex-col items-center gap-4 bg-white p-8 rounded-xl transition-all hover:-translate-y-1 hover:shadow-lg shadow-sm border border-surface-container-low hover:border-primary/20">
+                  <div className="group-hover:scale-110 transition-transform text-primary-dark">
+                    <Icon size={40} />
+                  </div>
+                  <span className="font-bold text-on-surface">{cat.name}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -125,19 +123,23 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {doctors.map(doc => (
-              <div key={doc.id} className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+              <Link
+                key={doc.id}
+                to={`/doctor/${doc.id}`}
+                className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-surface-container-low"
+              >
                 <div className="h-64 overflow-hidden">
-                  <img src={doc.image_url} alt={doc.name} className="w-full h-full object-cover" />
+                  <img src={doc.image_url} alt={doc.name} className="w-full h-full object-cover " />
                 </div>
                 <div className="p-6">
-                  <span className="text-primary-dark font-bold text-sm tracking-wider uppercase mb-2 block">{doc.specialty}</span>
-                  <h4 className="text-xl font-bold mb-3">{doc.name}</h4>
-                  <p className="text-on-surface-variant text-sm leading-relaxed mb-4">{doc.description}</p>
-                  <Button variant="ghost" className="text-primary-dark hover:underline p-0 m-0">
-                    Book Appointment <ArrowRight size={14} />
-                  </Button>
+                  <span className="text-primary-dark font-bold text-xs tracking-wider uppercase mb-2 block">{doc.specialty}</span>
+                  <h4 className="text-xl font-bold mb-2">{doc.name}</h4>
+                  <p className="text-on-surface-variant text-sm leading-relaxed mb-4 line-clamp-2">{doc.description}</p>
+                  <span className="inline-flex items-center gap-1 text-primary-dark font-bold text-sm group-hover:gap-2 transition-all">
+                    View Profile <ArrowRight size={14} />
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -154,7 +156,7 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {services.map(service => (
-              <div key={service.id} className="bg-surface-container-low p-8 rounded-2xl flex flex-col items-center text-center hover:-translate-y-2 transition-transform shadow-sm hover:shadow-md">
+              <div key={service.id} className="bg-surface-container-low p-8 rounded-xl flex flex-col items-center text-center hover:-translate-y-1 transition-transform shadow-sm hover:shadow-md">
                 <div className="w-16 h-16 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-6">
                   {service.icon}
                 </div>
@@ -167,13 +169,13 @@ const Home = () => {
       </section>
 
       {/* Newsletter */}
-      <section className="bg-secondary-container py-20 px-6 rounded-t-[4rem]">
+      <section className="bg-secondary-container py-20 px-6 rounded-t-2xl">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-on-secondary-container font-bold tracking-widest uppercase mb-4 block">Join the Pack</span>
           <h2 className="text-4xl md:text-5xl font-black mb-6">Want 20% Off Your First Order?</h2>
           <p className="text-lg mb-10 opacity-80">Subscribe to our newsletter for exclusive deals, pet care tips, and new arrivals.</p>
           <form className="flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
-            <input className="flex-grow bg-surface-container-lowest border-none rounded-full px-8 py-4 focus:ring-2 focus:ring-primary transition-all" placeholder="Your email address" type="email" />
+            <input className="flex-grow bg-surface-container-lowest border border-surface-container-low rounded-xl px-6 py-4 focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="Your email address" type="email" />
             <Button className="w-full sm:w-auto text-lg">Subscribe</Button>
           </form>
         </div>

@@ -5,7 +5,6 @@ exports.getAllProducts = async (req, res) => {
         let query = 'SELECT * FROM products';
         let params = [];
 
-        // Basic search/filter functionality
         if (req.query.q) {
             query += ' WHERE name LIKE ? OR description LIKE ?';
             const searchTerm = `%${req.query.q}%`;
@@ -16,7 +15,13 @@ exports.getAllProducts = async (req, res) => {
         }
 
         const [products] = await db.execute(query, params);
-        res.json(products);
+        const parsed = products.map(p => ({
+            ...p,
+            images: p.images
+                ? (typeof p.images === 'string' ? JSON.parse(p.images) : p.images)
+                : [p.image_url].filter(Boolean),
+        }));
+        res.json(parsed);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -29,7 +34,13 @@ exports.getProductById = async (req, res) => {
         if (products.length === 0) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        res.json(products[0]);
+        const p = products[0];
+        res.json({
+            ...p,
+            images: p.images
+                ? (typeof p.images === 'string' ? JSON.parse(p.images) : p.images)
+                : [p.image_url].filter(Boolean),
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

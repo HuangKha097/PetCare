@@ -22,7 +22,7 @@ const Footer = () => {
           <div>
             <h5 className="font-bold uppercase tracking-widest text-md text-primary-dark mb-6">About PetCare</h5>
             <ul className="flex flex-col gap-4">
-              <li><Link to="#" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Our Story</Link></li>
+              <li><Link to="/our-story" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Our Story</Link></li>
               <li><Link to="#" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Sustainability</Link></li>
               <li><Link to="/blog" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Blog</Link></li>
               <li><Link to="#" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Careers</Link></li>
@@ -31,9 +31,9 @@ const Footer = () => {
           <div>
             <h5 className="font-bold uppercase tracking-widest text-md text-primary-dark mb-6">Support</h5>
             <ul className="flex flex-col gap-4">
-              <li><Link to="#" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Contact Us</Link></li>
-              <li><Link to="#" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Shipping & Returns</Link></li>
-              <li><Link to="#" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">FAQ</Link></li>
+              <li><Link to="/contact" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Contact Us</Link></li>
+              <li><Link to="/faq" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Shipping & Returns</Link></li>
+              <li><Link to="/faq" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">FAQ</Link></li>
               <li><Link to="#" className="text-on-background opacity-70 hover:text-primary-dark hover:translate-x-1 transition-all inline-block">Privacy Policy</Link></li>
             </ul>
           </div>

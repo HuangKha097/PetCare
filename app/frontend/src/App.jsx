@@ -16,6 +16,10 @@ import Search from './pages/Search';
 import Blog from './pages/Blog';
 import BlogDetail from './pages/BlogDetail';
 import Account from './pages/Account';
+import OurStory from './pages/OurStory';
+import FAQ from './pages/FAQ';
+import ContactUs from './pages/ContactUs';
+import DoctorDetail from './pages/DoctorDetail';
 import ProtectedRoute from './components/ProtectedRoute';
 import { loadUser } from './store/slices/authSlice';
 import { fetchCart } from './store/slices/cartSlice';
@@ -57,6 +61,10 @@ function App() {
                         <Route path="/search" element={<Search />} />
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/blog/:id" element={<BlogDetail />} />
+                        <Route path="/our-story" element={<OurStory />} />
+                        <Route path="/faq" element={<FAQ />} />
+                        <Route path="/contact" element={<ContactUs />} />
+                        <Route path="/doctor/:id" element={<DoctorDetail />} />
                     </Routes>
                 </main>
                 <Footer />

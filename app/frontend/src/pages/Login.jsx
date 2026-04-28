@@ -48,9 +48,9 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-[90vh] bg-surface flex items-center justify-center py-12 px-6">
-            <div className="max-w-5xl w-full flex flex-col md:flex-row gap-0 rounded-[3rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.12)] border border-surface-container-low bg-surface-container-lowest md:h-[700px]">
-                
+        <div className="min-h-[calc(100vh-68px)] bg-surface flex items-center justify-center py-12 px-6">
+            <div className="max-w-5xl w-full flex flex-col md:flex-row gap-0 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.10)] border border-surface-container-low bg-surface-container-lowest md:h-[700px]">
+
                 {/* Visual Section */}
                 <div className="w-full md:w-5/12 relative overflow-hidden hidden md:block">
                     <img
@@ -87,7 +87,7 @@ const Login = () => {
                         </div>
 
                         {/* Switcher */}
-                        <div className="inline-flex p-1 bg-surface-container-low rounded-2xl mb-8 w-full">
+                        <div className="inline-flex p-1 bg-surface-container-low rounded-xl mb-8 w-full">
                             <button
                                 onClick={() => setIsLogin(true)}
                                 className={`flex-1 py-3 px-6 rounded-xl text-sm font-bold transition-all duration-300 ${isLogin ? 'bg-white text-on-background shadow-lg' : 'text-on-surface-variant hover:text-on-surface'}`}
@@ -103,7 +103,7 @@ const Login = () => {
                         </div>
 
                         {error && (
-                            <div className={`mb-8 p-4 rounded-2xl text-sm font-bold flex items-center gap-3 ${error.includes('successfully') ? 'bg-secondary-container text-on-secondary-container border border-secondary/20' : 'bg-red-50 text-red-600 border border-red-100'}`}>
+                            <div className={`mb-8 p-4 rounded-xl text-sm font-bold flex items-center gap-3 ${error.includes('successfully') ? 'bg-secondary-container text-on-secondary-container border border-secondary/20' : 'bg-red-50 text-red-600 border border-red-100'}`}>
                                 <div className={`w-2 h-2 rounded-full ${error.includes('successfully') ? 'bg-secondary' : 'bg-red-500'}`} />
                                 {error}
                             </div>
@@ -116,7 +116,7 @@ const Login = () => {
                                         <UserIcon size={20} />
                                     </div>
                                     <input
-                                        className="w-full pl-14 pr-6 py-4 rounded-2xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
+                                        className="w-full pl-14 pr-6 py-4 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
                                         name="name" placeholder="Full Name" type="text"
                                         value={formData.name} onChange={handleInputChange} required
                                     />
@@ -128,7 +128,7 @@ const Login = () => {
                                     <Mail size={20} />
                                 </div>
                                 <input
-                                    className="w-full pl-14 pr-6 py-4 rounded-2xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
+                                    className="w-full pl-14 pr-6 py-4 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
                                     name="email" placeholder="Email Address" type="email"
                                     value={formData.email} onChange={handleInputChange} required
                                 />
@@ -139,7 +139,7 @@ const Login = () => {
                                     <Lock size={20} />
                                 </div>
                                 <input
-                                    className="w-full pl-14 pr-14 py-4 rounded-2xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
+                                    className="w-full pl-14 pr-14 py-4 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
                                     name="password" placeholder="Password" type={showPassword ? "text" : "password"}
                                     value={formData.password} onChange={handleInputChange} required
                                 />
@@ -165,13 +165,13 @@ const Login = () => {
                         </div>
 
                         <div className="grid grid-cols-3 gap-4">
-                            <button className="flex items-center justify-center p-4 rounded-2xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
+                            <button className="flex items-center justify-center p-4 rounded-xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
                                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-6 h-6" alt="Google" />
                             </button>
-                            <button className="flex items-center justify-center p-4 rounded-2xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
+                            <button className="flex items-center justify-center p-4 rounded-xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
                                 <Apple className="w-6 h-6" />
                             </button>
-                            <button className="flex items-center justify-center p-4 rounded-2xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
+                            <button className="flex items-center justify-center p-4 rounded-xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
                                 <Github className="w-6 h-6" />
                             </button>
                         </div>

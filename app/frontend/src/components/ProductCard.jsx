@@ -18,12 +18,12 @@ const ProductCard = ({ product }) => {
     const handleAddToCart = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         if (!isAuthenticated) {
             navigate('/login');
             return;
         }
-        
+
         dispatch(addToCart({ productId: product.id, quantity: 1 }));
     };
 
@@ -43,10 +43,10 @@ const ProductCard = ({ product }) => {
     const price = Number(product.price || 0);
 
     return (
-        <div className="group bg-surface-container-lowest rounded-[2.5rem] p-4 transition-all duration-700 hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] hover:-translate-y-3 border border-surface-container-low hover:border-primary/30 flex flex-col h-full relative overflow-hidden">
+        <div className="group bg-surface-container-lowest rounded-2xl p-4 transition-all duration-300 hover:shadow-[0_16px_40px_-8px_rgba(0,0,0,0.10)] hover:-translate-y-1.5 border border-surface-container-low hover:border-primary/30 flex flex-col h-full relative overflow-hidden">
 
             {/* Image & Badge Container */}
-            <div className="relative aspect-[1/1] mb-6 overflow-hidden rounded-[2rem] bg-surface-container-low/50">
+            <div className="relative aspect-[1/1] mb-5 overflow-hidden rounded-xl bg-surface-container-low/50">
                 {/* Badges */}
                 <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
                     {rating > 4.7 && (
@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
                 <Link to={`/product/${product.id}`} className="block w-full h-full">
                     <img
                         alt={product.name}
-                        className="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-110"
+                        className="w-full h-full object-cover transform transition-transform duration-1000 "
                         src={product.image_url}
                     />
                 </Link>
@@ -76,11 +76,11 @@ const ProductCard = ({ product }) => {
                 <div className="absolute inset-x-4 bottom-4 z-20 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex gap-2">
                     <Button
                         onClick={handleAddToCart}
-                        className="flex-1 bg-white/90 backdrop-blur-md text-on-background hover:bg-primary hover:text-on-background border-none shadow-xl py-3 rounded-2xl font-black text-xs uppercase tracking-widest"
+                        className="flex-1 bg-white/90 backdrop-blur-md text-on-background hover:bg-primary hover:text-on-background border-none shadow-xl py-3 rounded-lg font-black text-xs uppercase tracking-widest"
                     >
                         Quick Add
                     </Button>
-                    <Link to={`/product/${product.id}`} className="w-12 h-12 rounded-2xl bg-white/90 backdrop-blur-md flex items-center justify-center shadow-xl hover:bg-on-background hover:text-white transition-colors">
+                    <Link to={`/product/${product.id}`} className="w-12 h-12 rounded-lg bg-white/90 backdrop-blur-md flex items-center justify-center shadow-xl hover:bg-on-background hover:text-white transition-colors">
                         <Eye size={20} />
                     </Link>
                 </div>
@@ -103,7 +103,7 @@ const ProductCard = ({ product }) => {
                 </div>
 
                 <Link to={`/product/${product.id}`}>
-                    <h4 className="font-display font-bold text-xl leading-[1.3] mb-4 text-on-background group-hover:text-primary transition-colors line-clamp-2">
+                    <h4 className="font-display font-bold text-xl leading-[1.3] mb-2 text-on-background group-hover:text-primary transition-colors line-clamp-2">
                         {product.name}
                     </h4>
                 </Link>

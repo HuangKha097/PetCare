@@ -69,7 +69,7 @@ const Account = () => {
         
         {/* SIDEBAR NAVIGATION */}
         <aside className="lg:col-span-3 space-y-6">
-          <div className="bg-white rounded-3xl border border-surface-container-low p-6 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-xl border border-surface-container-low p-6 shadow-sm overflow-hidden">
             <div className="mb-8 px-2">
               <h1 className="text-2xl font-bold tracking-tight mb-1">{user?.name}</h1>
               <p className="text-sm font-medium text-on-surface-variant opacity-60">{user?.email}</p>
@@ -81,7 +81,7 @@ const Account = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all duration-300 group ${
+                    className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-300 group ${
                       activeTab === tab.id 
                         ? 'bg-primary text-on-primary shadow-lg shadow-primary/20' 
                         : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-background'
@@ -98,7 +98,7 @@ const Account = () => {
               <div className="h-px bg-surface-container-low my-4 mx-2"></div>
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-4 p-4 rounded-2xl text-red-500 hover:bg-red-50 transition-all font-bold text-sm"
+                className="w-full flex items-center gap-4 p-4 rounded-xl text-red-500 hover:bg-red-50 transition-all font-bold text-sm"
               >
                 <LogOut size={20} />
                 <span>Logout</span>
@@ -119,8 +119,8 @@ const Account = () => {
                   { label: 'Wishlist Items', value: '0', icon: Heart, color: 'bg-red-50 text-red-600' },
                   { label: 'Recent Spending', value: `$${orders.reduce((acc, o) => acc + parseFloat(o.total_amount), 0).toFixed(2)}`, icon: ShoppingBag, color: 'bg-primary/10 text-primary' },
                 ].map((stat, idx) => (
-                  <div key={idx} className="bg-white p-8 rounded-3xl border border-surface-container-low shadow-sm hover:shadow-xl transition-all duration-500 group">
-                    <div className={`w-12 h-12 rounded-2xl ${stat.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                  <div key={idx} className="bg-white p-8 rounded-xl border border-surface-container-low shadow-sm hover:shadow-xl transition-all duration-500 group">
+                    <div className={`w-12 h-12 rounded-xl ${stat.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                       <stat.icon size={24} />
                     </div>
                     <p className="text-sm font-bold text-on-surface-variant opacity-60 mb-2 uppercase tracking-widest">{stat.label}</p>
@@ -129,7 +129,7 @@ const Account = () => {
                 ))}
               </div>
 
-              <div className="bg-white rounded-[2.5rem] border border-surface-container-low p-10 shadow-sm">
+              <div className="bg-white rounded-xl border border-surface-container-low p-10 shadow-sm">
                 <h2 className="text-2xl font-bold mb-10 flex items-center gap-3">
                   <User size={24} className="text-primary" /> Profile Information
                 </h2>
@@ -181,7 +181,7 @@ const Account = () => {
               {loading ? (
                 <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div></div>
               ) : orders.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-surface-container-low p-20 text-center shadow-sm">
+                <div className="bg-white rounded-xl border border-surface-container-low p-20 text-center shadow-sm">
                   <div className="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center mx-auto mb-6">
                     <ShoppingBag className="text-on-surface-variant opacity-30" size={32} />
                   </div>
@@ -193,7 +193,7 @@ const Account = () => {
                 </div>
               ) : (
                 orders.map((order) => (
-                  <div key={order.id} className="bg-white rounded-3xl border border-surface-container-low overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+                  <div key={order.id} className="bg-white rounded-xl border border-surface-container-low overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
                     <div className="bg-surface-container-low/30 p-6 flex flex-wrap items-center justify-between gap-6 border-b border-surface-container-low">
                       <div className="flex items-center gap-8">
                         <div>
@@ -250,7 +250,7 @@ const Account = () => {
                           </div>
                           
                           {order.note && (
-                            <div className="bg-surface-container-low/50 p-4 rounded-2xl border border-dashed border-surface-container-high">
+                            <div className="bg-surface-container-low/50 p-4 rounded-xl border border-dashed border-surface-container-high">
                               <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-50 mb-2">Order Note</p>
                               <p className="text-sm italic opacity-70">"{order.note}"</p>
                             </div>
@@ -280,11 +280,11 @@ const Account = () => {
           {activeTab === 'wishlist' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {wishlistItems.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-surface-container-low p-20 text-center shadow-sm">
+                <div className="bg-white rounded-xl border border-surface-container-low p-20 text-center shadow-sm">
                   <Heart className="text-red-500 opacity-20 mx-auto mb-6" size={64} />
                   <h3 className="text-2xl font-bold mb-4">Your Wishlist is Empty</h3>
                   <p className="text-on-surface-variant max-w-sm mx-auto mb-8">Items you love will appear here. Start curating your favorites for your pet!</p>
-                  <button onClick={() => navigate('/shop')} className="bg-primary text-on-primary px-8 py-3 rounded-2xl font-bold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">Browse Collection</button>
+                  <button onClick={() => navigate('/shop')} className="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">Browse Collection</button>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -298,13 +298,13 @@ const Account = () => {
 
           {/* TAB: SETTINGS */}
           {activeTab === 'settings' && (
-            <div className="bg-white rounded-3xl border border-surface-container-low p-20 text-center shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-xl border border-surface-container-low p-20 text-center shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                <Settings className="text-on-surface-variant opacity-20 mx-auto mb-6" size={64} />
                <h3 className="text-2xl font-bold mb-4">Account Settings</h3>
                <p className="text-on-surface-variant max-w-sm mx-auto mb-8">Update your password, manage notifications, and control your privacy settings here.</p>
                <div className="flex flex-col gap-4 max-w-xs mx-auto">
-                 <button className="w-full py-4 rounded-2xl bg-surface-container font-bold text-sm hover:bg-surface-container-high transition-colors">Change Password</button>
-                 <button className="w-full py-4 rounded-2xl border-2 border-surface-container font-bold text-sm hover:border-primary/30 transition-colors">Manage Data</button>
+                 <button className="w-full py-4 rounded-xl bg-surface-container font-bold text-sm hover:bg-surface-container-high transition-colors">Change Password</button>
+                 <button className="w-full py-4 rounded-xl border-2 border-surface-container font-bold text-sm hover:border-primary/30 transition-colors">Manage Data</button>
                </div>
             </div>
           )}

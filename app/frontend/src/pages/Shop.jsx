@@ -21,7 +21,7 @@ const Shop = () => {
         'All Food',
         'Grain-Free',
         'Organic Bites',
-        'Under $25',
+
         'Puppy Specific',
         'High Protein',
         'Senior Care'
@@ -91,7 +91,7 @@ const Shop = () => {
 
                         <div className="flex items-center gap-4">
                             <div className="relative group min-w-[200px]">
-                                <select className="appearance-none w-full bg-white border border-surface-container-high rounded-2xl px-6 py-4 pr-12 text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer shadow-sm outline-none">
+                                <select className="appearance-none w-full bg-white border border-surface-container-high rounded-lg px-6 py-4 pr-12 text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer shadow-sm outline-none">
                                     <option>Best Selling</option>
                                     <option>Price: Low to High</option>
                                     <option>Price: High to Low</option>
@@ -102,7 +102,7 @@ const Shop = () => {
 
                             <Button
                                 variant="secondary"
-                                className="md:hidden w-14 h-14 rounded-2xl flex items-center justify-center p-0"
+                                className="md:hidden w-14 h-14 rounded-xl flex items-center justify-center p-0"
                                 onClick={() => setShowMobileFilters(true)}
                             >
                                 <Filter size={20} />
@@ -130,7 +130,7 @@ const Shop = () => {
                                     <button
                                         key={cat}
                                         onClick={() => setCategory(cat)}
-                                        className={`flex items-center justify-between px-6 py-4 rounded-2xl transition-all font-bold text-sm tracking-tight ${category === cat ? 'bg-primary text-on-background shadow-xl shadow-primary/20' : 'hover:bg-surface-container-low text-on-surface-variant'}`}
+                                        className={`flex items-center justify-between px-6 py-4 rounded-xl transition-all font-bold text-sm tracking-tight ${category === cat ? 'bg-primary text-on-background shadow-xl shadow-primary/20' : 'hover:bg-surface-container-low text-on-surface-variant'}`}
                                     >
                                         <span>{cat}</span>
                                         <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${category === cat ? 'bg-white/30' : 'bg-surface-container-high opacity-40'}`}>24</span>
@@ -171,7 +171,7 @@ const Shop = () => {
                             </div>
                         </div>
 
-                        <Button variant="outline" className="mt-4 py-4 rounded-2xl text-xs uppercase tracking-widest border-surface-container-high">
+                        <Button variant="outline" className="mt-4 py-4 rounded-xl text-xs uppercase tracking-widest border-surface-container-high">
                             Reset All Filters
                         </Button>
                     </aside>
@@ -191,7 +191,7 @@ const Shop = () => {
                                 <p className="text-xs font-bold uppercase tracking-widest opacity-40">Loading Essentials...</p>
                             </div>
                         ) : error ? (
-                            <div className="bg-red-50 p-8 rounded-[2rem] text-center border border-red-100">
+                            <div className="bg-red-50 p-8 rounded-xl text-center border border-red-100">
                                 <p className="text-red-500 font-bold">{error}</p>
                             </div>
                         ) : (
@@ -207,7 +207,7 @@ const Shop = () => {
                             <div className="mt-20 flex justify-center gap-3">
                                 <Button
                                     variant="secondary"
-                                    className="w-14 h-14 rounded-2xl flex items-center justify-center p-0 disabled:opacity-30"
+                                    className="w-14 h-14 rounded-xl flex items-center justify-center p-0 disabled:opacity-30"
                                     onClick={() => paginate(currentPage - 1)}
                                     disabled={currentPage === 1}
                                 >
@@ -218,7 +218,7 @@ const Shop = () => {
                                     <Button
                                         key={i + 1}
                                         variant={currentPage === i + 1 ? 'primary' : 'secondary'}
-                                        className={`w-14 h-14 rounded-2xl flex items-center justify-center p-0 font-bold ${currentPage === i + 1 ? 'shadow-xl shadow-primary/30' : ''}`}
+                                        className={`w-14 h-14 rounded-xl flex items-center justify-center p-0 font-bold ${currentPage === i + 1 ? 'shadow-xl shadow-primary/30' : ''}`}
                                         onClick={() => paginate(i + 1)}
                                     >
                                         {i + 1}
@@ -227,7 +227,7 @@ const Shop = () => {
 
                                 <Button
                                     variant="secondary"
-                                    className="w-14 h-14 rounded-2xl flex items-center justify-center p-0 disabled:opacity-30"
+                                    className="w-14 h-14 rounded-xl flex items-center justify-center p-0 disabled:opacity-30"
                                     onClick={() => paginate(currentPage + 1)}
                                     disabled={currentPage === totalPages}
                                 >
