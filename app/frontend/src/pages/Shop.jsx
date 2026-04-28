@@ -21,7 +21,6 @@ const Shop = () => {
         'All Food',
         'Grain-Free',
         'Organic Bites',
-
         'Puppy Specific',
         'High Protein',
         'Senior Care'
@@ -115,11 +114,17 @@ const Shop = () => {
             <div className="px-6 max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row gap-12">
 
+                    {/* Mobile Backdrop Overlay */}
+                    <div 
+                        className={`fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${showMobileFilters ? 'opacity-100 visible' : 'opacity-0 invisible'}`} 
+                        onClick={() => setShowMobileFilters(false)} 
+                    />
+
                     {/* Filters Sidebar */}
-                    <aside className={`fixed inset-0 z-[100] bg-white p-8 md:p-0 md:relative md:z-0 md:bg-transparent md:w-80 md:flex flex-col gap-10 transition-transform duration-500 md:sticky md:top-24 md:self-start ${showMobileFilters ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-                        <div className="flex items-center justify-between md:hidden mb-8">
+                    <aside className={`fixed top-0 left-0 z-[101] h-full w-4/5 max-w-sm bg-white p-6 shadow-2xl flex flex-col gap-8 transition-all duration-300 ease-out overflow-y-auto md:relative md:z-0 md:h-auto md:w-[300px] shrink-0 md:max-w-none md:p-0 md:bg-transparent md:shadow-none md:overflow-visible md:flex md:gap-10 md:sticky md:top-[120px] md:self-start md:translate-x-0 md:opacity-100 md:visible ${showMobileFilters ? 'translate-x-0 opacity-100 visible' : '-translate-x-full opacity-0 invisible'}`}>
+                        <div className="flex items-center justify-between md:hidden mb-2">
                             <h2 className="font-display font-black text-2xl">Filters</h2>
-                            <button onClick={() => setShowMobileFilters(false)}><X size={24} /></button>
+                            <button onClick={() => setShowMobileFilters(false)} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors"><X size={24} /></button>
                         </div>
 
                         {/* Categories */}

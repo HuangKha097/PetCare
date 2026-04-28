@@ -4,14 +4,42 @@ exports.getAllProducts = async (req, res) => {
     try {
         let query = 'SELECT * FROM products';
         let params = [];
+        let conditions = [];
 
-        if (req.query.q) {
-            query += ' WHERE name LIKE ? OR description LIKE ?';
-            const searchTerm = `%${req.query.q}%`;
+        const searchQuery = req.query.search || req.query.q;
+
+        if (searchQuery) {
+            conditions.push('(name LIKE ? OR description LIKE ?)');
+            const searchTerm = `%${searchQuery}%`;
             params.push(searchTerm, searchTerm);
-        } else if (req.query.category) {
-            query += ' WHERE category = ?';
+        }
+        if (req.query.category) {
+            conditions.push('category = ?');
             params.push(req.query.category);
+        }
+        if (req.query.brand) {
+            conditions.push('brand = ?');
+            params.push(req.query.brand);
+        }
+        if (req.query.minPrice) {
+            conditions.push('price >= ?');
+            params.push(req.query.minPrice);
+        }
+        if (req.query.maxPrice) {
+            conditions.push('price <= ?');
+            params.push(req.query.maxPrice);
+        }
+
+        if (conditions.length > 0) {
+            query += ' WHERE ' + conditions.join(' AND ');
+        }
+
+        if (req.query.sort === 'price_asc') {
+            query += ' ORDER BY price ASC';
+        } else if (req.query.sort === 'price_desc') {
+            query += ' ORDER BY price DESC';
+        } else if (req.query.sort === 'newest') {
+            query += ' ORDER BY created_at DESC';
         }
 
         const [products] = await db.execute(query, params);

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-    Trash2, Minus, Plus, ShoppingBag, ArrowRight, ShieldCheck, 
-    RotateCcw, Headphones, MapPin, CreditCard as CardIcon, 
-    CheckCircle2, ChevronLeft, Truck, PackageCheck 
+import {
+    Trash2, Minus, Plus, ShoppingBag, ArrowRight, ShieldCheck,
+    RotateCcw, Headphones, MapPin, CreditCard as CardIcon,
+    CheckCircle2, ChevronLeft, Truck, PackageCheck
 } from 'lucide-react';
 import { fetchCart, updateCartItem, removeFromCart, clearCartLocal } from '../store/slices/cartSlice';
 import { loginSuccess } from '../store/slices/authSlice';
@@ -170,7 +170,7 @@ const Cart = () => {
                     </div>
                     <h1 className="text-4xl font-black mb-4">Order Confirmed!</h1>
                     <p className="text-on-surface-variant font-medium text-lg mb-10 leading-relaxed">
-                        Thank you for your purchase, <span className="text-on-background font-bold">{orderInfo.name}</span>. 
+                        Thank you for your purchase, <span className="text-on-background font-bold">{orderInfo.name}</span>.
                         Your pet's treats are being prepared and will be shipped to <span className="text-on-background font-bold">{orderInfo.city}</span> soon.
                     </p>
                     <div className="space-y-4">
@@ -198,30 +198,30 @@ const Cart = () => {
                         {step === 1 ? `Reviewing ${totalQuantity} premium pet selections.` : step === 2 ? 'Where should we send your package?' : 'Finalize your order securely.'}
                     </p>
                 </div>
-                
+
                 {/* Step Indicator */}
-                <div className="flex items-center gap-4 bg-white p-2 px-6 rounded-full border border-surface-container-low shadow-sm">
+                <div className="flex items-center justify-center md:justify-start gap-2 md:gap-4 bg-white p-2 px-4 md:px-6 rounded-[2rem] md:rounded-full border border-surface-container-low shadow-sm w-full md:w-auto">
                     {[1, 2, 3].map((s) => (
                         <React.Fragment key={s}>
-                            <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-500 ${step >= s ? 'bg-primary text-on-primary shadow-lg shadow-primary/20 scale-110' : 'bg-surface-container text-on-surface-variant opacity-40'}`}>
-                                    {step > s ? <CheckCircle2 size={20} /> : s}
+                            <div className="flex items-center gap-2 md:gap-3">
+                                <div className={`w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-full flex items-center justify-center font-bold text-xs md:text-sm transition-all duration-500 ${step >= s ? 'bg-primary text-on-primary shadow-lg shadow-primary/20 md:scale-110' : 'bg-surface-container text-on-surface-variant opacity-40'}`}>
+                                    {step > s ? <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5" /> : s}
                                 </div>
-                                <span className={`font-bold text-sm transition-colors duration-500 ${step >= s ? 'text-on-background' : 'text-on-surface-variant opacity-40'}`}>
+                                <span className={`font-bold text-xs md:text-sm transition-colors duration-500 ${step >= s ? 'text-on-background' : 'text-on-surface-variant opacity-40'} ${step === s ? 'block' : 'hidden md:block'}`}>
                                     {s === 1 ? 'Cart' : s === 2 ? 'Details' : 'Pay'}
                                 </span>
                             </div>
-                            {s < 3 && <div className={`w-8 h-[2px] transition-colors duration-500 ${step > s ? 'bg-primary' : 'bg-surface-container-high'}`}></div>}
+                            {s < 3 && <div className={`w-4 md:w-8 h-[2px] shrink-0 transition-colors duration-500 ${step > s ? 'bg-primary' : 'bg-surface-container-high'}`}></div>}
                         </React.Fragment>
                     ))}
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                
+
                 {/* Main Content (Changes based on Step) */}
                 <div className="lg:col-span-8">
-                    
+
                     {/* STEP 1: CART LIST */}
                     {step === 1 && (
                         <div className="space-y-6">
@@ -266,15 +266,15 @@ const Cart = () => {
                                     <MapPin size={24} className="text-primary" /> Delivery Address
                                 </h2>
                                 {(user?.phone || user?.address) && (
-                                    <button 
+                                    <button
                                         type="button"
                                         onClick={handleUseDefault}
                                         className="text-sm font-black text-primary bg-primary/5 hover:bg-primary/10 px-5 py-2.5 rounded-2xl transition-all border-2 border-primary/20 flex items-center gap-2 group active:scale-95"
                                     >
-                                      <div className="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h8l-2 10 2-10h-8z"/></svg>
-                                      </div>
-                                      Quick Fill Default Info
+                                        <div className="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h8l-2 10 2-10h-8z" /></svg>
+                                        </div>
+                                        Quick Fill Default Info
                                     </button>
                                 )}
                             </div>
@@ -303,7 +303,7 @@ const Cart = () => {
                                     <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Order Notes (Optional)</label>
                                     <textarea name="note" value={orderInfo.note} onChange={handleInputChange} rows="3" className="bg-surface px-6 py-4 rounded-lg border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all resize-none" placeholder="Special instructions for delivery..."></textarea>
                                 </div>
-                                
+
                                 <div className="md:col-span-2 pt-4">
                                     <label className="flex items-center gap-3 cursor-pointer group">
                                         <div className="relative">
@@ -331,9 +331,9 @@ const Cart = () => {
                                     { id: 'banking', label: 'Chuyển khoản', icon: Headphones, desc: 'Bank Transfer' },
                                     { id: 'card', label: 'Thẻ Visa/Master', icon: CardIcon, desc: 'Online Payment' }
                                 ].map((method) => (
-                                    <div 
+                                    <div
                                         key={method.id}
-                                        onClick={() => setOrderInfo({...orderInfo, paymentMethod: method.id})}
+                                        onClick={() => setOrderInfo({ ...orderInfo, paymentMethod: method.id })}
                                         className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${orderInfo.paymentMethod === method.id ? 'border-primary bg-primary/5 shadow-md' : 'border-surface-container-high hover:border-primary/30'}`}
                                     >
                                         <method.icon className={`mb-4 ${orderInfo.paymentMethod === method.id ? 'text-primary' : 'text-on-surface-variant'}`} size={28} />
@@ -400,7 +400,7 @@ const Cart = () => {
                 <aside className="lg:col-span-4 sticky top-28">
                     <div className="bg-white border border-surface-container-low rounded-[2rem] p-8 shadow-sm">
                         <h2 className="text-2xl font-bold mb-8 tracking-tight">Order Summary</h2>
-                        
+
                         {/* Mini Cart Preview in Sidebar if not on Cart step */}
                         {step > 1 && (
                             <div className="mb-8 space-y-4">
@@ -450,22 +450,22 @@ const Cart = () => {
                                 </Button>
                             )}
                             {step === 2 && (
-                                <Button 
-                                    className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validateDetails() ? 'shadow-primary/30 opacity-100' : 'opacity-60 cursor-not-allowed'}`} 
+                                <Button
+                                    className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validateDetails() ? 'shadow-primary/30 opacity-100' : 'opacity-60 cursor-not-allowed'}`}
                                     onClick={handleNextStep}
                                 >
                                     Continue to Payment <ArrowRight size={20} />
                                 </Button>
                             )}
                             {step === 3 && (
-                                <Button 
-                                    className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validatePayment() ? 'bg-green-500 hover:bg-green-600 shadow-green-500/30' : 'bg-green-500/50 cursor-not-allowed opacity-60'} text-white`} 
+                                <Button
+                                    className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validatePayment() ? 'bg-green-500 hover:bg-green-600 shadow-green-500/30' : 'bg-green-500/50 cursor-not-allowed opacity-60'} text-white`}
                                     onClick={handlePlaceOrder}
                                 >
                                     Confirm & Place Order <CheckCircle2 size={20} />
                                 </Button>
                             )}
-                            
+
                             {step > 1 && (
                                 <button onClick={() => setStep(step - 1)} className="flex items-center justify-center gap-2 text-sm font-bold text-on-surface-variant hover:text-on-background transition-colors">
                                     <ChevronLeft size={16} /> Back to {step === 2 ? 'Cart' : 'Details'}

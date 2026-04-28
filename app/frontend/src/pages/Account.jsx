@@ -138,36 +138,36 @@ const Account = () => {
                     <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 transition-colors">
                       <User size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Full Name</p>
-                      <p className="text-lg font-bold">{user?.name}</p>
+                      <p className="text-lg font-bold truncate">{user?.name}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-5 group">
                     <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 transition-colors">
                       <Mail size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Email Address</p>
-                      <p className="text-lg font-bold">{user?.email}</p>
+                      <p className="text-lg font-bold truncate">{user?.email}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-5 group">
                     <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 transition-colors">
                       <Phone size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Phone Number</p>
-                      <p className="text-lg font-bold">{user?.phone || 'Not provided'}</p>
+                      <p className="text-lg font-bold truncate">{user?.phone || 'Not provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-5 group">
                     <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 transition-colors">
                       <MapPin size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Default Address</p>
-                      <p className="text-lg font-bold leading-tight">{user?.address ? `${user.address}, ${user.city}` : 'Not provided'}</p>
+                      <p className="text-lg font-bold leading-tight truncate">{user?.address ? `${user.address}, ${user.city}` : 'Not provided'}</p>
                     </div>
                   </div>
                 </div>
