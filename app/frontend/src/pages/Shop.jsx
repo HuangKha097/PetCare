@@ -4,13 +4,16 @@ import { ChevronRight, Filter, ChevronDown, ChevronLeft, Star, X, Search } from 
 import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
 import Button from '../components/Button';
+import Pagination from '../components/Pagination';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [category, setCategory] = useState('All Food');
-    const [priceRange, setPriceRange] = useState(100);
+    const [selectedBrand, setSelectedBrand] = useState('');
+    const [priceRange, setPriceRange] = useState(500);
+    const [sort, setSort] = useState('');
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     // Pagination State
@@ -32,7 +35,13 @@ const Shop = () => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const response = await API.get('/products');
+                const params = {};
+                if (category !== 'All Food') params.category = category;
+                if (selectedBrand) params.brand = selectedBrand;
+                if (priceRange < 99) params.maxPrice = priceRange;
+                if (sort) params.sort = sort;
+
+                const response = await API.get('/products', { params });
                 setProducts(response.data);
             } catch (err) {
                 setError('Failed to fetch products');
@@ -42,13 +51,15 @@ const Shop = () => {
             }
         };
 
-        fetchProducts();
-    }, []);
+        const timeoutId = setTimeout(() => {
+            fetchProducts();
+        }, 300);
 
-    // Filter products by category
-    const filteredProducts = products.filter(p =>
-        category === 'All Food' || p.category === category
-    );
+        return () => clearTimeout(timeoutId);
+    }, [category, selectedBrand, priceRange, sort]);
+
+    // Filter products by category (Now handled by backend)
+    const filteredProducts = products;
 
     // Calculate pagination
     const indexOfLastProduct = currentPage * productsPerPage;
@@ -63,7 +74,14 @@ const Shop = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [category]);
+    }, [category, selectedBrand, priceRange, sort]);
+
+    const resetFilters = () => {
+        setCategory('All Food');
+        setSelectedBrand('');
+        setPriceRange(500);
+        setSort('');
+    };
 
     return (
         <div className="pb-24">
@@ -90,11 +108,15 @@ const Shop = () => {
 
                         <div className="flex items-center gap-4">
                             <div className="relative group min-w-[200px]">
-                                <select className="appearance-none w-full bg-white border border-surface-container-high rounded-lg px-6 py-4 pr-12 text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer shadow-sm outline-none">
-                                    <option>Best Selling</option>
-                                    <option>Price: Low to High</option>
-                                    <option>Price: High to Low</option>
-                                    <option>Newest Arrivals</option>
+                                <select
+                                    className="appearance-none w-full bg-white border border-surface-container-high rounded-lg px-6 py-4 pr-12 text-sm font-bold focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer shadow-sm outline-none"
+                                    value={sort}
+                                    onChange={(e) => setSort(e.target.value)}
+                                >
+                                    <option value="">Best Selling</option>
+                                    <option value="price_asc">Price: Low to High</option>
+                                    <option value="price_desc">Price: High to Low</option>
+                                    <option value="newest">Newest Arrivals</option>
                                 </select>
                                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none opacity-40" size={18} />
                             </div>
@@ -115,9 +137,9 @@ const Shop = () => {
                 <div className="flex flex-col md:flex-row gap-12">
 
                     {/* Mobile Backdrop Overlay */}
-                    <div 
-                        className={`fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${showMobileFilters ? 'opacity-100 visible' : 'opacity-0 invisible'}`} 
-                        onClick={() => setShowMobileFilters(false)} 
+                    <div
+                        className={`fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${showMobileFilters ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                        onClick={() => setShowMobileFilters(false)}
                     />
 
                     {/* Filters Sidebar */}
@@ -151,7 +173,7 @@ const Shop = () => {
                                 <input
                                     type="range"
                                     min="0"
-                                    max="500"
+                                    max="99"
                                     value={priceRange}
                                     onChange={(e) => setPriceRange(e.target.value)}
                                     className="w-full h-2 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary"
@@ -159,7 +181,7 @@ const Shop = () => {
                                 <div className="flex justify-between mt-4 text-xs font-black text-on-surface-variant">
                                     <span>$0</span>
                                     <span className="text-primary-dark font-black text-lg">${priceRange}</span>
-                                    <span>$500</span>
+                                    <span>$99</span>
                                 </div>
                             </div>
                         </div>
@@ -169,14 +191,25 @@ const Shop = () => {
                             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">Popular Brands</h3>
                             <div className="flex flex-wrap gap-2">
                                 {brands.map(brand => (
-                                    <button key={brand} className="px-4 py-2 rounded-lg border border-surface-container-high text-xs font-bold hover:border-primary hover:bg-primary/5 transition-all">
+                                    <button
+                                        key={brand}
+                                        onClick={() => setSelectedBrand(selectedBrand === brand ? '' : brand)}
+                                        className={`px-4 py-2 rounded-lg border text-xs font-bold transition-all ${selectedBrand === brand
+                                            ? 'border-primary bg-primary/10 text-primary'
+                                            : 'border-surface-container-high hover:border-primary hover:bg-primary/5'
+                                            }`}
+                                    >
                                         {brand}
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        <Button variant="outline" className="mt-4 py-4 rounded-xl text-xs uppercase tracking-widest border-surface-container-high">
+                        <Button
+                            variant="outline"
+                            className="mt-4 py-4 rounded-xl text-xs uppercase tracking-widest border-surface-container-high"
+                            onClick={resetFilters}
+                        >
                             Reset All Filters
                         </Button>
                     </aside>
@@ -208,38 +241,13 @@ const Shop = () => {
                         )}
 
                         {/* Pagination */}
-                        {totalPages > 1 && (
-                            <div className="mt-20 flex justify-center gap-3">
-                                <Button
-                                    variant="secondary"
-                                    className="w-14 h-14 rounded-xl flex items-center justify-center p-0 disabled:opacity-30"
-                                    onClick={() => paginate(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    <ChevronLeft size={20} />
-                                </Button>
-
-                                {[...Array(totalPages)].map((_, i) => (
-                                    <Button
-                                        key={i + 1}
-                                        variant={currentPage === i + 1 ? 'primary' : 'secondary'}
-                                        className={`w-14 h-14 rounded-xl flex items-center justify-center p-0 font-bold ${currentPage === i + 1 ? 'shadow-xl shadow-primary/30' : ''}`}
-                                        onClick={() => paginate(i + 1)}
-                                    >
-                                        {i + 1}
-                                    </Button>
-                                ))}
-
-                                <Button
-                                    variant="secondary"
-                                    className="w-14 h-14 rounded-xl flex items-center justify-center p-0 disabled:opacity-30"
-                                    onClick={() => paginate(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    <ChevronRight size={20} />
-                                </Button>
-                            </div>
-                        )}
+                        {/* Pagination */}
+                        <Pagination 
+                            currentPage={currentPage} 
+                            totalPages={totalPages} 
+                            paginate={paginate} 
+                            className="mt-20 flex justify-center gap-3" 
+                        />
                     </div>
                 </div>
             </div>

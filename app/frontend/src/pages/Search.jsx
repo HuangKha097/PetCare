@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search as SearchIcon, X, SlidersHorizontal } from 'lucide-react';
+import { Search as SearchIcon, X, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
 import FilterSelect from '../components/FilterSelect';
+import Button from '../components/Button';
+import Pagination from '../components/Pagination';
 
 const Search = () => {
   const [query, setQuery] = useState('');
@@ -10,12 +12,14 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
-    category: '',
+    petType: '',
     brand: '',
     sort: '',
     minPrice: '',
     maxPrice: '',
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   const setFilter = (key, value) => setFilters((prev) => ({ ...prev, [key]: value }));
 
@@ -24,7 +28,7 @@ const Search = () => {
     try {
       const params = new URLSearchParams();
       if (searchQuery) params.append('search', searchQuery);
-      if (filters.category) params.append('category', filters.category);
+      if (filters.petType) params.append('pet_type', filters.petType);
       if (filters.brand) params.append('brand', filters.brand);
       if (filters.sort) params.append('sort', filters.sort);
       if (filters.minPrice) params.append('minPrice', filters.minPrice);
@@ -41,20 +45,32 @@ const Search = () => {
 
   useEffect(() => {
     fetchResults(query);
+    setCurrentPage(1);
   }, [filters]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     fetchResults(query);
+    setCurrentPage(1);
+  };
+
+  const indexOfLastResult = currentPage * itemsPerPage;
+  const indexOfFirstResult = indexOfLastResult - itemsPerPage;
+  const currentResults = results.slice(indexOfFirstResult, indexOfLastResult);
+  const totalPages = Math.ceil(results.length / itemsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const clearFilters = () => {
-    setFilters({ category: '', brand: '', sort: '', minPrice: '', maxPrice: '' });
+    setFilters({ petType: '', brand: '', sort: '', minPrice: '', maxPrice: '' });
     setQuery('');
   };
 
   const hasActiveFilters =
-    filters.category || filters.brand || filters.sort || filters.minPrice || filters.maxPrice;
+    filters.petType || filters.brand || filters.sort || filters.minPrice || filters.maxPrice;
 
   return (
     <main className="pt-12 pb-32">
@@ -90,7 +106,9 @@ const Search = () => {
         {query && !loading && results.length > 0 && (
           <p className="mt-4 text-on-surface-variant text-sm font-medium">
             Showing&nbsp;
-            <span className="text-on-surface font-bold">{results.length} results</span>
+            <span className="text-on-surface font-bold">
+              {indexOfFirstResult + 1}–{Math.min(indexOfLastResult, results.length)} of {results.length} results
+            </span>
             &nbsp;for&nbsp;"<span className="text-primary">{query}</span>"
           </p>
         )}
@@ -125,11 +143,11 @@ const Search = () => {
         {/* Mobile: collapsible filter panel */}
         {showFilters && (
           <div className="md:hidden px-4 py-3 flex flex-col gap-2 border-t border-outline-variant/10">
-            <FilterSelect value={filters.category} onChange={(e) => setFilter('category', e.target.value)}>
+            <FilterSelect value={filters.petType} onChange={(e) => setFilter('petType', e.target.value)}>
               <option value="">All Categories</option>
-              <option value="Dog">Dogs</option>
-              <option value="Cat">Cats</option>
-              <option value="Small Pet">Small Pets</option>
+              <option value="dogs">Dogs</option>
+              <option value="cats">Cats</option>
+              <option value="small-pets">Small Pets</option>
             </FilterSelect>
             <FilterSelect value={filters.brand} onChange={(e) => setFilter('brand', e.target.value)}>
               <option value="">All Brands</option>
@@ -166,11 +184,11 @@ const Search = () => {
 
         {/* Desktop: full inline filter row */}
         <div className="hidden md:flex max-w-7xl mx-auto px-6 py-3 items-center gap-3 flex-wrap">
-          <FilterSelect value={filters.category} onChange={(e) => setFilter('category', e.target.value)}>
+          <FilterSelect value={filters.petType} onChange={(e) => setFilter('petType', e.target.value)}>
             <option value="">All Categories</option>
-            <option value="Dog">Dogs</option>
-            <option value="Cat">Cats</option>
-            <option value="Small Pet">Small Pets</option>
+            <option value="dogs">Dogs</option>
+            <option value="cats">Cats</option>
+            <option value="small-pets">Small Pets</option>
           </FilterSelect>
           <FilterSelect value={filters.brand} onChange={(e) => setFilter('brand', e.target.value)}>
             <option value="">All Brands</option>
@@ -220,11 +238,19 @@ const Search = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
           </div>
         ) : results.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-            {results.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+              {currentResults.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            <Pagination 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              paginate={paginate} 
+            />
+          </>
         ) : (
           <div className="text-center py-24">
             <SearchIcon size={56} className="mx-auto text-on-surface-variant/20 mb-4" />

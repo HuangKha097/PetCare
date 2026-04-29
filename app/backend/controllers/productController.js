@@ -17,6 +17,10 @@ exports.getAllProducts = async (req, res) => {
             conditions.push('category = ?');
             params.push(req.query.category);
         }
+        if (req.query.pet_type) {
+            conditions.push('pet_type = ?');
+            params.push(req.query.pet_type);
+        }
         if (req.query.brand) {
             conditions.push('brand = ?');
             params.push(req.query.brand);

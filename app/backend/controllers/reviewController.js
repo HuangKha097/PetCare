@@ -21,7 +21,7 @@ exports.getProductReviews = async (req, res) => {
 // Add a review
 exports.addReview = async (req, res) => {
     const { productId, rating, comment } = req.body;
-    const userId = req.user.id;
+    const userId = req.user;
 
     if (!rating || !comment) {
         return res.status(400).json({ message: 'Rating and comment are required' });

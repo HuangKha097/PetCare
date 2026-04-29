@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, NavLink } from 'react-router-dom';
 import {
     Trash2, Minus, Plus, ShoppingBag, ArrowRight, ShieldCheck,
     RotateCcw, Headphones, MapPin, CreditCard as CardIcon,
@@ -24,6 +24,8 @@ const Cart = () => {
         phone: '',
         address: '',
         city: '',
+        district: '',
+        ward: '',
         note: '',
         saveDefault: false,
         paymentMethod: 'cash', // cash | card | banking
@@ -32,8 +34,16 @@ const Cart = () => {
         cvv: ''
     });
 
+    const [provinces, setProvinces] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+
     useEffect(() => {
         dispatch(fetchCart());
+        fetch('https://provinces.open-api.vn/api/?depth=3')
+            .then(res => res.json())
+            .then(data => setProvinces(data))
+            .catch(console.error);
     }, [dispatch]);
 
     const handleUpdateQuantity = (cartItemId, currentQty, change) => {
@@ -52,19 +62,63 @@ const Cart = () => {
         setOrderInfo({ ...orderInfo, [name]: type === 'checkbox' ? checked : value });
     };
 
+    const handleCityChange = (e) => {
+        const cityName = e.target.value;
+        setOrderInfo({ ...orderInfo, city: cityName, district: '', ward: '' });
+        const selectedProv = provinces.find(p => p.name === cityName);
+        setDistricts(selectedProv ? selectedProv.districts : []);
+        setWards([]);
+    };
+
+    const handleDistrictChange = (e) => {
+        const districtName = e.target.value;
+        setOrderInfo({ ...orderInfo, district: districtName, ward: '' });
+        const selectedDist = districts.find(d => d.name === districtName);
+        setWards(selectedDist ? selectedDist.wards : []);
+    };
+
     const handleUseDefault = () => {
         if (!user) return;
+
+        let street = user.address || '';
+        let savedWard = '';
+        let savedDistrict = '';
+
+        if (user.address && user.address.includes(', ')) {
+            const parts = user.address.split(', ');
+            if (parts.length >= 3) {
+                savedDistrict = parts.pop();
+                savedWard = parts.pop();
+                street = parts.join(', ');
+            }
+        }
+
         setOrderInfo({
             ...orderInfo,
             phone: user.phone || '',
-            address: user.address || '',
-            city: user.city || ''
+            address: street,
+            city: user.city || '',
+            district: savedDistrict,
+            ward: savedWard
         });
+
+        if (user.city) {
+            const selectedProv = provinces.find(p => p.name === user.city);
+            const distList = selectedProv ? selectedProv.districts : [];
+            setDistricts(distList);
+
+            if (savedDistrict) {
+                const selectedDist = distList.find(d => d.name === savedDistrict);
+                setWards(selectedDist ? selectedDist.wards : []);
+            } else {
+                setWards([]);
+            }
+        }
     };
 
     const validateDetails = () => {
-        const { name, email, phone, address, city } = orderInfo;
-        return name && email && phone && address && city;
+        const { name, email, phone, address, city, district, ward } = orderInfo;
+        return name && email && phone && address && city && district && ward;
     };
 
     const validatePayment = () => {
@@ -104,7 +158,7 @@ const Cart = () => {
                     } else {
                         const response = await API.patch('/auth/profile', {
                             phone: orderInfo.phone,
-                            address: orderInfo.address,
+                            address: `${orderInfo.address}, ${orderInfo.ward}, ${orderInfo.district}`,
                             city: orderInfo.city
                         });
                         dispatch(loginSuccess({ user: response.data, token }));
@@ -113,7 +167,7 @@ const Cart = () => {
                     // First time saving info
                     const response = await API.patch('/auth/profile', {
                         phone: orderInfo.phone,
-                        address: orderInfo.address,
+                        address: `${orderInfo.address}, ${orderInfo.ward}, ${orderInfo.district}`,
                         city: orderInfo.city
                     });
                     dispatch(loginSuccess({ user: response.data, token }));
@@ -125,7 +179,7 @@ const Cart = () => {
                 items: items,
                 totalAmount: totalAmount * 1.08,
                 paymentMethod: orderInfo.paymentMethod,
-                address: orderInfo.address,
+                address: `${orderInfo.address}, ${orderInfo.ward}, ${orderInfo.district}`,
                 phone: orderInfo.phone,
                 city: orderInfo.city,
                 note: orderInfo.note
@@ -173,13 +227,13 @@ const Cart = () => {
                         Thank you for your purchase, <span className="text-on-background font-bold">{orderInfo.name}</span>.
                         Your pet's treats are being prepared and will be shipped to <span className="text-on-background font-bold">{orderInfo.city}</span> soon.
                     </p>
-                    <div className="space-y-4">
-                        <Link to="/account">
+                    <div className="flex flex-col gap-4">
+                        <NavLink to="/account">
                             <Button className="w-full py-4 text-base font-bold">Track My Order</Button>
-                        </Link>
-                        <Link to="/shop">
+                        </NavLink>
+                        <NavLink to="/shop">
                             <Button variant="outline" className="w-full py-4 text-base font-bold border-surface-container-high">Back to Shop</Button>
-                        </Link>
+                        </NavLink>
                     </div>
                 </div>
             </div>
@@ -226,7 +280,7 @@ const Cart = () => {
                     {step === 1 && (
                         <div className="space-y-6">
                             {items.map((item) => (
-                                <div key={item.cart_item_id} className="bg-white border border-surface-container-low rounded-2xl p-6 flex flex-col md:flex-row gap-6 shadow-sm group hover:shadow-xl transition-all duration-300">
+                                <div key={item.cart_item_id} className="bg-white border border-surface-container-low rounded-xl p-6 flex flex-col md:flex-row gap-6 shadow-sm group hover:shadow-xl transition-all duration-300">
                                     <div className="w-full md:w-40 aspect-square rounded-xl overflow-hidden bg-surface-container-low">
                                         <img alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={item.image_url} />
                                     </div>
@@ -260,7 +314,7 @@ const Cart = () => {
 
                     {/* STEP 2: SHIPPING DETAILS */}
                     {step === 2 && (
-                        <div className="bg-white border border-surface-container-low rounded-3xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="bg-white border border-surface-container-low rounded-xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="flex justify-between items-center mb-8">
                                 <h2 className="text-2xl font-bold flex items-center gap-3">
                                     <MapPin size={24} className="text-primary" /> Delivery Address
@@ -293,11 +347,34 @@ const Cart = () => {
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">City / Province</label>
-                                    <input type="text" name="city" value={orderInfo.city} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="e.g. Ho Chi Minh, Ha Noi..." />
+                                    <select name="city" value={orderInfo.city} onChange={handleCityChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all appearance-none cursor-pointer">
+                                        <option value="">Select City / Province</option>
+                                        {provinces.map(p => (
+                                            <option key={p.code} value={p.name}>{p.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
-                                <div className="md:col-span-2 flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Shipping Address</label>
-                                    <input type="text" name="address" value={orderInfo.address} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="Street name, District, Ward..." />
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">District</label>
+                                    <select name="district" value={orderInfo.district} onChange={handleDistrictChange} disabled={!orderInfo.city} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <option value="">{orderInfo.city ? 'Select District' : 'Select City First'}</option>
+                                        {districts.map(d => (
+                                            <option key={d.code} value={d.name}>{d.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Ward / Commune</label>
+                                    <select name="ward" value={orderInfo.ward} onChange={handleInputChange} disabled={!orderInfo.district} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <option value="">{orderInfo.district ? 'Select Ward / Commune' : 'Select District First'}</option>
+                                        {wards.map(w => (
+                                            <option key={w.code} value={w.name}>{w.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Street Address</label>
+                                    <input type="text" name="address" value={orderInfo.address} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="House number, Street name..." />
                                 </div>
                                 <div className="md:col-span-2 flex flex-col gap-2">
                                     <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Order Notes (Optional)</label>
@@ -321,7 +398,7 @@ const Cart = () => {
 
                     {/* STEP 3: PAYMENT */}
                     {step === 3 && (
-                        <div className="bg-white border border-surface-container-low rounded-3xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="bg-white border border-surface-container-low rounded-xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
                                 <CardIcon size={24} className="text-primary" /> Choose Payment Method
                             </h2>
@@ -361,7 +438,7 @@ const Cart = () => {
                             )}
 
                             {orderInfo.paymentMethod === 'banking' && (
-                                <div className="mt-10 p-8 rounded-2xl bg-primary/5 border border-primary/20 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <div className="mt-10 p-8 rounded-xl bg-primary/5 border border-primary/20 animate-in fade-in slide-in-from-top-2 duration-300">
                                     <h4 className="font-bold mb-4">Bank Transfer Information</h4>
                                     <div className="space-y-3">
                                         <div className="flex justify-between text-sm">
@@ -385,7 +462,7 @@ const Cart = () => {
                             )}
 
                             {orderInfo.paymentMethod === 'cash' && (
-                                <div className="mt-10 p-6 rounded-2xl bg-surface-container-low border border-surface-container-high flex gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <div className="mt-10 p-6 rounded-xl bg-surface-container-low border border-surface-container-high flex gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
                                     <Truck size={24} className="text-primary flex-shrink-0" />
                                     <p className="text-sm font-medium leading-relaxed text-on-surface-variant">
                                         You will pay in cash when the delivery person arrives at your address. Please keep your phone reachable.
@@ -398,7 +475,7 @@ const Cart = () => {
 
                 {/* SIDEBAR SUMMARY */}
                 <aside className="lg:col-span-4 sticky top-28">
-                    <div className="bg-white border border-surface-container-low rounded-[2rem] p-8 shadow-sm">
+                    <div className="bg-white border border-surface-container-low rounded-xl p-8 shadow-sm">
                         <h2 className="text-2xl font-bold mb-8 tracking-tight">Order Summary</h2>
 
                         {/* Mini Cart Preview in Sidebar if not on Cart step */}
