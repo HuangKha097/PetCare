@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { 
-  User, Package, Heart, LogOut, Settings, 
-  ChevronRight, ShoppingBag, Clock, CheckCircle, 
+import {
+  User, Package, Heart, LogOut, Settings,
+  ChevronRight, ShoppingBag, Clock, CheckCircle,
   MapPin, Phone, Mail, Calendar, Eye
 } from 'lucide-react';
 import { logout } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
-import { fetchWishlist } from '../store/slices/wishlistSlice';
+
 
 const Account = () => {
   const { user } = useSelector((state) => state.auth);
@@ -66,7 +66,7 @@ const Account = () => {
   return (
     <div className="mt-28 mb-24 max-w-7xl mx-auto px-6 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
+
         {/* SIDEBAR NAVIGATION */}
         <aside className="lg:col-span-3 space-y-6">
           <div className="bg-white rounded-xl border border-surface-container-low p-6 shadow-sm overflow-hidden">
@@ -81,11 +81,10 @@ const Account = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-300 group ${
-                      activeTab === tab.id 
-                        ? 'bg-primary text-on-primary shadow-lg shadow-primary/20' 
-                        : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-background'
-                    }`}
+                    className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-300 group ${activeTab === tab.id
+                      ? 'bg-primary text-on-primary shadow-lg shadow-primary/20'
+                      : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-background'
+                      }`}
                   >
                     <div className="flex items-center gap-4">
                       <Icon size={20} />
@@ -109,7 +108,7 @@ const Account = () => {
 
         {/* MAIN DASHBOARD AREA */}
         <main className="lg:col-span-9 space-y-8 min-h-[600px]">
-          
+
           {/* TAB: PROFILE OVERVIEW */}
           {activeTab === 'profile' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -222,7 +221,7 @@ const Account = () => {
                           <Package size={14} className="text-primary" />
                           <span>{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</span>
                         </div>
-                        <button 
+                        <button
                           onClick={() => toggleOrderDetails(order.id)}
                           className="text-xs font-bold text-primary hover:underline flex items-center gap-1 bg-primary/5 px-4 py-2 rounded-xl transition-all"
                         >
@@ -248,7 +247,7 @@ const Account = () => {
                               </div>
                             ))}
                           </div>
-                          
+
                           {order.note && (
                             <div className="bg-surface-container-low/50 p-4 rounded-xl border border-dashed border-surface-container-high">
                               <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-50 mb-2">Order Note</p>
@@ -299,13 +298,13 @@ const Account = () => {
           {/* TAB: SETTINGS */}
           {activeTab === 'settings' && (
             <div className="bg-white rounded-xl border border-surface-container-low p-20 text-center shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-               <Settings className="text-on-surface-variant opacity-20 mx-auto mb-6" size={64} />
-               <h3 className="text-2xl font-bold mb-4">Account Settings</h3>
-               <p className="text-on-surface-variant max-w-sm mx-auto mb-8">Update your password, manage notifications, and control your privacy settings here.</p>
-               <div className="flex flex-col gap-4 max-w-xs mx-auto">
-                 <button className="w-full py-4 rounded-xl bg-surface-container font-bold text-sm hover:bg-surface-container-high transition-colors">Change Password</button>
-                 <button className="w-full py-4 rounded-xl border-2 border-surface-container font-bold text-sm hover:border-primary/30 transition-colors">Manage Data</button>
-               </div>
+              <Settings className="text-on-surface-variant opacity-20 mx-auto mb-6" size={64} />
+              <h3 className="text-2xl font-bold mb-4">Account Settings</h3>
+              <p className="text-on-surface-variant max-w-sm mx-auto mb-8">Update your password, manage notifications, and control your privacy settings here.</p>
+              <div className="flex flex-col gap-4 max-w-xs mx-auto">
+                <button className="w-full py-4 rounded-xl bg-surface-container font-bold text-sm hover:bg-surface-container-high transition-colors">Change Password</button>
+                <button className="w-full py-4 rounded-xl border-2 border-surface-container font-bold text-sm hover:border-primary/30 transition-colors">Manage Data</button>
+              </div>
             </div>
           )}
         </main>

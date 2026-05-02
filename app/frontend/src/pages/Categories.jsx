@@ -40,7 +40,7 @@ const Categories = () => {
             <div className="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl relative aspect-[4/5]">
               <img
                 className="w-full h-full object-cover transform transition-transform hover:scale-105 duration-700"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5zwv9asqb0qzN3PGBmZdHGb48iTYHNK3uwsZGuEd4cm8yZki-p4ufW-KrVRaFkigvBE8s0gyVIboAnaU0AvgjGc7MWKcs7EXp0ljbbN8X5OtiNct2dY3KbqXWhxzP0hOXagUrEeRyZjwyarm7mWOUIIulKy_ibZdgPxKgQCrY0lcuE7NhAgvFfXZzDr449b4rpVSEWs0_0as0ul2WHnoqsAQ7ki8MwKTIxrDz7MwQT6ZyRnIzDso2s8Jzwtsro99JX2CFaS5Plz5D"
+                src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Puppy"
               />
             </div>
@@ -58,7 +58,7 @@ const Categories = () => {
                 <div className="w-full md:w-1/2 overflow-hidden rounded-lg">
                   <img
                     className="w-full aspect-square object-cover transform group-hover:scale-110 transition-transform duration-500"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsYXDw2NgcOJZ2AZdDhJpK_8HWN2yj2mI3xBEtqVQ5ovTQnrwA5OY6kjn_fIOGEZ4UdhimBNipJ_jbxRpt6OCikSzGGF6HzHhX27n4gEJX1DVLHrKgRApd1Rt9_UH5gnaVX1c-fsSHa1QGKkXG3L5vzmeDY5Py_VKbdHUzO7w-EASu9OH7o7jPATQRzi4wpmt0tFsKRZKAK7jFcTPB1qOr9aqFniMXVzYb9JzdO8NsiqnAAXLd3gFvhhTaNZJHFQd4k8a-afb5xPsf"
+                    src="https://plus.unsplash.com/premium_photo-1718652942341-3cbe0512171e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8c2hpYmF8ZW58MHx8MHx8fDA%3D"
                     alt="Dog"
                   />
                 </div>
@@ -102,7 +102,7 @@ const Categories = () => {
             </div>
 
             {/* Cats Section */}
-            <div className="md:col-span-12 bg-secondary-container/10 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-secondary/10">
+            <div className="md:col-span-12  bg-secondary-container/10 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-secondary/10">
               <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-5/12 p-8 md:p-16 flex flex-col justify-center order-2 md:order-1">
                   <h2 className="font-display font-bold text-4xl md:text-5xl text-on-background mb-8 tracking-tight">Cats</h2>
@@ -125,10 +125,10 @@ const Categories = () => {
                     </Button>
                   </Link>
                 </div>
-                <div className="w-full md:w-7/12 order-1 md:order-2 aspect-video md:aspect-auto h-96 md:h-auto">
+                <div className="w-full  md:w-7/12 order-1 md:order-2 aspect-video md:aspect-auto h-96 md:h-auto">
                   <img
-                    className="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAGdaIzFEK4tQ4MbAnBNaQypCKGleyPpd2BRqaTERbEvUdIpRYoIQqN6CnXsCaYtAtCXJIZk-bkgxexeC2bQrFBHQuZclYsJ9FFUCCIOAyumuJ_ZnfqELDjDJ3e41RqWvzLcUdXsd4ZNtFPkeMG3DI8jYuxiA4OlqP42dLdPaXCG8BokWwYjkpcZate4MxTDodcSR1KtvDmKGzvzPn3j2LQmujX2P2SYjHJYpFBIQzDRzHE7kjxIX6xuIGeKRBiwa69rxf0MXz9Nka"
+                    className="w-full h-[80vh] object-cover"
+                    src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2F0fGVufDB8fDB8fHww"
                     alt="Cat"
                   />
                 </div>

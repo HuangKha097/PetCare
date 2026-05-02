@@ -282,7 +282,7 @@ const Cart = () => {
                             {items.map((item) => (
                                 <div key={item.cart_item_id} className="bg-white border border-surface-container-low rounded-xl p-6 flex flex-col md:flex-row gap-6 shadow-sm group hover:shadow-xl transition-all duration-300">
                                     <div className="w-full md:w-40 aspect-square rounded-xl overflow-hidden bg-surface-container-low">
-                                        <img alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={item.image_url} />
+                                        <img alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={item.images ? item.images[0] : "https://static.vecteezy.com/system/resources/previews/058/788/346/non_2x/broken-or-missing-file-icon-with-sad-face-symbol-of-technical-issue-data-loss-system-failure-used-as-placeholder-when-content-is-unavailable-illustration-vector.jpg"} />
                                     </div>
                                     <div className="flex-grow flex flex-col justify-between">
                                         <div className="flex justify-between items-start">
@@ -484,7 +484,7 @@ const Cart = () => {
                                 {items.map(item => (
                                     <div key={item.cart_item_id} className="flex items-center gap-4">
                                         <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-surface-container-low">
-                                            <img src={item.image_url} className="w-full h-full object-cover" alt="" />
+                                            <img src={item.images ? item.images[0] : "https://static.vecteezy.com/system/resources/previews/058/788/346/non_2x/broken-or-missing-file-icon-with-sad-face-symbol-of-technical-issue-data-loss-system-failure-used-as-placeholder-when-content-is-unavailable-illustration-vector.jpg"} className="w-full h-full object-cover" alt="" />
                                         </div>
                                         <div className="flex-grow min-w-0">
                                             <p className="text-sm font-bold truncate">{item.name}</p>

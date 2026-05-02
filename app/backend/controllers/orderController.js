@@ -46,17 +46,21 @@ exports.getUserOrders = async (req, res) => {
         );
 
         // Fetch items for each order
-        const ordersWithItems = await Promise.all(orders.map(async (order) => {
-            const [items] = await db.execute(
-                `SELECT oi.*, p.name, p.image_url 
-                 FROM order_items oi 
-                 JOIN products p ON oi.product_id = p.id 
-                 WHERE oi.order_id = ?`,
-                [order.id]
-            );
-            return { ...order, items };
-        }));
+        const ordersWithItems = await Promise.all(
+            orders.map(async (order) => {
+                const [items] = await db.execute(
+                    `SELECT oi.*, 
+              p.name, 
+              JSON_UNQUOTE(JSON_EXTRACT(p.images, '$[0]')) AS image_url
+       FROM order_items oi 
+       JOIN products p ON oi.product_id = p.id 
+       WHERE oi.order_id = ?`,
+                    [order.id]
+                );
 
+                return { ...order, items };
+            })
+        );
         res.json(ordersWithItems);
     } catch (error) {
         console.error(error);

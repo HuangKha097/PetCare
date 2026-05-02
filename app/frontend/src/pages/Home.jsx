@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, ArrowRight, Truck, Gift, Zap, Star, Stethoscope, Scissors, Heart, ShieldCheck, Dog, Cat, Bone, Gamepad2, Tag } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import Button from '../components/Button';
 import { doctors } from './DoctorDetail';
+import API from '../api/axios';
 
 const categories = [
   { name: 'Dog', icon: Dog },
@@ -13,12 +14,6 @@ const categories = [
   { name: 'Accessories', icon: Tag },
 ];
 
-const popularProducts = [
-  { id: 1, name: 'Premium Dog Kibble', price: 45.99, rating: 4.8, image_url: 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=500&auto=format&fit=crop&q=60' },
-  { id: 2, name: 'Interactive Cat Toy', price: 15.50, rating: 4.9, image_url: 'https://images.unsplash.com/photo-1545249390-6bdfa286032f?w=500&auto=format&fit=crop&q=60' },
-  { id: 3, name: 'Orthopedic Pet Bed', price: 89.99, rating: 4.7, image_url: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=500&auto=format&fit=crop&q=60' },
-  { id: 4, name: 'Natural Grain-Free Treats', price: 12.99, rating: 4.6, image_url: 'https://images.unsplash.com/photo-1623366302587-bca9fbcf9f46?w=500&auto=format&fit=crop&q=60' },
-];
 
 
 
@@ -30,6 +25,21 @@ const services = [
 ];
 
 const Home = () => {
+
+  const [popularProducts, setPopularProducts] = useState([]);
+  useEffect(() => {
+    const fetchPopularProducts = async () => {
+      try {
+        const response = await API.get('/products/popular');
+        console.log(response);
+        setPopularProducts(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPopularProducts();
+  }, []);
+
   return (
     <>
       {/* Hero Section */}

@@ -78,3 +78,28 @@ exports.getProductById = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+exports.getPopularProducts = async (req, res) => {
+    try {
+        const [rows] = await db.execute(
+            `SELECT * 
+FROM products
+ORDER BY rating DESC
+LIMIT 4;`
+        );
+
+
+        const products = rows.map(p => ({
+            ...p,
+            images: p.images
+                ? (typeof p.images === 'string' ? JSON.parse(p.images) : p.images)
+                : [p.image_url].filter(Boolean),
+        }));
+
+        res.json(products);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+

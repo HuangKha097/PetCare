@@ -68,8 +68,8 @@ const ProductCard = ({ product }) => {
                     <img
                         alt={product.name}
                         className="w-full h-full object-cover transform transition-transform duration-1000 "
-                        src={product.image_url}
-                    />
+                        src={product.images ? product.images[0] : "https://static.vecteezy.com/system/resources/previews/058/788/346/non_2x/broken-or-missing-file-icon-with-sad-face-symbol-of-technical-issue-data-loss-system-failure-used-as-placeholder-when-content-is-unavailable-illustration-vector.jpg"} />
+
                 </Link>
 
                 {/* Hover Quick Actions */}
