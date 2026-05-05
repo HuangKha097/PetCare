@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import API from '../../api/axios';
+import { getWishlist, toggleWishlistItem } from '../../services/wishlistService';
 
 export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (_, { rejectWithValue }) => {
     try {
-        const response = await API.get('/wishlist');
+        const response = await getWishlist();
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to fetch wishlist');
@@ -12,7 +12,7 @@ export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (_
 
 export const toggleWishlist = createAsyncThunk('wishlist/toggleWishlist', async (productId, { rejectWithValue }) => {
     try {
-        const response = await API.post('/wishlist/toggle', { productId });
+        const response = await toggleWishlistItem(productId);
         return { productId, action: response.data.action };
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to update wishlist');

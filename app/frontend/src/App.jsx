@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ScrollToTop from './components/ScrollToTop';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -25,6 +25,37 @@ import { loadUser } from './store/slices/authSlice';
 import { fetchCart } from './store/slices/cartSlice';
 import { fetchWishlist } from './store/slices/wishlistSlice';
 
+// Admin Imports
+import AdminLayout from './admin/layout/AdminLayout';
+import AdminProtectedRoute from './admin/components/AdminProtectedRoute';
+import Dashboard from './admin/pages/Dashboard';
+import ProductManagement from './admin/pages/ProductManagement';
+import ProductForm from './admin/pages/ProductForm';
+import OrderManagement from './admin/pages/OrderManagement';
+import InventoryMonitoring from './admin/pages/InventoryMonitoring';
+import UserManagement from './admin/pages/UserManagement';
+
+const UserLayout = () => {
+    const { user, isAuthenticated } = useSelector((state) => state.auth);
+    
+    // Redirect admin trying to access user pages
+    if (isAuthenticated && user?.role === 'admin') {
+        return <Navigate to="/admin/dashboard" replace />;
+    }
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+                <Outlet />
+            </main>
+            <Footer />
+            <MobileNav />
+            <ScrollToTopBtn />
+        </div>
+    );
+};
+
 function App() {
     const dispatch = useDispatch();
 
@@ -39,38 +70,36 @@ function App() {
     return (
         <Router>
             <ScrollToTop />
-            <div className="flex flex-col min-h-screen">
-                <Header />
-                <main className="flex-grow">
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/shop" element={<Shop />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/cart" element={
-                            <ProtectedRoute>
-                                <Cart />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/account" element={
-                            <ProtectedRoute>
-                                <Account />
-                            </ProtectedRoute>
-                        } />
-                        <Route path="/categories" element={<Categories />} />
-                        <Route path="/product/:id" element={<ProductDetail />} />
-                        <Route path="/search" element={<Search />} />
-                        <Route path="/blog" element={<Blog />} />
-                        <Route path="/blog/:id" element={<BlogDetail />} />
-                        <Route path="/our-story" element={<OurStory />} />
-                        <Route path="/faq" element={<FAQ />} />
-                        <Route path="/contact" element={<ContactUs />} />
-                        <Route path="/doctor/:id" element={<DoctorDetail />} />
-                    </Routes>
-                </main>
-                <Footer />
-                <MobileNav />
-                <ScrollToTopBtn />
-            </div>
+            <Routes>
+                {/* Admin Routes */}
+                <Route path="/admin" element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="products" element={<ProductManagement />} />
+                    <Route path="products/new" element={<ProductForm />} />
+                    <Route path="products/edit/:id" element={<ProductForm />} />
+                    <Route path="orders" element={<OrderManagement />} />
+                    <Route path="users" element={<UserManagement />} />
+                    <Route path="inventory" element={<InventoryMonitoring />} />
+                </Route>
+
+                {/* User Routes */}
+                <Route path="/" element={<UserLayout />}>
+                    <Route index element={<Home />} />
+                    <Route path="shop" element={<Shop />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+                    <Route path="account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+                    <Route path="categories" element={<Categories />} />
+                    <Route path="product/:id" element={<ProductDetail />} />
+                    <Route path="search" element={<Search />} />
+                    <Route path="blog" element={<Blog />} />
+                    <Route path="blog/:id" element={<BlogDetail />} />
+                    <Route path="our-story" element={<OurStory />} />
+                    <Route path="faq" element={<FAQ />} />
+                    <Route path="contact" element={<ContactUs />} />
+                    <Route path="doctor/:id" element={<DoctorDetail />} />
+                </Route>
+            </Routes>
         </Router>
     );
 }

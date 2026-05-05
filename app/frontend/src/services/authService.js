@@ -1,0 +1,22 @@
+import API from '../api/axios';
+
+/**
+ * Auth Service
+ * Handles all API calls related to authentication and user profile.
+ */
+
+export const login = (credentials) => {
+  return API.post('/auth/login', credentials);
+};
+
+export const register = (userData) => {
+  return API.post('/auth/register', userData);
+};
+
+export const getMe = () => {
+  return API.get('/auth/me');
+};
+
+export const updateProfile = (profileData) => {
+  return API.patch('/auth/profile', profileData);
+};

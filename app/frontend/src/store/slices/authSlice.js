@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import API from '../../api/axios';
+import { getMe } from '../../services/authService';
 
 export const loadUser = createAsyncThunk('auth/loadUser', async (_, { rejectWithValue }) => {
     try {
-        const response = await API.get('/auth/me');
+        const response = await getMe();
         return response.data;
     } catch (error) {
         localStorage.removeItem('token');

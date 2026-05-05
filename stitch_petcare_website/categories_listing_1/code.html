@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PetCare | Shop by Category</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#ffffff",
+                    "primary-dim": "#604e00",
+                    "surface-container-highest": "#dadddd",
+                    "on-primary-fixed": "#483a00",
+                    "background": "#f5f7f6",
+                    "secondary": "#375d8a",
+                    "secondary-fixed": "#b6d4ff",
+                    "error-dim": "#b92902",
+                    "on-primary-fixed-variant": "#6a5600",
+                    "surface": "#f5f7f6",
+                    "tertiary": "#8d4a00",
+                    "on-tertiary-fixed-variant": "#643300",
+                    "on-primary-container": "#5e4d00",
+                    "outline": "#757777",
+                    "on-secondary-fixed-variant": "#2b527f",
+                    "inverse-primary": "#fcdb65",
+                    "on-error-container": "#520c00",
+                    "tertiary-fixed-dim": "#ef964b",
+                    "on-background": "#2c2f2f",
+                    "primary-container": "#fcdb65",
+                    "surface-container-low": "#eff1f0",
+                    "outline-variant": "#abadad",
+                    "tertiary-dim": "#7c4000",
+                    "surface-container-high": "#e0e3e2",
+                    "on-surface": "#2c2f2f",
+                    "error-container": "#f95630",
+                    "primary": "#6e5a00",
+                    "error": "#b02500",
+                    "tertiary-container": "#ffa457",
+                    "tertiary-fixed": "#ffa457",
+                    "inverse-surface": "#0c0f0f",
+                    "secondary-container": "#b6d4ff",
+                    "surface-container": "#e6e9e8",
+                    "on-tertiary": "#fff0e7",
+                    "inverse-on-surface": "#9b9d9d",
+                    "secondary-fixed-dim": "#a1c6f9",
+                    "on-secondary": "#edf3ff",
+                    "on-tertiary-container": "#572b00",
+                    "primary-fixed": "#fcdb65",
+                    "on-tertiary-fixed": "#361900",
+                    "primary-fixed-dim": "#edcd58",
+                    "on-secondary-fixed": "#033560",
+                    "surface-tint": "#6e5a00",
+                    "on-primary": "#fff2d0",
+                    "surface-dim": "#d1d5d5",
+                    "on-surface-variant": "#595c5c",
+                    "on-secondary-container": "#204975",
+                    "surface-variant": "#dadddd",
+                    "on-error": "#ffefec",
+                    "secondary-dim": "#2a517d",
+                    "surface-bright": "#f5f7f6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "display": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #6e5a00 0%, #fcdb65 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-primary-dim">
+<!-- TopAppBar Shared Component -->
+<header class="bg-white/80 dark:bg-stone-900/80 backdrop-blur-xl docked full-width top-0 sticky border-b border-stone-100 dark:border-stone-800 shadow-sm z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-[1280px] mx-auto">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-yellow-700 dark:text-yellow-500 scale-95 active:transition-transform cursor-pointer hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors p-2 rounded-full" data-icon="menu">menu</span>
+<a class="text-2xl font-black text-yellow-800 dark:text-yellow-400 italic font-['Plus_Jakarta_Sans'] font-bold tracking-tight" href="#">PetCare</a>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-yellow-700 dark:text-yellow-500 font-bold font-['Plus_Jakarta_Sans'] tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-2 rounded-md" href="#">Shop</a>
+<a class="text-stone-500 dark:text-stone-400 font-['Plus_Jakarta_Sans'] tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-2 rounded-md" href="#">Categories</a>
+<a class="text-stone-500 dark:text-stone-400 font-['Plus_Jakarta_Sans'] tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-2 rounded-md" href="#">Best Seller</a>
+<a class="text-stone-500 dark:text-stone-400 font-['Plus_Jakarta_Sans'] tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-2 rounded-md" href="#">Blog</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-yellow-700 dark:text-yellow-500 cursor-pointer hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors scale-95 active:transition-transform p-2 rounded-full" data-icon="search">search</span>
+<span class="material-symbols-outlined text-yellow-700 dark:text-yellow-500 cursor-pointer hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors scale-95 active:transition-transform p-2 rounded-full" data-icon="shopping_cart">shopping_cart</span>
+<button class="hidden lg:block editorial-gradient text-on-primary px-6 py-2 rounded-full font-headline font-bold text-sm tracking-tight transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20">
+                    Shop Now
+                </button>
+</div>
+</div>
+</header>
+<main class="pt-12 pb-32">
+<!-- Hero Section -->
+<section class="px-6 py-12 md:py-24 max-w-7xl mx-auto overflow-hidden">
+<div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+<div class="z-10 relative">
+<span class="inline-block px-4 py-1 rounded-full bg-primary-container text-on-primary-container text-[10px] font-bold uppercase tracking-widest mb-6">Discovery Phase</span>
+<h1 class="font-display font-extrabold text-5xl md:text-7xl leading-tight text-on-background tracking-tight mb-6">
+                        Shop by <span class="text-primary italic">Category</span>
+</h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-md leading-relaxed mb-10">
+                        Find exactly what your furry friend needs with our curated collection of premium pet essentials.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<div class="flex -space-x-3">
+<div class="w-12 h-12 rounded-full border-4 border-surface overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="close-up of a happy golden retriever dog smiling in a sunlit field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvl5lhvo0c1a6LHszpwh55nhzzkudIGNlLtkjwNwIoRL6hG-QeMMCcOVVQlwlX_uwz-0AIiL9u_S1YrM1BWjI2J0NsDhTxTEljXdGtVUjvvNq0fMP8G2q6fDQYyq6IiNKjn93UDX0zoO1_LgtSu8PiIWdRqTKO4eZZr04TtK4un6XXbVWwbA7FEraum5aFNzODQ-gVnyihAERc6NDNJak8BmS76q314Mm1r-X8Y42ZDqJSWzP13A_vI3tSFKtHDk-DBJkwKeL98AYU"/>
+</div>
+<div class="w-12 h-12 rounded-full border-4 border-surface overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a ginger tabby cat looking curiously at the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDObMgf4qfpHx99A7Y4qTYaL1xwQDJ29eZ4terISnG2d-CtpogGdGmRHRuMXWQL8uNxw-fX9bKf3nsG4gZQxk56TbsLFngd7-IOneLrzgYQrlL3G-sicpFh3xYxT3MWTvlD62kwaBszf29EXfOs49f0L29eCcdUlc5-zRJJkyScFbckUQ6-FThO7zASJvFTrN8dDqKFp1fObU57_wlqsF5GjlAQobF-COiTgi2uNfytoSlZ3mtkha9yT7jf8cgh8oHc-8h7NLoogZJ9"/>
+</div>
+<div class="w-12 h-12 rounded-full border-4 border-surface overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="close-up of a cute white hamster nibbling on a small vegetable" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMaVNO0zBcwQ2aGpsst7fUfgVABnjgOl8dwhIjGVgEU9eqF49KoflTJgSkOx7ub6geKbIAi0dD0sYuUF8D-XTAEQK0pyC_X1znn5JNA4hNP5b-fMWE9qckSJmeN512O_Jg0n9Uvy_Zz_vXDhLSW_dp7VFTFNa50WC58lo63puohjbRfP8EInoDrzC3X3mqfa_UNCz207g8FCmw7O9yt0DxEMAKx_3ErzfbyGETCYfz-2fKdnOPZ9cGCdBN1T86wJyWGHGBeKSKXYAa"/>
+</div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-sm font-bold text-on-background">Joined by 10k+ Pet Parents</p>
+<p class="text-xs text-on-surface-variant">Quality guaranteed products</p>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="absolute inset-0 bg-primary-container rounded-xl rotate-3 -z-10 translate-x-4"></div>
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl relative aspect-[4/5]">
+<img class="w-full h-full object-cover transform transition-transform hover:scale-105 duration-700" data-alt="High-end editorial shot of a playful puppy jumping against a minimalist light grey background with warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5zwv9asqb0qzN3PGBmZdHGb48iTYHNK3uwsZGuEd4cm8yZki-p4ufW-KrVRaFkigvBE8s0gyVIboAnaU0AvgjGc7MWKcs7EXp0ljbbN8X5OtiNct2dY3KbqXWhxzP0hOXagUrEeRyZjwyarm7mWOUIIulKy_ibZdgPxKgQCrY0lcuE7NhAgvFfXZzDr449b4rpVSEWs0_0as0ul2WHnoqsAQ7ki8MwKTIxrDz7MwQT6ZyRnIzDso2s8Jzwtsro99JX2CFaS5Plz5D"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Grid -->
+<section class="px-6 py-16 bg-surface-container-low">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Dogs Section -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-lg p-8 md:p-12 shadow-sm hover:shadow-xl transition-all duration-300 group">
+<div class="flex flex-col md:flex-row gap-12 items-center">
+<div class="w-full md:w-1/2 overflow-hidden rounded-lg">
+<img class="w-full aspect-square object-cover transform group-hover:scale-110 transition-transform duration-500" data-alt="Professional studio photograph of a border collie dog looking attentive on a clean surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsYXDw2NgcOJZ2AZdDhJpK_8HWN2yj2mI3xBEtqVQ5ovTQnrwA5OY6kjn_fIOGEZ4UdhimBNipJ_jbxRpt6OCikSzGGF6HzHhX27n4gEJX1DVLHrKgRApd1Rt9_UH5gnaVX1c-fsSHa1QGKkXG3L5vzmeDY5Py_VKbdHUzO7w-EASu9OH7o7jPATQRzi4wpmt0tFsKRZKAK7jFcTPB1qOr9aqFniMXVzYb9JzdO8NsiqnAAXLd3gFvhhTaNZJHFQd4k8a-afb5xPsf"/>
+</div>
+<div class="w-full md:w-1/2">
+<h2 class="font-display font-bold text-4xl text-on-background mb-6">Dogs</h2>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group/item">
+<span class="w-2 h-2 rounded-full bg-primary-container group-hover/item:bg-primary transition-colors"></span>
+<span class="font-medium text-lg font-body">Premium Food</span>
+</li>
+<li class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group/item">
+<span class="w-2 h-2 rounded-full bg-primary-container group-hover/item:bg-primary transition-colors"></span>
+<span class="font-medium text-lg font-body">Durable Toys</span>
+</li>
+<li class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group/item">
+<span class="w-2 h-2 rounded-full bg-primary-container group-hover/item:bg-primary transition-colors"></span>
+<span class="font-medium text-lg font-body">Orthopedic Beds</span>
+</li>
+<li class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group/item">
+<span class="w-2 h-2 rounded-full bg-primary-container group-hover/item:bg-primary transition-colors"></span>
+<span class="font-medium text-lg font-body">Smart Accessories</span>
+</li>
+</ul>
+<button class="w-full py-4 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-on-primary transition-all active:scale-95">
+                                    Shop All Dogs
+                                </button>
+</div>
+</div>
+</div>
+<!-- Small Pets Section -->
+<div class="md:col-span-4 bg-tertiary-container/20 rounded-lg p-8 flex flex-col justify-between overflow-hidden relative group">
+<div class="z-10">
+<h2 class="font-display font-bold text-3xl text-on-background mb-4">Small Pets</h2>
+<p class="text-on-surface-variant mb-8 font-medium">Bunnies, hamsters, and birds</p>
+<button class="bg-surface-container-lowest text-on-background px-6 py-3 rounded-full font-bold text-sm shadow-sm hover:shadow-md transition-all">
+                                Shop All Small Pets
+                            </button>
+</div>
+<div class="mt-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<img class="w-full rounded-xl object-cover aspect-[4/3] shadow-lg" data-alt="Cute bunny rabbit sitting in soft hay with bright natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDjEW3zisw_me31rdJyvZjU52vZOke3-l898ZaYDH6mdi_7HrkJRXYB2B-wBXy85B608MD0AnJFdz0i9_hZWLRUDSUwKHzzE-2XddJpJgUq7L37jxYFI6JxtE_mcAQIcFnstI3l1d7DFl50FpqqbCBFTG9kAdV2ZMs4RcCX8774h6GdJWv583RXjocCKWMaozJh1qRxezO_BLwPu_j3ZKTQXUxmeseNsKYyyY6_H2b_-PQi3l7lExJQ8pp6UDLy99moo7t7rLiIeMF"/>
+</div>
+</div>
+<!-- Cats Section -->
+<div class="md:col-span-12 bg-secondary-container/10 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+<div class="flex flex-col md:flex-row">
+<div class="w-full md:w-5/12 p-8 md:p-16 flex flex-col justify-center order-2 md:order-1">
+<h2 class="font-display font-bold text-4xl md:text-5xl text-on-background mb-8 tracking-tight">Cats</h2>
+<div class="grid grid-cols-2 gap-y-6 gap-x-8 mb-12">
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Gourmet</span>
+<span class="text-lg font-medium">Organic Food</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Hygiene</span>
+<span class="text-lg font-medium">Auto Litter</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Play</span>
+<span class="text-lg font-medium">Interactive Toys</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Home</span>
+<span class="text-lg font-medium">Modern Furniture</span>
+</div>
+</div>
+<button class="editorial-gradient text-on-primary py-4 rounded-full font-bold text-lg transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20">
+                                    Shop All Cats
+                                </button>
+</div>
+<div class="w-full md:w-7/12 order-1 md:order-2 aspect-video md:aspect-auto h-96 md:h-auto">
+<img class="w-full h-full object-cover" data-alt="Elegant cat sitting on a contemporary velvet sofa in a bright modern living room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAGdaIzFEK4tQ4MbAnBNaQypCKGleyPpd2BRqaTERbEvUdIpRYoIQqN6CnXsCaYtAtCXJIZk-bkgxexeC2bQrFBHQuZclYsJ9FFUCCIOAyumuJ_ZnfqELDjDJ3e41RqWvzLcUdXsd4ZNtFPkeMG3DI8jYuxiA4OlqP42dLdPaXCG8BokWwYjkpcZate4MxTDodcSR1KtvDmKGzvzPn3j2LQmujX2P2SYjHJYpFBIQzDRzHE7kjxIX6xuIGeKRBiwa69rxf0MXz9Nka"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / Promo -->
+<section class="px-6 py-20 max-w-7xl mx-auto">
+<div class="editorial-gradient rounded-xl p-8 md:p-16 text-center text-on-primary relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+<div class="relative z-10">
+<h3 class="font-display font-extrabold text-3xl md:text-5xl mb-6 tracking-tight">Stay in the Paws!</h3>
+<p class="text-lg mb-10 max-w-xl mx-auto opacity-90">Get 15% off your first order when you sign up for our weekly pet tips and product alerts.</p>
+<form class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
+<input class="flex-grow px-6 py-4 rounded-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:ring-white focus:border-white text-lg" placeholder="Your email address" type="email"/>
+<button class="bg-white text-primary font-bold px-10 py-4 rounded-full hover:bg-on-primary transition-colors whitespace-nowrap text-lg" type="submit">Join Now</button>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shared Component -->
+<footer class="bg-stone-50 dark:bg-stone-950 full-width py-16 px-8 mt-24 border-t border-stone-200 dark:border-stone-800">
+<div class="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center text-center md:text-left font-['Plus_Jakarta_Sans'] text-sm leading-relaxed">
+<div class="flex flex-col gap-6 items-center md:items-start">
+<span class="text-xl font-black text-yellow-800 dark:text-yellow-600">PetCare</span>
+<p class="text-stone-600 dark:text-stone-400">© 2024 PetCare Boutique. Family-owned and operated.</p>
+</div>
+<div class="flex flex-wrap justify-center md:justify-end gap-6 md:gap-12">
+<a class="text-stone-600 dark:text-stone-400 hover:text-yellow-700 underline transition-all font-bold" href="#">Collection</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-yellow-700 underline transition-all font-bold" href="#">Journal</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-yellow-700 underline transition-all font-bold" href="#">Our Story</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-yellow-700 underline transition-all font-bold" href="#">Support</a>
+</div>
+</div>
+</footer>
+<!-- BottomNavBar Shared Component (Mobile only) -->
+<nav class="md:hidden bg-white/90 dark:bg-stone-900/90 backdrop-blur-lg fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] rounded-full shadow-2xl shadow-yellow-900/10 z-50 flex justify-around items-center px-4 py-2 max-w-md mx-auto">
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-4 py-2 hover:text-yellow-600 dark:hover:text-yellow-400 transition-all font-['Plus_Jakarta_Sans'] text-[11px] font-semibold active:bounce-sm duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="pets">pets</span>
+<span class="mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 rounded-full px-5 py-2 scale-110 transition-all font-['Plus_Jakarta_Sans'] text-[11px] font-semibold active:bounce-sm duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="mt-1">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-4 py-2 hover:text-yellow-600 dark:hover:text-yellow-400 transition-all font-['Plus_Jakarta_Sans'] text-[11px] font-semibold active:bounce-sm duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="mt-1">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 px-4 py-2 hover:text-yellow-600 dark:hover:text-yellow-400 transition-all font-['Plus_Jakarta_Sans'] text-[11px] font-semibold active:bounce-sm duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -4,15 +4,16 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import {
     Trash2, Minus, Plus, ShoppingBag, ArrowRight, ShieldCheck,
     RotateCcw, Headphones, MapPin, CreditCard as CardIcon,
-    CheckCircle2, ChevronLeft, Truck, PackageCheck
+    CheckCircle2, ChevronLeft, Truck, PackageCheck, AlertTriangle, X
 } from 'lucide-react';
-import { fetchCart, updateCartItem, removeFromCart, clearCartLocal } from '../store/slices/cartSlice';
+import { fetchCart, updateCartItem, removeFromCart, clearCartLocal, clearNotifications } from '../store/slices/cartSlice';
 import { loginSuccess } from '../store/slices/authSlice';
 import Button from '../components/Button';
-import API from '../api/axios';
+import { updateProfile } from '../services/authService';
+import { createOrder } from '../services/orderService';
 
 const Cart = () => {
-    const { items, totalQuantity, totalAmount, status } = useSelector((state) => state.cart);
+    const { items, totalQuantity, totalAmount, status, notifications } = useSelector((state) => state.cart);
     const { user, token } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -156,7 +157,7 @@ const Cart = () => {
                     if (!confirmOverride) {
                         // User chose not to override, we just proceed with the order without patching profile
                     } else {
-                        const response = await API.patch('/auth/profile', {
+                        const response = await updateProfile({
                             phone: orderInfo.phone,
                             address: `${orderInfo.address}, ${orderInfo.ward}, ${orderInfo.district}`,
                             city: orderInfo.city
@@ -165,7 +166,7 @@ const Cart = () => {
                     }
                 } else if (!hasExistingData) {
                     // First time saving info
-                    const response = await API.patch('/auth/profile', {
+                    const response = await updateProfile({
                         phone: orderInfo.phone,
                         address: `${orderInfo.address}, ${orderInfo.ward}, ${orderInfo.district}`,
                         city: orderInfo.city
@@ -175,7 +176,7 @@ const Cart = () => {
             }
 
             // Place real order
-            await API.post('/orders', {
+            await createOrder({
                 items: items,
                 totalAmount: totalAmount * 1.08,
                 paymentMethod: orderInfo.paymentMethod,
@@ -242,6 +243,27 @@ const Cart = () => {
 
     return (
         <main className="mt-28 mb-24 max-w-7xl mx-auto w-full px-6">
+            {/* Out-of-stock Notifications */}
+            {notifications && notifications.length > 0 && (
+                <div className="mb-8 space-y-3">
+                    {notifications.map((notif, idx) => (
+                        <div key={idx} className={`flex items-start gap-4 p-5 rounded-2xl border shadow-sm ${notif.type === 'removed' ? 'bg-red-50 border-red-200' : 'bg-amber-50 border-amber-200'}`}>
+                            <AlertTriangle size={22} className={notif.type === 'removed' ? 'text-red-500 mt-0.5 shrink-0' : 'text-amber-500 mt-0.5 shrink-0'} />
+                            <div className="flex-1">
+                                <p className={`font-bold text-sm ${notif.type === 'removed' ? 'text-red-800' : 'text-amber-800'}`}>
+                                    {notif.type === 'removed' ? 'Items Removed' : 'Quantities Adjusted'}
+                                </p>
+                                <p className={`text-sm mt-1 ${notif.type === 'removed' ? 'text-red-600' : 'text-amber-600'}`}>
+                                    {notif.message}
+                                </p>
+                            </div>
+                            <button onClick={() => dispatch(clearNotifications())} className="p-1 hover:bg-black/5 rounded-full transition-colors shrink-0">
+                                <X size={18} className="text-on-surface-variant" />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
             {/* Page Title & Step Indicator */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                 <div>

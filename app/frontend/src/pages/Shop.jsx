@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Filter, ChevronDown, ChevronLeft, Star, X, Search } from 'lucide-react';
-import API from '../api/axios';
+import { getProducts } from '../services/productService';
 import ProductCard from '../components/ProductCard';
 import Button from '../components/Button';
 import Pagination from '../components/Pagination';
@@ -12,7 +12,7 @@ const Shop = () => {
     const [error, setError] = useState(null);
     const [category, setCategory] = useState('All Food');
     const [selectedBrand, setSelectedBrand] = useState('');
-    const [priceRange, setPriceRange] = useState(500);
+    const [priceRange, setPriceRange] = useState(50);
     const [sort, setSort] = useState('');
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
@@ -41,7 +41,7 @@ const Shop = () => {
                 if (priceRange < 99) params.maxPrice = priceRange;
                 if (sort) params.sort = sort;
 
-                const response = await API.get('/products', { params });
+                const response = await getProducts(params);
                 setProducts(response.data);
             } catch (err) {
                 setError('Failed to fetch products');
@@ -79,7 +79,7 @@ const Shop = () => {
     const resetFilters = () => {
         setCategory('All Food');
         setSelectedBrand('');
-        setPriceRange(500);
+        setPriceRange(50);
         setSort('');
     };
 
@@ -242,11 +242,11 @@ const Shop = () => {
 
                         {/* Pagination */}
                         {/* Pagination */}
-                        <Pagination 
-                            currentPage={currentPage} 
-                            totalPages={totalPages} 
-                            paginate={paginate} 
-                            className="mt-20 flex justify-center gap-3" 
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            paginate={paginate}
+                            className="mt-20 flex justify-center gap-3"
                         />
                     </div>
                 </div>

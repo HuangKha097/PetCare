@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Search Results | Vibrant Curator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#edf3ff",
+                        "surface-tint": "#6e5a00",
+                        "on-tertiary-fixed": "#361900",
+                        "tertiary": "#8d4a00",
+                        "secondary-fixed-dim": "#a1c6f9",
+                        "tertiary-fixed": "#ffa457",
+                        "on-surface": "#2c2f2f",
+                        "on-primary-container": "#5e4d00",
+                        "tertiary-container": "#ffa457",
+                        "surface-container-high": "#e0e3e2",
+                        "surface-container-highest": "#dadddd",
+                        "surface-bright": "#f5f7f6",
+                        "error": "#b02500",
+                        "on-secondary-container": "#204975",
+                        "background": "#f5f7f6",
+                        "primary": "#6e5a00",
+                        "surface": "#f5f7f6",
+                        "secondary-dim": "#2a517d",
+                        "error-container": "#f95630",
+                        "on-primary": "#fff2d0",
+                        "inverse-on-surface": "#9b9d9d",
+                        "tertiary-fixed-dim": "#ef964b",
+                        "primary-dim": "#604e00",
+                        "on-tertiary": "#fff0e7",
+                        "tertiary-dim": "#7c4000",
+                        "secondary-container": "#b6d4ff",
+                        "secondary-fixed": "#b6d4ff",
+                        "surface-dim": "#d1d5d5",
+                        "secondary": "#375d8a",
+                        "on-secondary-fixed-variant": "#2b527f",
+                        "primary-container": "#fcdb65",
+                        "error-dim": "#b92902",
+                        "on-error-container": "#520c00",
+                        "on-background": "#2c2f2f",
+                        "inverse-primary": "#fcdb65",
+                        "on-tertiary-fixed-variant": "#643300",
+                        "on-primary-fixed-variant": "#6a5600",
+                        "surface-variant": "#dadddd",
+                        "inverse-surface": "#0c0f0f",
+                        "outline-variant": "#abadad",
+                        "primary-fixed": "#fcdb65",
+                        "on-tertiary-container": "#572b00",
+                        "on-primary-fixed": "#483a00",
+                        "on-error": "#ffefec",
+                        "surface-container": "#e6e9e8",
+                        "surface-container-low": "#eff1f0",
+                        "on-surface-variant": "#595c5c",
+                        "on-secondary-fixed": "#033560",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#edcd58",
+                        "outline": "#757777"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "display": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift-bg-surface-container-low { background-color: #eff1f0; }
+        .tonal-layering-surface-container-low { background-color: #eff1f0; }
+        .active-pill { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface scale-95 active:transition-all">menu</button>
+<h1 class="text-2xl font-black text-on-surface tracking-tighter font-headline">Vibrant Curator</h1>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-on-surface-variant font-medium hover:scale-105 transition-transform duration-200 hover:text-primary" href="#">Journal</a>
+<a class="text-primary font-bold border-b-2 border-primary hover:scale-105 transition-transform duration-200" href="#">Shop</a>
+<a class="text-on-surface-variant font-medium hover:scale-105 transition-transform duration-200 hover:text-primary" href="#">Sustainability</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface scale-95 active:transition-all">shopping_bag</button>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32">
+<!-- Search Header -->
+<section class="px-6 py-12 md:py-20 text-center max-w-4xl mx-auto">
+<div class="relative group">
+<div class="flex items-center bg-surface-container-lowest rounded-full p-2 shadow-sm focus-within:shadow-md transition-shadow">
+<span class="material-symbols-outlined ml-4 text-outline">search</span>
+<input class="flex-grow bg-transparent border-none focus:ring-0 text-lg px-4 font-medium" placeholder="Search for your pet..." type="text" value="grain-free dog food"/>
+<button class="bg-primary-container text-on-primary-container font-bold px-8 py-3 rounded-full hover:scale-105 active:scale-95 transition-all">
+                        Search
+                    </button>
+</div>
+</div>
+<p class="mt-6 text-on-surface-variant font-medium">
+                Showing <span class="text-on-surface font-bold">24 results</span> for "grain-free dog food"
+            </p>
+</section>
+<!-- Advanced Filters -->
+<section class="sticky top-[72px] z-40 bg-surface/95 backdrop-blur-sm border-b border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center gap-4">
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 md:pb-0">
+<button class="flex items-center gap-2 px-6 py-2.5 bg-surface-container-high rounded-full font-semibold text-sm hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+                        Animal Type <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2.5 bg-surface-container-high rounded-full font-semibold text-sm hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+                        Product Type <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2.5 bg-surface-container-high rounded-full font-semibold text-sm hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+                        Brand <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2.5 bg-surface-container-high rounded-full font-semibold text-sm hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+                        Price Range <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant/30 mx-2 hidden md:block"></div>
+<button class="text-sm font-bold text-primary hover:underline underline-offset-4 decoration-2">
+                    Clear All Filters
+                </button>
+</div>
+</section>
+<!-- Search Results Grid -->
+<section class="max-w-7xl mx-auto px-6 mt-12">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- Product Card 1 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col hover:scale-[1.02] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(44,47,47,0.06)] h-full">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="premium natural grain-free dog food in organic minimal packaging with wooden bowl and natural ingredients background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvyFdxmTZPTv3nrYLCBe_06a5OfWJzdr3ktzfx-KCNJGuCqhCAtm5N7fgsjQ4m8EdhFuQ88AN19qjnsyvZn-pqu9IkSuuBSkqopdBog62q5xmH9erlG68Jch00-hHyIRaGJT9sIDE9l3rMT1Q_rO7gV0J7HbqQSgloPQztcCxzEbmlDFvqbM8_uzkm6itguQx5XShpnGjKz04A5W02sQnzm1W2TQtuWltmBUZe0SSnWyS3fvuiEwdbZpvi_u1z41gJUiq6cLegvaqV"/>
+<div class="absolute top-4 right-4 bg-primary-container text-on-primary-container text-[10px] font-bold px-3 py-1 rounded-full tracking-widest uppercase">New Arrival</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm">star_half</span>
+<span class="text-xs text-on-surface-variant font-medium ml-1">(124)</span>
+</div>
+<h3 class="font-headline font-bold text-lg leading-tight mb-2 text-on-surface">Artisan Salmon &amp; Sweet Potato Kibble</h3>
+<p class="text-2xl font-bold text-on-surface mt-auto">$42.00</p>
+<button class="mt-6 w-full bg-primary text-on-primary font-bold py-3 rounded-full hover:opacity-90 active:scale-95 transition-all">
+                            Add to Cart
+                        </button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col hover:scale-[1.02] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(44,47,47,0.06)] h-full">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="gourmet grain-free raw beef dog food slices on marble platter with garnish, professional lighting, editorial pet food photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdh_kRK2eq4tPtLgd1JQ4fNptrZVI8j4QN6vISqf2DFS0s86mDYDMbMaT_rKapoYSd_pEosZ94LhfVjNaLa2yawCv0WoegGL1EyGz0pnMK9KL9MK9_oeQZ8XI-f64Cvr0UahO5OSFHcV0grysQ4DNiFmWHULyZqrzDJ1nitglvHzwS5Yna797Ffl1P56Vv1intR6hgoz52ce9PbfqGHjmdI9jN9hLUwzLTjRW_jZz5PtXsirVFAY0LdpxEn_TWTIdq_TJkt-_UeaGz"/>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs text-on-surface-variant font-medium ml-1">(89)</span>
+</div>
+<h3 class="font-headline font-bold text-lg leading-tight mb-2 text-on-surface">Grass-Fed Prime Beef Feast</h3>
+<p class="text-2xl font-bold text-on-surface mt-auto">$55.00</p>
+<button class="mt-6 w-full bg-primary text-on-primary font-bold py-3 rounded-full hover:opacity-90 active:scale-95 transition-all">
+                            Add to Cart
+                        </button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col hover:scale-[1.02] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(44,47,47,0.06)] h-full">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="clean minimal white bag of grain-free dog food treats on aesthetic wooden shelf with neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD7SJLABHsoDw-P2nM45BHG8ZUsMOJXJkMnyofRrBw-pXtTskv0qi6fIsk_LgSpVqHamS2zFKrh-zROazBJdXPc9tsLreCUVjZcna2uZo44IFFNlTB6gLNClT-AizJ6yhZiqbne0nFO9eQOxV0neu6-bDfM9D9u_l84dAJWfEQOOYQymRZpgfTbP720y4BRuja4bemSzbESmbFnLtIY5Por2eW3VbbQDuLienLsb6bM5b4-rqjCr1td6bQuDNF9Zn_vRqJG2tSKVSz"/>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm">star_outline</span>
+<span class="text-xs text-on-surface-variant font-medium ml-1">(210)</span>
+</div>
+<h3 class="font-headline font-bold text-lg leading-tight mb-2 text-on-surface">Eco-Harvest Organic Poultry Mix</h3>
+<p class="text-2xl font-bold text-on-surface mt-auto">$38.50</p>
+<button class="mt-6 w-full bg-primary text-on-primary font-bold py-3 rounded-full hover:opacity-90 active:scale-95 transition-all">
+                            Add to Cart
+                        </button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col hover:scale-[1.02] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(44,47,47,0.06)] h-full">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover" data-alt="close-up of healthy grain-free wet dog food with visible chunks of turkey and vegetables in a ceramic bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEDH0VXuuO9GziWQ1MVnUHgLeLrLaqQgkptJwxi_4GWuyEjWB_JfK8tqgM1aIjMKsNJS-nOyJ144sZou4tjNkvRwxOtohBJe9_VfSIUfn4w3CjX4iPXnxt-aOrYKgAaELoNjqgR62KFVXUCMfDopTKW6KjHUdBCeoNxwktGyBPZv23ejXm0XcVNjjZwVM_-C4z4HtBS2eg53_lp6XAE2hdv81O9Sexoyg6oon2S-IK8qEazN8_f3l_jGZoI_D-QZ0josSF9QRE3V3K"/>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex items-center gap-1 mb-2">
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm active-pill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm">star</span>
+<span class="text-xs text-on-surface-variant font-medium ml-1">(42)</span>
+</div>
+<h3 class="font-headline font-bold text-lg leading-tight mb-2 text-on-surface">Wild-Caught Turkey &amp; Greens Puree</h3>
+<p class="text-2xl font-bold text-on-surface mt-auto">$4.25 <span class="text-sm font-normal text-on-surface-variant">/ can</span></p>
+<button class="mt-6 w-full bg-primary text-on-primary font-bold py-3 rounded-full hover:opacity-90 active:scale-95 transition-all">
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Pagination -->
+<section class="max-w-7xl mx-auto px-6 mt-20 flex justify-center items-center gap-2">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-primary text-on-primary font-bold">1</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant font-bold">2</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant font-bold">3</button>
+<span class="px-2 text-outline">...</span>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant font-bold">6</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center p-4 pb-8 bg-white/90 backdrop-blur-2xl z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.04)] rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-gray-500 px-6 py-2 hover:bg-gray-100 rounded-full transition-colors active:scale-90">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Shop</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-yellow-100 text-yellow-900 rounded-full px-6 py-2 active:scale-90 transition-transform">
+<span class="material-symbols-outlined active-pill" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-gray-500 px-6 py-2 hover:bg-gray-100 rounded-full transition-colors active:scale-90">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-gray-500 px-6 py-2 hover:bg-gray-100 rounded-full transition-colors active:scale-90">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold">Profile</span>
+</div>
+</nav>
+<!-- Footer -->
+<footer class="w-full rounded-t-xl mt-20 bg-surface-container-low">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-16 gap-8 max-w-7xl mx-auto">
+<div class="flex flex-col gap-4 max-w-sm">
+<h2 class="font-headline font-extrabold text-xl text-on-surface">Vibrant Curator</h2>
+<p class="text-on-surface-variant font-body">Elevating the everyday for the discerning pet and their human companion.</p>
+<div class="mt-4 flex gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg">public</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-lg">chat</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap justify-center gap-x-12 gap-y-6">
+<div class="flex flex-col gap-3">
+<p class="font-bold text-xs uppercase tracking-widest text-primary mb-2">Editorial</p>
+<a class="text-gray-600 hover:text-yellow-600 transition-colors" href="#">Journal</a>
+<a class="text-gray-600 hover:text-yellow-600 transition-colors" href="#">Sustainability</a>
+</div>
+<div class="flex flex-col gap-3">
+<p class="font-bold text-xs uppercase tracking-widest text-primary mb-2">Support</p>
+<a class="text-gray-600 hover:text-yellow-600 transition-colors" href="#">Shipping</a>
+<a class="text-gray-600 hover:text-yellow-600 transition-colors" href="#">Returns</a>
+</div>
+<div class="flex flex-col gap-3">
+<p class="font-bold text-xs uppercase tracking-widest text-primary mb-2">Newsletter</p>
+<div class="flex bg-surface-container-lowest rounded-full p-1 max-w-xs shadow-sm">
+<input class="bg-transparent border-none focus:ring-0 px-4 text-sm w-full" placeholder="Your email" type="email"/>
+<button class="bg-primary text-on-primary w-10 h-10 flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-outline-variant/10 px-12 py-8 text-center text-on-surface-variant font-label text-sm">
+            © 2024 The Vibrant Curator. Editorial Pet Supplies.
+        </div>
+</footer>
+</body></html>

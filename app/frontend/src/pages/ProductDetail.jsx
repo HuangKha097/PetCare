@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, NavLink } from 'react-router-dom';
-import { ChevronRight, ChevronLeft, Star, Minus, Plus, ShoppingCart, Heart, ShieldCheck, CheckCircle, Send, User } from 'lucide-react';
-import API from '../api/axios';
+import { ChevronRight, ChevronLeft, Star, Minus, Plus, ShoppingCart, Heart, ShieldCheck, CheckCircle, Send, User, PackageX } from 'lucide-react';
+import { getProductById } from '../services/productService';
+import { getReviewsByProduct, createReview } from '../services/reviewService';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../store/slices/cartSlice';
@@ -24,7 +25,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await API.get(`/products/${id}`);
+        const response = await getProductById(id);
         setProduct(response.data);
         setActiveImg(0);
       } catch (err) {
@@ -36,7 +37,7 @@ const ProductDetail = () => {
 
     const fetchReviews = async () => {
       try {
-        const response = await API.get(`/reviews/${id}`);
+        const response = await getReviewsByProduct(id);
         setReviews(response.data);
       } catch (err) {
         console.error(err);
@@ -63,16 +64,16 @@ const ProductDetail = () => {
 
     setSubmittingReview(true);
     try {
-      await API.post('/reviews', {
+      await createReview({
         productId: product.id,
         rating: newReview.rating,
         comment: newReview.comment
       });
 
       // Refresh reviews and product rating
-      const revRes = await API.get(`/reviews/${id}`);
+      const revRes = await getReviewsByProduct(id);
       setReviews(revRes.data);
-      const prodRes = await API.get(`/products/${id}`);
+      const prodRes = await getProductById(id);
       setProduct(prodRes.data);
 
       setNewReview({ rating: 5, comment: '' });
@@ -187,6 +188,24 @@ const ProductDetail = () => {
           <div className="mb-8">
             <div className="text-3xl font-display font-black text-on-surface">${product.price}</div>
             <p className="text-on-surface-variant text-sm mt-1">Free shipping on orders over $50</p>
+            {/* Stock Status */}
+            {product.stock_quantity !== undefined && (
+              <div className="mt-3">
+                {product.stock_quantity > 10 ? (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-green-600 bg-green-50 px-3 py-1.5 rounded-full">
+                    <CheckCircle size={14} /> In Stock
+                  </span>
+                ) : product.stock_quantity > 0 ? (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full">
+                    <PackageX size={14} /> Only {product.stock_quantity} left
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full">
+                    <PackageX size={14} /> Out of Stock
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 items-center mb-6">
@@ -201,14 +220,18 @@ const ProductDetail = () => {
               <span className="w-12 text-center font-bold text-lg">{quantity}</span>
               <Button
                 variant="ghost"
-                onClick={() => setQuantity(prev => prev + 1)}
+                onClick={() => setQuantity(prev => Math.min(product.stock_quantity || 99, prev + 1))}
                 className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors"
               >
                 <Plus size={20} />
               </Button>
             </div>
-            <Button onClick={handleAddToCart} className="w-full sm:flex-1 text-xl">
-              <ShoppingCart size={24} /> Add to Cart
+            <Button 
+              onClick={handleAddToCart} 
+              className={`w-full sm:flex-1 text-xl ${product.stock_quantity === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={product.stock_quantity === 0}
+            >
+              <ShoppingCart size={24} /> {product.stock_quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
             </Button>
           </div>
 

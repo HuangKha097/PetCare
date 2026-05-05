@@ -1,11 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import API from '../../api/axios';
+import { getCart, addItemToCart, updateCartItemQty, removeCartItem } from '../../services/cartService';
+
+// Helper: extract items from response (supports both old flat array and new {items, notifications} format)
+const extractCartData = (data) => {
+    if (Array.isArray(data)) {
+        return { items: data, notifications: [] };
+    }
+    return { items: data.items || [], notifications: data.notifications || [] };
+};
 
 // Async Thunks
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWithValue }) => {
     try {
-        const response = await API.get('/cart');
-        return response.data;
+        const response = await getCart();
+        return extractCartData(response.data);
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to fetch cart');
     }
@@ -13,8 +21,8 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWi
 
 export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, quantity }, { rejectWithValue }) => {
     try {
-        const response = await API.post('/cart', { productId, quantity });
-        return response.data;
+        const response = await addItemToCart(productId, quantity);
+        return extractCartData(response.data);
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to add to cart');
     }
@@ -22,8 +30,8 @@ export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, 
 
 export const updateCartItem = createAsyncThunk('cart/updateCartItem', async ({ cartItemId, quantity }, { rejectWithValue }) => {
     try {
-        const response = await API.put(`/cart/${cartItemId}`, { quantity });
-        return response.data;
+        const response = await updateCartItemQty(cartItemId, quantity);
+        return extractCartData(response.data);
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to update cart');
     }
@@ -31,8 +39,8 @@ export const updateCartItem = createAsyncThunk('cart/updateCartItem', async ({ c
 
 export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (cartItemId, { rejectWithValue }) => {
     try {
-        const response = await API.delete(`/cart/${cartItemId}`);
-        return response.data;
+        const response = await removeCartItem(cartItemId);
+        return extractCartData(response.data);
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed to remove item');
     }
@@ -42,6 +50,7 @@ const initialState = {
     items: [],
     totalQuantity: 0,
     totalAmount: 0,
+    notifications: [], // stock-related notifications from server
     status: 'idle', // idle | loading | succeeded | failed
     error: null
 };
@@ -52,6 +61,14 @@ const calculateTotals = (items) => {
     return { totalQuantity, totalAmount };
 };
 
+const handleCartResponse = (state, payload) => {
+    state.items = payload.items;
+    state.notifications = payload.notifications;
+    const { totalQuantity, totalAmount } = calculateTotals(payload.items);
+    state.totalQuantity = totalQuantity;
+    state.totalAmount = totalAmount;
+};
+
 export const cartSlice = createSlice({
     name: 'cart',
     initialState,
@@ -60,6 +77,10 @@ export const cartSlice = createSlice({
             state.items = [];
             state.totalQuantity = 0;
             state.totalAmount = 0;
+            state.notifications = [];
+        },
+        clearNotifications: (state) => {
+            state.notifications = [];
         }
     },
     extraReducers: (builder) => {
@@ -70,10 +91,7 @@ export const cartSlice = createSlice({
             })
             .addCase(fetchCart.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.items = action.payload;
-                const { totalQuantity, totalAmount } = calculateTotals(action.payload);
-                state.totalQuantity = totalQuantity;
-                state.totalAmount = totalAmount;
+                handleCartResponse(state, action.payload);
             })
             .addCase(fetchCart.rejected, (state, action) => {
                 state.status = 'failed';
@@ -81,27 +99,24 @@ export const cartSlice = createSlice({
             })
             // Add To Cart
             .addCase(addToCart.fulfilled, (state, action) => {
-                state.items = action.payload;
-                const { totalQuantity, totalAmount } = calculateTotals(action.payload);
-                state.totalQuantity = totalQuantity;
-                state.totalAmount = totalAmount;
+                handleCartResponse(state, action.payload);
+            })
+            .addCase(addToCart.rejected, (state, action) => {
+                state.error = action.payload;
             })
             // Update Item
             .addCase(updateCartItem.fulfilled, (state, action) => {
-                state.items = action.payload;
-                const { totalQuantity, totalAmount } = calculateTotals(action.payload);
-                state.totalQuantity = totalQuantity;
-                state.totalAmount = totalAmount;
+                handleCartResponse(state, action.payload);
+            })
+            .addCase(updateCartItem.rejected, (state, action) => {
+                state.error = action.payload;
             })
             // Remove Item
             .addCase(removeFromCart.fulfilled, (state, action) => {
-                state.items = action.payload;
-                const { totalQuantity, totalAmount } = calculateTotals(action.payload);
-                state.totalQuantity = totalQuantity;
-                state.totalAmount = totalAmount;
+                handleCartResponse(state, action.payload);
             });
     }
 });
 
-export const { clearCartLocal } = cartSlice.actions;
+export const { clearCartLocal, clearNotifications } = cartSlice.actions;
 export default cartSlice.reducer;

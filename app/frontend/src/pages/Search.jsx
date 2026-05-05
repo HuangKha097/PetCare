@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search as SearchIcon, X, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
-import API from '../api/axios';
+import { searchProducts } from '../services/productService';
 import ProductCard from '../components/ProductCard';
 import FilterSelect from '../components/FilterSelect';
 import Button from '../components/Button';
@@ -34,7 +34,7 @@ const Search = () => {
       if (filters.minPrice) params.append('minPrice', filters.minPrice);
       if (filters.maxPrice) params.append('maxPrice', filters.maxPrice);
 
-      const response = await API.get(`/products?${params.toString()}`);
+      const response = await searchProducts(params.toString());
       setResults(response.data);
     } catch (err) {
       console.error(err);

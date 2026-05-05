@@ -4,7 +4,7 @@ import { ShoppingCart, ArrowRight, Truck, Gift, Zap, Star, Stethoscope, Scissors
 import ProductCard from '../components/ProductCard';
 import Button from '../components/Button';
 import { doctors } from './DoctorDetail';
-import API from '../api/axios';
+import { getPopularProducts } from '../services/productService';
 
 const categories = [
   { name: 'Dog', icon: Dog },
@@ -30,8 +30,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPopularProducts = async () => {
       try {
-        const response = await API.get('/products/popular');
-        console.log(response);
+        const response = await getPopularProducts();
         setPopularProducts(response.data);
       } catch (err) {
         console.log(err);

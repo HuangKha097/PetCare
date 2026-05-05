@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PawPrint, ArrowLeft, Eye, EyeOff, Apple, Github, Mail, Lock, User as UserIcon } from 'lucide-react';
-import API from '../api/axios';
+import { login as loginAPI, register as registerAPI } from '../services/authService';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../store/slices/authSlice';
 import Button from '../components/Button';
@@ -30,12 +30,17 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const endpoint = isLogin ? '/auth/login' : '/auth/register';
-            const response = await API.post(endpoint, formData);
+            const response = isLogin
+                ? await loginAPI(formData)
+                : await registerAPI(formData);
 
             if (isLogin) {
                 dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
-                navigate('/');
+                if (response.data.user.role === 'admin') {
+                    navigate('/admin/dashboard');
+                } else {
+                    navigate('/');
+                }
             } else {
                 setIsLogin(true);
                 setError('Account created successfully! Please log in.');

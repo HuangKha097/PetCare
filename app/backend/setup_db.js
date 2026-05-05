@@ -19,8 +19,6 @@ async function setup() {
     await conn.query(`CREATE DATABASE IF NOT EXISTS petcaredb`);
     await conn.query(`USE petcaredb`);
 
-    console.log('Creating tables...');
-
     await conn.query(`
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,6 +28,9 @@ async function setup() {
         phone VARCHAR(20) DEFAULT NULL,
         address TEXT DEFAULT NULL,
         city VARCHAR(100) DEFAULT NULL,
+        role VARCHAR(20) DEFAULT 'user',
+        is_active BOOLEAN DEFAULT TRUE,
+        is_protected BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);

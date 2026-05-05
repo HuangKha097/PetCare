@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, User, Share2, ArrowRight } from 'lucide-react';
-import API from '../api/axios';
+import { getBlogById, getBlogs } from '../services/blogService';
 import Button from '../components/Button';
 
 const BlogDetail = () => {
@@ -18,8 +18,8 @@ const BlogDetail = () => {
         setLoading(true);
         // Fetch current blog and all blogs simultaneously
         const [blogRes, allBlogsRes] = await Promise.all([
-          API.get(`/blogs/${id}`),
-          API.get('/blogs')
+          getBlogById(id),
+          getBlogs()
         ]);
         
         setBlog(blogRes.data);

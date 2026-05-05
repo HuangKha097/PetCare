@@ -16,10 +16,10 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Insert user
+        // Insert user with default role 'user'
         const [result] = await db.execute(
-            'INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)',
-            [name, email, hashedPassword]
+            'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)',
+            [name, email, hashedPassword, 'user']
         );
 
         res.status(201).json({ message: 'User registered successfully', userId: result.insertId });
@@ -33,34 +33,40 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check user
         const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
         if (users.length === 0) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
 
         const user = users[0];
 
-        // Validate password
-        const isMatch = await bcrypt.compare(password, user.password_hash);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+        if (!user.is_active) {
+            return res.status(403).json({ message: 'Your account has been banned. Please contact support.' });
         }
 
-        // Create token
-        const payload = { userId: user.id };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const isMatch = await bcrypt.compare(password, user.password_hash);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
 
-        res.json({ 
-            token, 
+        const token = jwt.sign(
+            { userId: user.id, email: user.email, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.json({
+            token,
             user: { 
                 id: user.id, 
                 name: user.name, 
-                email: user.email,
+                email: user.email, 
+                role: user.role || 'user', 
+                is_active: user.is_active,
                 phone: user.phone,
                 address: user.address,
-                city: user.city
-            } 
+                city: user.city 
+            }
         });
     } catch (error) {
         console.error(error);
@@ -70,7 +76,7 @@ exports.login = async (req, res) => {
 
 exports.getMe = async (req, res) => {
     try {
-        const [users] = await db.execute('SELECT id, name, email, phone, address, city FROM users WHERE id = ?', [req.user]);
+        const [users] = await db.execute('SELECT id, name, email, phone, address, city, role FROM users WHERE id = ?', [req.user]);
         if (users.length === 0) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -88,7 +94,7 @@ exports.updateProfile = async (req, res) => {
             'UPDATE users SET phone = ?, address = ?, city = ? WHERE id = ?',
             [phone || null, address || null, city || null, req.user]
         );
-        const [updated] = await db.execute('SELECT id, name, email, phone, address, city FROM users WHERE id = ?', [req.user]);
+        const [updated] = await db.execute('SELECT id, name, email, phone, address, city, role FROM users WHERE id = ?', [req.user]);
         res.json(updated[0]);
     } catch (error) {
         console.error(error);

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { logout } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import API from '../api/axios';
+import { getMyOrders } from '../services/orderService';
 import ProductCard from '../components/ProductCard';
 
 
@@ -29,7 +29,7 @@ const Account = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const ordersRes = await API.get('/orders/my-orders');
+        const ordersRes = await getMyOrders();
         setOrders(ordersRes.data);
         // Add wishlist fetch if needed
       } catch (error) {

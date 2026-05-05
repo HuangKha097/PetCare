@@ -41,6 +41,7 @@ const ProductCard = ({ product }) => {
 
     const rating = Number(product.rating || 0);
     const price = Number(product.price || 0);
+    const isOutOfStock = product.stock_quantity !== undefined && product.stock_quantity <= 0;
 
     return (
         <div className="group bg-surface-container-lowest rounded-2xl p-4 transition-all duration-300 hover:shadow-[0_16px_40px_-8px_rgba(0,0,0,0.10)] hover:-translate-y-1.5 border border-surface-container-low hover:border-primary/30 flex flex-col h-full relative overflow-hidden">
@@ -49,7 +50,12 @@ const ProductCard = ({ product }) => {
             <div className="relative aspect-[1/1] mb-5 overflow-hidden rounded-xl bg-surface-container-low/50">
                 {/* Badges */}
                 <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
-                    {rating > 4.7 && (
+                    {isOutOfStock && (
+                        <div className="bg-error/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
+                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-white">Out of Stock</span>
+                        </div>
+                    )}
+                    {!isOutOfStock && rating > 4.7 && (
                         <div className="glassmorphism px-3 py-1.5 rounded-full shadow-sm border border-white/40 backdrop-blur-xl">
                             <span className="text-[10px] font-black uppercase tracking-[0.1em] text-primary-dark">Best Seller</span>
                         </div>
@@ -73,6 +79,7 @@ const ProductCard = ({ product }) => {
                 </Link>
 
                 {/* Hover Quick Actions */}
+                {!isOutOfStock && (
                 <div className="absolute inset-x-4 bottom-4 z-20 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex gap-2">
                     <Button
                         onClick={handleAddToCart}
@@ -84,6 +91,12 @@ const ProductCard = ({ product }) => {
                         <Eye size={20} />
                     </Link>
                 </div>
+                )}
+
+                {/* Out of stock overlay */}
+                {isOutOfStock && (
+                    <div className="absolute inset-0 bg-white/30 z-10" />
+                )}
             </div>
 
             {/* Product Details */}

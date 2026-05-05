@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, User, ArrowRight } from 'lucide-react';
-import API from '../api/axios';
+import { getBlogs } from '../services/blogService';
 
 const Blog = () => {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -12,7 +12,7 @@ const Blog = () => {
     const fetchBlogs = async () => {
       try {
         setLoading(true);
-        const response = await API.get('/blogs');
+        const response = await getBlogs();
         setBlogPosts(response.data);
       } catch (err) {
         console.error(err);
