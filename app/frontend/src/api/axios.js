@@ -3,7 +3,7 @@ import { store } from '../store/index';
 import { logout, updateTokens } from '../store/slices/authSlice';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Flag to prevent multiple refresh requests simultaneously
@@ -68,7 +68,7 @@ API.interceptors.response.use(
       }
 
       try {
-        const { data } = await axios.post('http://localhost:5000/api/auth/refresh-token', {
+        const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/refresh-token`, {
           refreshToken,
         });
 
