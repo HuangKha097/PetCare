@@ -256,6 +256,7 @@
     "password": "密码",
     "please_wait": "请稍候...",
     "or_connect": "或通过以下方式连接",
+    "continue_google": "通过 Google 继续",
     "success_register": "账户创建成功！请登录。",
     "error_default": "出错了"
   },

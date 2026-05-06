@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PawPrint, Eye, EyeOff, Apple, Github, Mail, Lock, User as UserIcon } from 'lucide-react';
+import { PawPrint, Eye, EyeOff, Mail, Lock, User as UserIcon } from 'lucide-react';
 import { login as loginAPI, register as registerAPI } from '../services/authService';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../store/slices/authSlice';
@@ -173,15 +173,10 @@ const Login = () => {
                             <span className="relative px-4 bg-surface-container-lowest text-xs font-bold uppercase tracking-widest text-on-surface-variant/40">{t('auth.or_connect')}</span>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-4">
-                            <button className="flex items-center justify-center p-4 rounded-xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
-                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-6 h-6" alt="Google" />
-                            </button>
-                            <button className="flex items-center justify-center p-4 rounded-xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
-                                <Apple className="w-6 h-6" />
-                            </button>
-                            <button className="flex items-center justify-center p-4 rounded-xl border border-surface-container-high hover:bg-surface-container-low transition-all active:scale-95">
-                                <Github className="w-6 h-6" />
+                        <div className="flex justify-center">
+                            <button className="flex items-center justify-center gap-3 px-8 py-4 rounded-2xl border border-surface-container-high bg-white hover:bg-surface-container-low transition-all active:scale-95 shadow-sm group">
+                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-6 h-6 group-hover:scale-110 transition-transform" alt="Google" />
+                                <span className="text-sm font-bold text-on-surface-variant group-hover:text-on-surface transition-colors">{t('auth.continue_google') || 'Continue with Google'}</span>
                             </button>
                         </div>
                     </div>

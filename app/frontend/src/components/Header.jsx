@@ -34,8 +34,11 @@ const Header = () => {
       <header className="bg-white/80 dark:bg-surface-container-low/80 backdrop-blur-xl font-display font-bold tracking-tight shadow-sm w-full top-0 z-50 sticky">
         <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
-            <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden">
-              <Menu className="text-primary cursor-pointer" />
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)} 
+              className="md:hidden p-2.5 bg-primary/10 rounded-2xl hover:bg-primary/20 transition-all active:scale-90 group"
+            >
+              <Menu className="text-primary group-hover:scale-110 transition-transform" size={24} />
             </button>
             <Link to="/" className="text-2xl font-black text-primary-dark tracking-tighter">PetCare <span className="text-primary italic">🐾</span></Link>
 
@@ -82,57 +85,76 @@ const Header = () => {
 
       {/* ── Mobile Sidebar Menu (Outside header to escape backdrop filter stacking context) ── */}
       <div
-        className={`fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm transition-all duration-500 md:hidden ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onClick={closeMenu}
       >
         <div
-          className={`fixed top-0 left-0 h-full w-4/5 max-w-sm bg-white p-6 shadow-2xl flex flex-col transition-all duration-300 ease-out ${isMobileMenuOpen ? 'translate-x-0 opacity-100 visible' : '-translate-x-full opacity-0 invisible'}`}
+          className={`fixed top-0 left-0 h-full w-[85%] max-w-sm bg-white dark:bg-surface-container-lowest p-8 shadow-2xl flex flex-col transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center justify-between mb-12">
             <Link to="/" className="text-2xl font-black text-primary-dark tracking-tighter" onClick={closeMenu}>
               PetCare <span className="text-primary italic">🐾</span>
             </Link>
-            <button onClick={closeMenu} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors">
+            <button 
+              onClick={closeMenu} 
+              className="p-3 bg-surface-container-low hover:bg-primary/10 hover:text-primary rounded-2xl text-on-surface-variant transition-all duration-300"
+            >
               <X size={24} />
             </button>
           </div>
 
-          <nav className="flex flex-col gap-6 text-xl">
-            <NavLink to="/shop" className={navLinkClass} onClick={closeMenu}>{t('nav.shop')}</NavLink>
-            <NavLink to="/blog" className={navLinkClass} onClick={closeMenu}>{t('nav.blog')}</NavLink>
+          <nav className="flex flex-col gap-2">
+            <NavLink 
+              to="/shop" 
+              className={({ isActive }) => `flex items-center gap-4 p-4 rounded-2xl text-lg font-bold transition-all duration-300 ${isActive ? 'bg-primary/10 text-primary translate-x-2' : 'text-on-background hover:bg-surface-container-low hover:translate-x-2'}`}
+              onClick={closeMenu}
+            >
+              <div className={`w-2 h-2 rounded-full bg-primary transition-transform duration-300 ${isMobileMenuOpen ? 'scale-100' : 'scale-0'}`} />
+              {t('nav.shop')}
+            </NavLink>
+            <NavLink 
+              to="/blog" 
+              className={({ isActive }) => `flex items-center gap-4 p-4 rounded-2xl text-lg font-bold transition-all duration-300 ${isActive ? 'bg-primary/10 text-primary translate-x-2' : 'text-on-background hover:bg-surface-container-low hover:translate-x-2'}`}
+              onClick={closeMenu}
+            >
+              <div className={`w-2 h-2 rounded-full bg-primary transition-transform duration-300 ${isMobileMenuOpen ? 'scale-100' : 'scale-0'}`} />
+              {t('nav.blog')}
+            </NavLink>
           </nav>
 
-          <div className="mt-auto pt-8 border-t border-surface-container-high">
+          <div className="mt-auto pt-8">
             {user ? (
               <div 
-                className="flex items-center justify-between cursor-pointer group hover:bg-surface-container-low p-2 -mx-2 rounded-xl transition-colors" 
+                className="flex items-center justify-between cursor-pointer group bg-surface-container-low p-4 rounded-3xl transition-all duration-300 hover:shadow-lg" 
                 onClick={() => { closeMenu(); navigate('/account'); }}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold text-lg group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-primary text-on-primary rounded-2xl flex items-center justify-center font-black text-xl shadow-lg shadow-primary/20">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-base font-bold text-on-surface">{user.name}</span>
-                    <span className="text-[10px] uppercase tracking-widest opacity-60">{t('nav.welcome_back')}</span>
+                    <span className="text-lg font-black text-on-surface leading-tight">{user.name}</span>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-primary">{t('nav.welcome_back')}</span>
                   </div>
                 </div>
                 <button 
                   onClick={(e) => { e.stopPropagation(); handleLogout(); closeMenu(); }} 
-                  className="p-3 hover:bg-error/10 rounded-full text-error transition-colors"
+                  className="p-4 bg-white dark:bg-surface-container-lowest shadow-sm hover:bg-error hover:text-white rounded-2xl text-error transition-all duration-300 active:scale-90"
                 >
                   <LogOut size={20} />
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col gap-3">
-                <Link to="/login" onClick={closeMenu}>
-                  <Button className="w-full py-3" variant="primary">{t('nav.sign_in')}</Button>
+              <div className="flex flex-col gap-4">
+                <Link to="/login" onClick={closeMenu} className="w-full">
+                  <Button className="w-full py-4 text-base font-black shadow-xl shadow-primary/20" variant="primary">
+                    {t('nav.sign_in')}
+                  </Button>
                 </Link>
-                <Link to="/register" onClick={closeMenu}>
-                  <Button className="w-full py-3 bg-surface-container hover:bg-surface-container-high text-on-surface" variant="secondary">{t('nav.create_account') || 'Create Account'}</Button>
-                </Link>
+                <p className="text-center text-[10px] text-on-surface-variant font-bold uppercase tracking-[0.2em] opacity-40">
+                  {t('nav.welcome_to_petcare') || 'Welcome to PetCare'}
+                </p>
               </div>
             )}
           </div>
