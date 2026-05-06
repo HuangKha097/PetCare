@@ -149,7 +149,7 @@ const Dashboard = () => {
                                     <td className="p-4 pl-6">
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-lg overflow-hidden border border-surface-container-low shrink-0 bg-white">
-                                                <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                                                <img src={product.image_url} alt={getLocalizedText(product.name, i18n.language)} className="w-full h-full object-cover" />
                                             </div>
                                             <span className="font-bold text-on-background line-clamp-1">{getLocalizedText(product.name, i18n.language)}</span>
                                         </div>

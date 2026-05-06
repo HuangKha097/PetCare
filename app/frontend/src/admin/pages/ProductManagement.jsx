@@ -84,11 +84,14 @@ const ProductManagement = () => {
     const filteredProducts = products.filter(p => {
         const searchLower = searchTerm.toLowerCase();
         const localizedName = getLocalizedText(p.name, i18n.language);
+        const localizedCategory = getLocalizedText(p.category, i18n.language);
+        const localizedBrand = getLocalizedText(p.brand, i18n.language);
+        
         const matchesSearch = 
             (localizedName && localizedName.toLowerCase().includes(searchLower)) || 
             (p.sku && p.sku.toLowerCase().includes(searchLower)) ||
-            (p.category && p.category.toLowerCase().includes(searchLower)) ||
-            (p.brand && p.brand.toLowerCase().includes(searchLower));
+            (localizedCategory && localizedCategory.toLowerCase().includes(searchLower)) ||
+            (localizedBrand && localizedBrand.toLowerCase().includes(searchLower));
             
         const matchesStatus = statusFilter === 'all' ? true : statusFilter === 'active' ? p.is_active : !p.is_active;
         return matchesSearch && matchesStatus;
@@ -179,17 +182,17 @@ const ProductManagement = () => {
                                             <div className="text-on-surface-variant font-medium mt-1 flex gap-3">
                                                 <span>SKU: {product.sku || 'N/A'}</span>
                                                 <span>•</span>
-                                                <span>{product.category}</span>
+                                                <span>{getLocalizedText(product.category, i18n.language)}</span>
                                             </div>
                                         </td>
                                         <td className="p-4 font-bold text-on-background">${Number(product.price).toFixed(2)}</td>
                                         <td className="p-4">
                                             {product.stock_quantity > 10 ? (
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-green-50 text-green-700 font-bold text-xs">{product.stock_quantity} in stock</span>
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-green-50 text-green-700 font-bold text-xs">{product.stock_quantity} {t('admin.in_stock')}</span>
                                             ) : product.stock_quantity > 0 ? (
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 font-bold text-xs">{product.stock_quantity} low stock</span>
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 font-bold text-xs">{product.stock_quantity} {t('admin.low_stock')}</span>
                                             ) : (
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-red-50 text-red-700 font-bold text-xs">Out of stock</span>
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-red-50 text-red-700 font-bold text-xs">{t('admin.out_of_stock_badge')}</span>
                                             )}
                                         </td>
                                         <td className="p-4">
@@ -226,7 +229,7 @@ const ProductManagement = () => {
                             ) : (
                                 <tr>
                                     <td colSpan="6" className="p-12 text-center text-on-surface-variant font-medium">
-                                        No products found matching your criteria.
+                                        {t('admin.no_products')}
                                     </td>
                                 </tr>
                             )}
@@ -292,12 +295,12 @@ const ProductManagement = () => {
                         <div className="w-12 h-12 bg-red-50 text-error rounded-full flex items-center justify-center mb-4">
                             <Trash2 size={24} />
                         </div>
-                        <h2 className="text-xl font-black mb-2">Delete Product?</h2>
+                        <h2 className="text-xl font-black mb-2">{t('admin.delete_title')}</h2>
                         <p className="text-sm font-medium text-on-surface-variant mb-4">
-                            Are you sure you want to deactivate <span className="font-bold text-on-background">"{getLocalizedText(productToDelete.name, i18n.language)}"</span>? It will be hidden from the public store.
+                            {t('admin.delete_desc')} <span className="font-bold text-on-background">"{getLocalizedText(productToDelete.name, i18n.language)}"</span>{t('admin.delete_desc_2')}
                         </p>
                         <p className="text-xs font-bold text-error mb-6 uppercase tracking-wider">
-                            Requires Admin Password
+                            {t('admin.requires_admin')}
                         </p>
                         
                         {deleteError && (
@@ -330,7 +333,7 @@ const ProductManagement = () => {
                                 disabled={!adminPassword || isDeleting}
                                 className="px-5 py-2.5 bg-error text-white rounded-xl font-bold shadow-md shadow-error/20 hover:bg-red-700 disabled:opacity-50 transition-colors"
                             >
-                                {isDeleting ? 'Verifying...' : 'Delete Product'}
+                                {isDeleting ? t('admin.verifying') : t('admin.delete_btn')}
                             </button>
                         </div>
                     </div>

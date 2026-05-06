@@ -115,7 +115,7 @@ const Header = () => {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-base font-bold text-on-surface">{user.name}</span>
-                    <span className="text-[10px] uppercase tracking-widest opacity-60">Welcome back</span>
+                    <span className="text-[10px] uppercase tracking-widest opacity-60">{t('nav.welcome_back')}</span>
                   </div>
                 </div>
                 <button 
@@ -128,10 +128,10 @@ const Header = () => {
             ) : (
               <div className="flex flex-col gap-3">
                 <Link to="/login" onClick={closeMenu}>
-                  <Button className="w-full py-3" variant="primary">Sign In</Button>
+                  <Button className="w-full py-3" variant="primary">{t('nav.sign_in')}</Button>
                 </Link>
                 <Link to="/register" onClick={closeMenu}>
-                  <Button className="w-full py-3 bg-surface-container hover:bg-surface-container-high text-on-surface" variant="secondary">Create Account</Button>
+                  <Button className="w-full py-3 bg-surface-container hover:bg-surface-container-high text-on-surface" variant="secondary">{t('nav.create_account') || 'Create Account'}</Button>
                 </Link>
               </div>
             )}

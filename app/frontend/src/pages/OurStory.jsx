@@ -1,30 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Leaf, ShieldCheck, Star, ArrowRight, Users, Package, Globe } from 'lucide-react';
-
-const milestones = [
-  { year: '2018', title: 'The Beginning', desc: 'Founded in a small apartment, PetCare started as a passion project after our founder struggled to find truly healthy food for his aging Labrador, Max.' },
-  { year: '2020', title: 'Going Online', desc: 'We launched our first e-commerce store and sold out of our curated pet food selection within 48 hours — proof that pet parents craved something better.' },
-  { year: '2022', title: 'Vet Partnership Program', desc: 'We partnered with 30+ veterinarians and animal nutritionists to co-develop and vet-approve every product we carry on our platform.' },
-  { year: '2024', title: 'Nationwide Reach', desc: 'PetCare expanded shipping to all 63 provinces, serving over 50,000 happy pets and their families across the country.' },
-  { year: '2026', title: 'What\'s Next', desc: 'We\'re launching subscription boxes, a pet health blog powered by licensed vets, and same-day delivery in major cities — more ways to care, faster.' },
-];
-
-const values = [
-  { icon: Heart, title: 'Pet-First Always', desc: 'Every product decision starts with one question: is this safe, healthy, and genuinely beneficial for the animal?', color: 'bg-red-50 text-red-500' },
-  { icon: Leaf, title: 'Ethically Sourced', desc: 'We only work with suppliers who share our commitment to responsible farming, sustainability, and cruelty-free practices.', color: 'bg-green-50 text-green-600' },
-  { icon: ShieldCheck, title: 'Vet-Approved', desc: 'Our in-house advisory board of licensed veterinarians reviews every product before it hits our shelves.', color: 'bg-blue-50 text-blue-500' },
-  { icon: Star, title: 'Honest Reviews', desc: 'We publish all reviews — including the critical ones — because transparency builds the trust your pets deserve.', color: 'bg-yellow-50 text-yellow-500' },
-];
-
-const stats = [
-  { icon: Users, value: '50,000+', label: 'Happy Pets Served' },
-  { icon: Package, value: '200+', label: 'Curated Products' },
-  { icon: Globe, value: '63', label: 'Provinces Shipped' },
-  { icon: ShieldCheck, value: '30+', label: 'Vet Partners' },
-];
+import { useTranslation } from 'react-i18next';
 
 const OurStory = () => {
+  const { t } = useTranslation();
+  
+  const milestones = t('story.milestones', { returnObjects: true });
+  const values = t('story.values', { returnObjects: true }).map((v, i) => ({
+    ...v,
+    icon: [Heart, Leaf, ShieldCheck, Star][i]
+  }));
+
+  const stats = [
+    { icon: Users, value: '50,000+', label: t('story.stats.pets') },
+    { icon: Package, value: '200+', label: t('story.stats.products') },
+    { icon: Globe, value: '63', label: t('story.stats.provinces') },
+    { icon: ShieldCheck, value: '30+', label: t('story.stats.partners') },
+  ];
+
   return (
     <div className="bg-surface">
 
@@ -35,13 +29,13 @@ const OurStory = () => {
           <div className="absolute bottom-0 right-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <span className="inline-block bg-primary/20 text-primary-dark text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6">Our Story</span>
+          <span className="inline-block bg-primary/20 text-primary-dark text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6">{t('story.subtitle')}</span>
           <h1 className="font-display font-black text-5xl md:text-7xl text-on-background leading-tight mb-6">
-            Born from a Love<br />
-            <span className="text-primary-dark">of Pets.</span>
+            {t('story.title_top')}<br />
+            <span className="text-primary-dark">{t('story.title_bottom')}</span>
           </h1>
           <p className="text-on-surface-variant text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-            PetCare wasn't built in a boardroom. It was built at 2am, on a kitchen floor, by a dog owner who just wanted something better for his best friend.
+            {t('story.desc')}
           </p>
         </div>
       </section>
@@ -66,18 +60,12 @@ const OurStory = () => {
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-xs font-black uppercase tracking-[0.2em] text-primary-dark opacity-60 mb-4 block">How It Started</span>
-            <h2 className="font-display font-black text-4xl text-on-background mb-6 leading-tight">Max changed everything.</h2>
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-primary-dark opacity-60 mb-4 block">{t('story.origin_subtitle')}</span>
+            <h2 className="font-display font-black text-4xl text-on-background mb-6 leading-tight">{t('story.origin_title')}</h2>
             <div className="space-y-4 text-on-surface-variant leading-relaxed font-medium">
-              <p>
-                In 2018, our founder <span className="font-bold bg-primary px-2 rounded-sm">Kha</span> noticed that his 10-year-old Labrador, Max, was losing energy and gaining weight despite eating "premium" kibble. After months of research and consultations with veterinarians, he discovered that most pet food marketed as healthy was anything but.
-              </p>
-              <p>
-                Frustrated by the lack of genuinely transparent, vet-backed options, he started sourcing food directly from ethical farms, testing formulas with a local animal nutritionist, and sharing the results with neighbors who had the same problem.
-              </p>
-              <p>
-                Word spread fast. Within a year, what started as a shared spreadsheet became a waiting list. PetCare was born.
-              </p>
+              <p>{t('story.origin_p1')}</p>
+              <p>{t('story.origin_p2')}</p>
+              <p>{t('story.origin_p3')}</p>
             </div>
           </div>
           <div className="relative">
@@ -95,8 +83,8 @@ const OurStory = () => {
       <section className="py-24 px-6 bg-surface-container-low">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-xs font-black uppercase tracking-[0.2em] text-primary-dark opacity-60 mb-4 block">What We Stand For</span>
-            <h2 className="font-display font-black text-4xl text-on-background">Our Core Values</h2>
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-primary-dark opacity-60 mb-4 block">{t('story.values_subtitle')}</span>
+            <h2 className="font-display font-black text-4xl text-on-background">{t('story.values_title')}</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v, i) => {
@@ -119,8 +107,8 @@ const OurStory = () => {
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-xs font-black uppercase tracking-[0.2em] text-primary-dark opacity-60 mb-4 block">Our Journey</span>
-            <h2 className="font-display font-black text-4xl text-on-background">Milestones That Shaped Us</h2>
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-primary-dark opacity-60 mb-4 block">{t('story.journey_subtitle')}</span>
+            <h2 className="font-display font-black text-4xl text-on-background">{t('story.journey_title')}</h2>
           </div>
           <div className="relative">
             {/* Vertical line */}
@@ -148,22 +136,22 @@ const OurStory = () => {
       {/* CTA */}
       <section className="py-20 px-6 bg-surface-container-low">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-display font-black text-4xl text-on-background mb-4">Still have questions?</h2>
+          <h2 className="font-display font-black text-4xl text-on-background">{t('story.cta_title')}</h2>
           <p className="text-on-surface-variant text-lg mb-10 font-medium">
-            Our FAQ page covers shipping, returns, ingredients, and everything in between.
+            {t('story.cta_desc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/faq"
               className="inline-flex items-center justify-center gap-2 bg-primary text-on-background px-8 py-3.5 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark hover:scale-105 active:scale-95 transition-all text-base"
             >
-              Read Our FAQ <ArrowRight size={18} />
+              {t('story.read_faq')} <ArrowRight size={18} />
             </Link>
             <Link
               to="/shop"
               className="inline-flex items-center justify-center gap-2 bg-white border-2 border-surface-container-high text-on-background px-8 py-3.5 rounded-xl font-bold hover:border-primary/30 hover:bg-surface-container-low transition-all text-base"
             >
-              Shop Now <ArrowRight size={18} />
+              {t('story.shop_now')} <ArrowRight size={18} />
             </Link>
           </div>
         </div>

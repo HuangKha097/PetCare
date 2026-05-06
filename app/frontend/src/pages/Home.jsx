@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ShoppingCart, ArrowRight, Truck, Gift, Zap, Star, Stethoscope, Scissors, Heart, ShieldCheck, Dog, Cat, Bone, Gamepad2, Tag } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import Button from '../components/Button';
 import { doctors } from './DoctorDetail';
 import { getPopularProducts } from '../services/productService';
 
-const categories = [
-  { name: 'Dog', icon: Dog },
-  { name: 'Cat', icon: Cat },
-  { name: 'Food', icon: Bone },
-  { name: 'Toys', icon: Gamepad2 },
-  { name: 'Accessories', icon: Tag },
-];
-
-
-
-
-const services = [
-  { id: 1, title: 'Vet Consultations', icon: <Stethoscope size={32} />, desc: 'Expert medical advice for your furry friends.' },
-  { id: 2, title: 'Professional Grooming', icon: <Scissors size={32} />, desc: 'Keep your pets looking their absolute best.' },
-  { id: 3, title: 'Wellness Plans', icon: <Heart size={32} />, desc: 'Comprehensive health packages for peace of mind.' },
-  { id: 4, title: 'Pet Insurance', icon: <ShieldCheck size={32} />, desc: 'Protect against unexpected veterinary costs.' },
-];
-
 const Home = () => {
-
+  const { t } = useTranslation();
   const [popularProducts, setPopularProducts] = useState([]);
+
+  const categories = [
+    { name: t('category.Dog'), icon: Dog },
+    { name: t('category.Cat'), icon: Cat },
+    { name: t('category.Food'), icon: Bone },
+    { name: t('category.Toys'), icon: Gamepad2 },
+    { name: t('category.Accessories'), icon: Tag },
+  ];
+
+  const services = [
+    { id: 1, title: t('services.vet_consult.title'), icon: <Stethoscope size={32} />, desc: t('services.vet_consult.desc') },
+    { id: 2, title: t('services.grooming.title'), icon: <Scissors size={32} />, desc: t('services.grooming.desc') },
+    { id: 3, title: t('services.wellness.title'), icon: <Heart size={32} />, desc: t('services.wellness.desc') },
+    { id: 4, title: t('services.insurance.title'), icon: <ShieldCheck size={32} />, desc: t('services.insurance.desc') },
+  ];
+
   useEffect(() => {
     const fetchPopularProducts = async () => {
       try {
@@ -46,20 +45,20 @@ const Home = () => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="z-10 text-center md:text-left flex-1">
             <h2 className="text-4xl md:text-7xl font-black text-on-background leading-tight mb-6">
-              Everything Your Pet Needs, In One Place
+              {t('home.hero_title')}
             </h2>
             <p className="text-lg md:text-xl text-on-surface-variant font-medium mb-10 max-w-lg">
-              Healthy, happy pets start here. Discover premium food, durable toys, and cozy accessories.
+              {t('home.hero_desc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <Link to="/shop">
                 <Button className="w-full sm:w-auto px-8 py-3.5 text-base">
-                  Shop Now
+                  {t('common.shop_now')}
                 </Button>
               </Link>
               <Link to="/categories">
                 <Button variant="outline" className="px-8 py-3.5 text-base w-full sm:w-auto">
-                  Browse Categories
+                  {t('common.browse_categories')}
                 </Button>
               </Link>
             </div>
@@ -78,16 +77,16 @@ const Home = () => {
       {/* Promo Banner */}
       <div className="bg-secondary text-on-secondary py-3 px-6 overflow-hidden whitespace-nowrap">
         <div className="flex justify-center items-center gap-12 animate-pulse text-sm font-bold tracking-widest uppercase">
-          <div className="flex items-center gap-2"><Truck size={16} /> FREE SHIPPING OVER $50</div>
-          <div className="hidden md:flex items-center gap-2"><Gift size={16} /> 20% OFF FOR NEW CUSTOMERS</div>
-          <div className="flex items-center gap-2"><Zap size={16} /> FLASH SALE: TOP BRANDS 30% OFF</div>
+          <div className="flex items-center gap-2"><Truck size={16} /> {t('home.free_shipping')}</div>
+          <div className="hidden md:flex items-center gap-2"><Gift size={16} /> {t('home.new_customer_off')}</div>
+          <div className="flex items-center gap-2"><Zap size={16} /> {t('home.flash_sale')}</div>
         </div>
       </div>
 
       {/* Categories */}
       <section className="py-16 bg-surface px-6">
         <div className="max-w-7xl mx-auto">
-          <h3 className="text-2xl font-bold mb-10 text-center md:text-left">Shop by Department</h3>
+          <h3 className="text-2xl font-bold mb-10 text-center md:text-left">{t('home.shop_department')}</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
             {categories.map((cat, i) => {
               const Icon = cat.icon;
@@ -108,9 +107,9 @@ const Home = () => {
       <section className="py-16 bg-surface px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-            <h3 className="text-2xl font-bold text-center md:text-left mb-4 md:mb-0">Popular Products</h3>
+            <h3 className="text-2xl font-bold text-center md:text-left mb-4 md:mb-0">{t('home.popular_products')}</h3>
             <Link to="/shop" className="flex items-center gap-2 text-primary-dark font-bold hover:translate-x-1 transition-transform">
-              View All <ArrowRight size={16} />
+              {t('common.view_all')} <ArrowRight size={16} />
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -125,9 +124,9 @@ const Home = () => {
       <section className="py-16 bg-surface-container-low px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Meet Our Top Veterinarians</h3>
+            <h3 className="text-3xl font-bold mb-4">{t('home.meet_doctors')}</h3>
             <p className="text-on-surface-variant max-w-2xl mx-auto">
-              Our team of highly qualified and passionate veterinarians are dedicated to providing the best possible care for your pets.
+              {t('home.doctors_desc')}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -141,11 +140,11 @@ const Home = () => {
                   <img src={doc.image_url} alt={doc.name} className="w-full h-full object-cover " />
                 </div>
                 <div className="p-6">
-                  <span className="text-primary-dark font-bold text-xs tracking-wider uppercase mb-2 block">{doc.specialty}</span>
-                  <h4 className="text-xl font-bold mb-2">{doc.name}</h4>
-                  <p className="text-on-surface-variant text-sm leading-relaxed mb-4 line-clamp-2">{doc.description}</p>
+                  <span className="text-primary-dark font-bold text-xs tracking-wider uppercase mb-2 block">{t(`doctor.${doc.key}.specialty`)}</span>
+                  <h4 className="text-xl font-bold mb-2">{t(`doctor.${doc.key}.name`)}</h4>
+                  <p className="text-on-surface-variant text-sm leading-relaxed mb-4 line-clamp-2">{t(`doctor.${doc.key}.desc`)}</p>
                   <span className="inline-flex items-center gap-1 text-primary-dark font-bold text-sm group-hover:gap-2 transition-all">
-                    View Profile <ArrowRight size={14} />
+                    {t('common.view_profile')} <ArrowRight size={14} />
                   </span>
                 </div>
               </Link>
@@ -158,9 +157,9 @@ const Home = () => {
       <section className="py-16 bg-surface px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Comprehensive Pet Care</h3>
+            <h3 className="text-3xl font-bold mb-4">{t('home.comprehensive_care')}</h3>
             <p className="text-on-surface-variant max-w-2xl mx-auto">
-              Beyond our premium products, we offer a range of services to ensure your pets live their happiest, healthiest lives.
+              {t('home.comprehensive_desc')}
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -180,12 +179,12 @@ const Home = () => {
       {/* Newsletter */}
       <section className="bg-secondary-container py-20 px-6 rounded-t-2xl">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="text-on-secondary-container font-bold tracking-widest uppercase mb-4 block">Join the Pack</span>
-          <h2 className="text-4xl md:text-5xl font-black mb-6">Want 20% Off Your First Order?</h2>
-          <p className="text-lg mb-10 opacity-80">Subscribe to our newsletter for exclusive deals, pet care tips, and new arrivals.</p>
-          <form className="flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
-            <input className="flex-grow bg-surface-container-lowest border border-surface-container-low rounded-xl px-6 py-4 focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="Your email address" type="email" />
-            <Button className="w-full sm:w-auto text-lg">Subscribe</Button>
+          <span className="text-on-secondary-container font-bold tracking-widest uppercase mb-4 block">{t('home.join_pack')}</span>
+          <h2 className="text-4xl md:text-5xl font-black mb-6">{t('home.newsletter_title')}</h2>
+          <p className="text-lg mb-10 opacity-80">{t('home.newsletter_desc')}</p>
+          <form className="flex flex-col md:flex-row gap-4 max-w-xl mx-auto" onSubmit={(e) => e.preventDefault()}>
+            <input className="flex-grow bg-surface-container-lowest border border-surface-container-low rounded-xl px-6 py-4 focus:ring-2 focus:ring-primary transition-all outline-none" placeholder={t('home.email_placeholder')} type="email" />
+            <Button className="w-full sm:w-auto text-lg">{t('common.subscribe')}</Button>
           </form>
         </div>
       </section>

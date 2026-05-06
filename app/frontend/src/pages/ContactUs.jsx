@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 // ── Brand SVG icons ──────────────────────────────────────────────────────────
 const TikTokIcon = () => (
@@ -32,75 +33,75 @@ const YouTubeIcon = () => (
   </svg>
 );
 
-// ── Contact channels ─────────────────────────────────────────────────────────
-const channels = [
-  {
-    name: 'TikTok',
-    handle: '@petcare.official',
-    desc: 'Short pet tips, product reviews & behind-the-scenes',
-    href: 'https://tiktok.com/@petcare',
-    icon: TikTokIcon,
-    color: 'text-black',
-    bg: 'bg-white',
-    border: 'border-gray-200',
-    hoverBorder: 'hover:border-black/30',
-  },
-  {
-    name: 'Facebook',
-    handle: 'PetCare Vietnam',
-    desc: 'Community posts, promotions & customer care',
-    href: 'https://facebook.com/petcare',
-    icon: FacebookIcon,
-    color: 'text-[#1877F2]',
-    bg: 'bg-white',
-    border: 'border-gray-200',
-    hoverBorder: 'hover:border-[#1877F2]/30',
-  },
-  {
-    name: 'Instagram',
-    handle: '@petcare.vn',
-    desc: 'Beautiful pet photos & lifestyle inspiration',
-    href: 'https://instagram.com/petcare.vn',
-    icon: InstagramIcon,
-    color: 'text-[#E1306C]',
-    bg: 'bg-white',
-    border: 'border-gray-200',
-    hoverBorder: 'hover:border-[#E1306C]/30',
-  },
-  {
-    name: 'Zalo',
-    handle: 'PetCare Zalo OA',
-    desc: 'Fastest support channel — we reply within 30 min',
-    href: 'https://zalo.me/petcare',
-    icon: ZaloIcon,
-    color: 'text-[#0068FF]',
-    bg: 'bg-white',
-    border: 'border-gray-200',
-    hoverBorder: 'hover:border-[#0068FF]/30',
-  },
-  {
-    name: 'YouTube',
-    handle: 'PetCare Channel',
-    desc: 'Vet talks, feeding guides & product unboxings',
-    href: 'https://youtube.com/@petcare',
-    icon: YouTubeIcon,
-    color: 'text-[#FF0000]',
-    bg: 'bg-white',
-    border: 'border-gray-200',
-    hoverBorder: 'hover:border-[#FF0000]/30',
-  },
-];
-
-const directContacts = [
-  { icon: Phone, label: 'Hotline', value: '1800 6868', sub: 'Mon–Sat · 8am–6pm · Free call', href: 'tel:18006868' },
-  { icon: Mail, label: 'Email', value: 'hello@petcare.vn', sub: 'We reply within 2 hours', href: 'mailto:hello@petcare.vn' },
-  { icon: MapPin, label: 'Showroom', value: '123 Nguyễn Trãi, Q.1, TP.HCM', sub: 'Open daily 8am–8pm', href: '#' },
-  { icon: Clock, label: 'Support Hours', value: 'Mon – Sat', sub: '8:00 AM – 6:00 PM', href: null },
-];
-
 const ContactUs = () => {
+  const { t } = useTranslation();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+
+  const channels = [
+    {
+      name: 'TikTok',
+      handle: '@petcare.official',
+      desc: t('contact.channels.tiktok'),
+      href: 'https://tiktok.com/@petcare',
+      icon: TikTokIcon,
+      color: 'text-black',
+      bg: 'bg-white',
+      border: 'border-gray-200',
+      hoverBorder: 'hover:border-black/30',
+    },
+    {
+      name: 'Facebook',
+      handle: 'PetCare Vietnam',
+      desc: t('contact.channels.facebook'),
+      href: 'https://facebook.com/petcare',
+      icon: FacebookIcon,
+      color: 'text-[#1877F2]',
+      bg: 'bg-white',
+      border: 'border-gray-200',
+      hoverBorder: 'hover:border-[#1877F2]/30',
+    },
+    {
+      name: 'Instagram',
+      handle: '@petcare.vn',
+      desc: t('contact.channels.instagram'),
+      href: 'https://instagram.com/petcare.vn',
+      icon: InstagramIcon,
+      color: 'text-[#E1306C]',
+      bg: 'bg-white',
+      border: 'border-gray-200',
+      hoverBorder: 'hover:border-[#E1306C]/30',
+    },
+    {
+      name: 'Zalo',
+      handle: 'PetCare Zalo OA',
+      desc: t('contact.channels.zalo'),
+      href: 'https://zalo.me/petcare',
+      icon: ZaloIcon,
+      color: 'text-[#0068FF]',
+      bg: 'bg-white',
+      border: 'border-gray-200',
+      hoverBorder: 'hover:border-[#0068FF]/30',
+    },
+    {
+      name: 'YouTube',
+      handle: 'PetCare Channel',
+      desc: t('contact.channels.youtube'),
+      href: 'https://youtube.com/@petcare',
+      icon: YouTubeIcon,
+      color: 'text-[#FF0000]',
+      bg: 'bg-white',
+      border: 'border-gray-200',
+      hoverBorder: 'hover:border-[#FF0000]/30',
+    },
+  ];
+
+  const directContacts = [
+    { icon: Phone, label: 'Hotline', value: '1800 6868', sub: t('contact.hotline_sub'), href: 'tel:18006868' },
+    { icon: Mail, label: 'Email', value: 'hello@petcare.vn', sub: t('contact.email_sub'), href: 'mailto:hello@petcare.vn' },
+    { icon: MapPin, label: 'Showroom', value: t('contact.showroom_value'), sub: t('contact.showroom_sub'), href: '#' },
+    { icon: Clock, label: t('contact.label_message').includes('Message') ? 'Support Hours' : 'Giờ hỗ trợ', value: t('contact.hours_value'), sub: t('contact.hours_sub'), href: null },
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -115,12 +116,12 @@ const ContactUs = () => {
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 -left-16 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-3xl mx-auto text-center relative z-10">
-          <span className="inline-block bg-primary/20 text-primary-dark text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6">Get In Touch</span>
+          <span className="inline-block bg-primary/20 text-primary-dark text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6">{t('contact.subtitle')}</span>
           <h1 className="font-display font-black text-5xl md:text-6xl text-on-background mb-4 leading-tight">
-            We'd Love to<br /><span className="text-primary-dark">Hear From You</span>
+            {t('contact.title_top')}<br /><span className="text-primary-dark">{t('contact.title_bottom')}</span>
           </h1>
           <p className="text-on-surface-variant text-lg font-medium">
-            Whether it's a question about your order, a product recommendation, or just a photo of your pet — we're here.
+            {t('contact.desc')}
           </p>
         </div>
       </section>
@@ -128,7 +129,7 @@ const ContactUs = () => {
       {/* Direct Contact Cards */}
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-6 text-center">Direct Contact</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-6 text-center">{t('contact.direct_title')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {directContacts.map((c, i) => {
               const Icon = c.icon;
@@ -157,7 +158,7 @@ const ContactUs = () => {
       {/* Social Channels */}
       <section className="py-8 px-6 pb-16">
         <div className="max-w-6xl mx-auto">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-6 text-center">Find Us On Social Media</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-6 text-center">{t('contact.social_title')}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {channels.map((ch, i) => {
               const Icon = ch.icon;
@@ -188,8 +189,8 @@ const ContactUs = () => {
       <section className="py-16 px-6 bg-surface-container-low">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-2">Send a Message</p>
-            <h2 className="font-display font-black text-3xl text-on-background">Drop Us a Note</h2>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-2">{t('contact.form_subtitle')}</p>
+            <h2 className="font-display font-black text-3xl text-on-background">{t('contact.form_title')}</h2>
           </div>
 
           {sent ? (
@@ -197,42 +198,42 @@ const ContactUs = () => {
               <div className="w-16 h-16 bg-white shadow-md rounded-xl flex items-center justify-center mx-auto mb-6 text-green-500">
                 <CheckCircle size={32} />
               </div>
-              <h3 className="font-bold text-xl text-on-background mb-2">Message Sent!</h3>
-              <p className="text-on-surface-variant">Thanks for reaching out. We'll get back to you within 2 hours.</p>
+              <h3 className="font-bold text-xl text-on-background mb-2">{t('contact.form_sent_title')}</h3>
+              <p className="text-on-surface-variant">{t('contact.form_sent_desc')}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-surface-container-low shadow-sm p-8 space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">Your Name</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">{t('contact.label_name')}</label>
                   <input
                     required
                     value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })}
-                    placeholder="Nguyen Van A"
+                    placeholder={t('contact.placeholder_name')}
                     className="w-full px-4 py-3.5 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/30 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none text-sm"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">Email Address</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">{t('contact.label_email')}</label>
                   <input
                     required
                     type="email"
                     value={form.email}
                     onChange={e => setForm({ ...form, email: e.target.value })}
-                    placeholder="you@email.com"
+                    placeholder={t('contact.placeholder_email')}
                     className="w-full px-4 py-3.5 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/30 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none text-sm"
                   />
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">Your Message</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">{t('contact.label_message')}</label>
                 <textarea
                   required
                   rows={5}
                   value={form.message}
                   onChange={e => setForm({ ...form, message: e.target.value })}
-                  placeholder="Ask us anything — product advice, order help, or just say hi 🐾"
+                  placeholder={t('contact.placeholder_message')}
                   className="w-full px-4 py-3.5 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/30 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none text-sm resize-none"
                 />
               </div>
@@ -240,7 +241,7 @@ const ContactUs = () => {
                 type="submit"
                 className="w-full flex items-center justify-center gap-2 bg-primary text-on-background px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark hover:scale-[1.02] active:scale-95 transition-all text-base"
               >
-                Send Message <Send size={18} />
+                {t('contact.send_btn')} <Send size={18} />
               </button>
             </form>
           )}

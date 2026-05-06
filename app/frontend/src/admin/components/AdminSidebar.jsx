@@ -2,22 +2,25 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, ShoppingBag, BarChart3, Users, LogOut } from 'lucide-react';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { logout } from '../../store/slices/authSlice';
 import { logoutAPI } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 
-const navItems = [
-    { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-    { name: 'Products', path: '/admin/products', icon: Package },
-    { name: 'Orders', path: '/admin/orders', icon: ShoppingBag },
-    { name: 'Users', path: '/admin/users', icon: Users },
-    { name: 'Inventory', path: '/admin/inventory', icon: BarChart3 },
-];
-
 const AdminSidebar = () => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const navItems = [
+
+        { name: t('admin.dashboard'), path: '/admin/dashboard', icon: LayoutDashboard },
+        { name: t('admin.products'), path: '/admin/products', icon: Package },
+        { name: t('admin_orders.title'), path: '/admin/orders', icon: ShoppingBag },
+        { name: t('admin_users.title'), path: '/admin/users', icon: Users },
+        { name: t('admin.inventory'), path: '/admin/inventory', icon: BarChart3 },
+    ];
 
     const handleLogout = async () => {
         try {
@@ -41,15 +44,16 @@ const AdminSidebar = () => {
             <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
                 {navItems.map((item) => {
                     const isActive = location.pathname.startsWith(item.path);
+                    if (item.external && isActive && item.path !== '/') return null; // Simple check
+
                     return (
                         <NavLink
-                            key={item.name}
+                            key={item.path}
                             to={item.path}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all duration-300 ${
-                                isActive 
-                                ? 'bg-primary text-on-primary shadow-lg shadow-primary/20 scale-[1.02]' 
-                                : 'text-on-surface-variant hover:bg-surface-container hover:text-on-background'
-                            }`}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all duration-300 ${isActive
+                                    ? 'bg-primary text-on-primary shadow-lg shadow-primary/20 scale-[1.02]'
+                                    : 'text-on-surface-variant hover:bg-surface-container hover:text-on-background'
+                                }`}
                         >
                             <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
                             {item.name}
@@ -60,12 +64,12 @@ const AdminSidebar = () => {
 
             {/* Bottom Actions */}
             <div className="p-4 border-t border-surface-container-low">
-                <button 
+                <button
                     onClick={handleLogout}
                     className="flex w-full items-center gap-3 px-4 py-3 rounded-xl font-bold text-error hover:bg-error/10 transition-colors"
                 >
                     <LogOut size={20} />
-                    Logout
+                    {t('nav.logout')}
                 </button>
             </div>
         </aside>

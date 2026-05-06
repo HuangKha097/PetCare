@@ -80,9 +80,9 @@ const ProductDetail = () => {
       setProduct(prodRes.data);
 
       setNewReview({ rating: 5, comment: '' });
-      alert('Review submitted successfully!');
+      alert(t('product.review_success'));
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to submit review');
+      alert(err.response?.data?.message || t('product.review_failed'));
     } finally {
       setSubmittingReview(false);
     }
@@ -170,7 +170,7 @@ const ProductDetail = () => {
         <section className="flex flex-col">
           <header className="mb-6">
             <div className="flex items-center gap-2 mb-4">
-              <span className="inline-block px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold tracking-widest uppercase rounded-sm">Premium Selection</span>
+              <span className="inline-block px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold tracking-widest uppercase rounded-sm">{t('product.premium_selection')}</span>
               {product.brand && (
                 <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold tracking-widest uppercase rounded-sm">
                   {product.brand}
@@ -190,7 +190,7 @@ const ProductDetail = () => {
 
           <div className="mb-8">
             <div className="text-3xl font-display font-black text-on-surface">${product.price}</div>
-            <p className="text-on-surface-variant text-sm mt-1">Free shipping on orders over $50</p>
+            <p className="text-on-surface-variant text-sm mt-1">{t('product.free_shipping_note')}</p>
             {/* Stock Status */}
             {product.stock_quantity !== undefined && (
               <div className="mt-3">
@@ -267,17 +267,17 @@ const ProductDetail = () => {
           {activeTab === 'Description' && (
             <div className="grid md:grid-cols-2 gap-12">
               <div className="space-y-4">
-                <h3 className="text-2xl font-display font-bold">Nature's Purest Nutrition</h3>
+                <h3 className="text-2xl font-display font-bold">{t('product.natures_purest')}</h3>
                 <p className="text-on-surface-variant leading-relaxed whitespace-pre-line">{getLocalizedText(product.description, i18n.language)}</p>
               </div>
               <div className="bg-primary-container/20 rounded-xl p-8 border border-primary/10">
                 <h4 className="font-bold mb-4 flex items-center gap-2 text-primary">
-                  <ShieldCheck size={20} /> Key Benefits
+                  <ShieldCheck size={20} /> {t('product.key_benefits')}
                 </h4>
                 <ul className="space-y-3 text-sm font-medium">
-                  <li className="flex items-center gap-2"><CheckCircle className="text-primary" size={18} /> High-quality protein sources</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="text-primary" size={18} /> Optimal Omega-3 & 6 for skin and coat</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="text-primary" size={18} /> Sustainably sourced ingredients</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="text-primary" size={18} /> {t('product.benefit_1')}</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="text-primary" size={18} /> {t('product.benefit_2')}</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="text-primary" size={18} /> {t('product.benefit_3')}</li>
                 </ul>
               </div>
             </div>
@@ -285,9 +285,9 @@ const ProductDetail = () => {
 
           {activeTab === 'Ingredients' && (
             <div className="bg-surface-container-low rounded-xl p-8 border border-surface-container">
-              <h3 className="text-xl font-bold mb-4">Complete List of Ingredients</h3>
+              <h3 className="text-xl font-bold mb-4">{t('product.ingredients_list')}</h3>
               <p className="text-on-surface-variant leading-relaxed font-medium italic whitespace-pre-line">
-                {getLocalizedText(product.ingredients, i18n.language) || 'Information pending update from the manufacturer.'}
+                {getLocalizedText(product.ingredients, i18n.language) || t('product.ingredients_pending')}
               </p>
             </div>
           )}
@@ -322,7 +322,7 @@ const ProductDetail = () => {
                         value={newReview.comment}
                         onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border border-surface-container focus:border-primary outline-none transition-all resize-none"
-                        placeholder="Share your experience with this product..."
+                        placeholder={t('product.review_placeholder')}
                       />
                     </div>
                     <Button type="submit" disabled={submittingReview} className="w-full md:w-auto px-10">
@@ -332,14 +332,14 @@ const ProductDetail = () => {
                 </div>
               ) : (
                 <div className="bg-surface-container-low rounded-xl p-8 align-center text-center border border-surface-container">
-                  <p className="text-on-surface-variant font-bold mb-4">Please log in to write a review</p>
-                  <NavLink to="/login" className="inline-block"><Button variant="primary">Login Now</Button></NavLink>
+                  <p className="text-on-surface-variant font-bold mb-4">{t('product.login_to_review')}</p>
+                  <NavLink to="/login" className="inline-block"><Button variant="primary">{t('product.login_now')}</Button></NavLink>
                 </div>
               )}
 
               {/* Review List */}
               <div className="space-y-6">
-                <h3 className="text-xl font-bold">User Testimonials ({reviews.length})</h3>
+                <h3 className="text-xl font-bold">{t('product.testimonials')} ({reviews.length})</h3>
                 {reviews.length > 0 ? (
                   <div className="grid gap-6">
                     {reviews.map((rev) => (
@@ -367,7 +367,7 @@ const ProductDetail = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-on-surface-variant italic">No reviews yet. Be the first to share your thoughts!</p>
+                  <p className="text-on-surface-variant italic">{t('product.no_reviews')}</p>
                 )}
               </div>
             </div>

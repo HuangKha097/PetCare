@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PawPrint, ArrowLeft, Eye, EyeOff, Apple, Github, Mail, Lock, User as UserIcon } from 'lucide-react';
+import { PawPrint, Eye, EyeOff, Apple, Github, Mail, Lock, User as UserIcon } from 'lucide-react';
 import { login as loginAPI, register as registerAPI } from '../services/authService';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../store/slices/authSlice';
 import Button from '../components/Button';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
+    const { t } = useTranslation();
     const [isLogin, setIsLogin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
@@ -47,10 +49,10 @@ const Login = () => {
                 }
             } else {
                 setIsLogin(true);
-                setError('Account created successfully! Please log in.');
+                setError(t('auth.success_register'));
             }
         } catch (err) {
-            setError(err.response?.data?.message || 'Something went wrong');
+            setError(err.response?.data?.message || t('auth.error_default'));
         } finally {
             setLoading(false);
         }
@@ -73,12 +75,10 @@ const Login = () => {
                             <PawPrint className="text-white" size={32} />
                         </div>
                         <h2 className="font-display font-black text-white text-4xl lg:text-5xl leading-tight mb-4">
-                            {isLogin ? 'Good to see you again.' : 'Start your pet journey.'}
+                            {isLogin ? t('auth.login_title') : t('auth.register_title')}
                         </h2>
                         <p className="text-white/90 text-lg font-medium max-w-sm">
-                            {isLogin
-                                ? 'Your pets are waiting! Log in to access your dashboard and rewards.'
-                                : 'Join thousands of pet parents getting the best care for their furry friends.'}
+                            {isLogin ? t('auth.login_desc') : t('auth.register_desc')}
                         </p>
                     </div>
                 </div>
@@ -88,10 +88,10 @@ const Login = () => {
                     <div className="max-w-md mx-auto w-full flex-grow flex flex-col justify-center">
                         <div className="text-center md:text-left mb-10">
                             <h1 className="font-display font-black text-3xl text-on-background mb-2">
-                                {isLogin ? 'Sign In' : 'Create Account'}
+                                {isLogin ? t('auth.sign_in') : t('auth.create_account')}
                             </h1>
                             <p className="text-on-surface-variant font-medium">
-                                {isLogin ? "Enter your details to access your account" : "Sign up to start shopping for your pets"}
+                                {isLogin ? t('auth.sign_in_desc') : t('auth.register_desc_short')}
                             </p>
                         </div>
 
@@ -101,19 +101,19 @@ const Login = () => {
                                 onClick={() => setIsLogin(true)}
                                 className={`flex-1 py-3 px-6 rounded-xl text-sm font-bold transition-all duration-300 ${isLogin ? 'bg-white text-on-background shadow-lg' : 'text-on-surface-variant hover:text-on-surface'}`}
                             >
-                                Sign In
+                                {t('auth.sign_in')}
                             </button>
                             <button
                                 onClick={() => setIsLogin(false)}
                                 className={`flex-1 py-3 px-6 rounded-xl text-sm font-bold transition-all duration-300 ${!isLogin ? 'bg-white text-on-background shadow-lg' : 'text-on-surface-variant hover:text-on-surface'}`}
                             >
-                                Register
+                                {t('auth.register')}
                             </button>
                         </div>
 
                         {error && (
-                            <div className={`mb-8 p-4 rounded-xl text-sm font-bold flex items-center gap-3 ${error.includes('successfully') ? 'bg-secondary-container text-on-secondary-container border border-secondary/20' : 'bg-red-50 text-red-600 border border-red-100'}`}>
-                                <div className={`w-2 h-2 rounded-full ${error.includes('successfully') ? 'bg-secondary' : 'bg-red-500'}`} />
+                            <div className={`mb-8 p-4 rounded-xl text-sm font-bold flex items-center gap-3 ${error.includes('successfully') || error === t('auth.success_register') ? 'bg-secondary-container text-on-secondary-container border border-secondary/20' : 'bg-red-50 text-red-600 border border-red-100'}`}>
+                                <div className={`w-2 h-2 rounded-full ${error.includes('successfully') || error === t('auth.success_register') ? 'bg-secondary' : 'bg-red-500'}`} />
                                 {error}
                             </div>
                         )}
@@ -126,7 +126,7 @@ const Login = () => {
                                     </div>
                                     <input
                                         className="w-full pl-14 pr-6 py-4 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
-                                        name="name" placeholder="Full Name" type="text"
+                                        name="name" placeholder={t('auth.full_name')} type="text"
                                         value={formData.name} onChange={handleInputChange} required
                                     />
                                 </div>
@@ -138,7 +138,7 @@ const Login = () => {
                                 </div>
                                 <input
                                     className="w-full pl-14 pr-6 py-4 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
-                                    name="email" placeholder="Email Address" type="email"
+                                    name="email" placeholder={t('auth.email')} type="email"
                                     value={formData.email} onChange={handleInputChange} required
                                 />
                             </div>
@@ -149,7 +149,7 @@ const Login = () => {
                                 </div>
                                 <input
                                     className="w-full pl-14 pr-14 py-4 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/20 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none"
-                                    name="password" placeholder="Password" type={showPassword ? "text" : "password"}
+                                    name="password" placeholder={t('auth.password')} type={showPassword ? "text" : "password"}
                                     value={formData.password} onChange={handleInputChange} required
                                 />
                                 <button
@@ -162,7 +162,7 @@ const Login = () => {
                             </div>
 
                             <Button type="submit" className="w-full py-4 text-lg mt-4 shadow-xl shadow-primary/20" disabled={loading}>
-                                {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
+                                {loading ? t('auth.please_wait') : (isLogin ? t('auth.sign_in') : t('auth.create_account'))}
                             </Button>
                         </form>
 
@@ -170,7 +170,7 @@ const Login = () => {
                             <div className="absolute inset-0 flex items-center">
                                 <div className="w-full border-t border-surface-container-high"></div>
                             </div>
-                            <span className="relative px-4 bg-surface-container-lowest text-xs font-bold uppercase tracking-widest text-on-surface-variant/40">Or connect with</span>
+                            <span className="relative px-4 bg-surface-container-lowest text-xs font-bold uppercase tracking-widest text-on-surface-variant/40">{t('auth.or_connect')}</span>
                         </div>
 
                         <div className="grid grid-cols-3 gap-4">

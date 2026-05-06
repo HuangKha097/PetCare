@@ -129,7 +129,7 @@ const InventoryMonitoring = () => {
                                                     <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                                                 </div>
                                                 <span className="font-bold text-on-background line-clamp-1">
-                                                    {typeof product.name === 'object' ? (product.name[i18n.language] || product.name.en) : product.name}
+                                                    {getLocalizedText(product.name, i18n.language)}
                                                 </span>
                                             </div>
                                         </td>

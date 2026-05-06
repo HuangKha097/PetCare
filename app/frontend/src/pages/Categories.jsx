@@ -1,21 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Button from '../components/Button';
 
 const Categories = () => {
+  const { t } = useTranslation();
   return (
     <div className="pb-32">
       {/* Hero Section */}
       <section className="px-6 py-8 md:py-16 max-w-7xl mx-auto overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
           <div className="z-10 relative">
-            <span className="inline-block px-4 py-1 rounded-full bg-primary-container text-on-primary-container text-[10px] font-bold uppercase tracking-widest mb-6">Discovery Phase</span>
+            <span className="inline-block px-4 py-1 rounded-full bg-primary-container text-on-primary-container text-[10px] font-bold uppercase tracking-widest mb-6">{t('categories.subtitle')}</span>
             <h1 className="font-display font-extrabold text-5xl md:text-7xl leading-tight text-on-background tracking-tight mb-6">
-              Shop by <span className="text-primary italic">Category</span>
+              {t('categories.title').split(' ').slice(0, -1).join(' ')} <span className="text-primary italic">{t('categories.title').split(' ').slice(-1)}</span>
             </h1>
             <p className="text-on-surface-variant text-lg md:text-xl max-w-md leading-relaxed mb-10">
-              Find exactly what your furry friend needs with our curated collection of premium pet essentials.
+              {t('categories.desc')}
             </p>
             <div className="flex flex-wrap gap-4">
               <div className="flex -space-x-3">
@@ -30,8 +32,8 @@ const Categories = () => {
                 ))}
               </div>
               <div className="flex flex-col justify-center">
-                <p className="text-sm font-bold text-on-background">Joined by 10k+ Pet Parents</p>
-                <p className="text-xs text-on-surface-variant">Quality guaranteed products</p>
+                <p className="text-sm font-bold text-on-background">{t('categories.joined_by')}</p>
+                <p className="text-xs text-on-surface-variant">{t('categories.quality_guaranteed')}</p>
               </div>
             </div>
           </div>
@@ -63,9 +65,9 @@ const Categories = () => {
                   />
                 </div>
                 <div className="w-full md:w-1/2">
-                  <h2 className="font-display font-bold text-4xl text-on-background mb-6">Dogs</h2>
+                  <h2 className="font-display font-bold text-4xl text-on-background mb-6">{t('categories.dogs')}</h2>
                   <ul className="space-y-4 mb-10">
-                    {['Premium Food', 'Durable Toys', 'Orthopedic Beds', 'Smart Accessories'].map((item) => (
+                    {t('categories.dog_items', { returnObjects: true }).map((item) => (
                       <li key={item} className="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group/item">
                         <span className="w-2 h-2 rounded-full bg-primary-container group-hover/item:bg-primary transition-colors"></span>
                         <span className="font-medium text-lg font-body">{item}</span>
@@ -74,7 +76,7 @@ const Categories = () => {
                   </ul>
                   <Link to="/shop">
                     <Button variant="outline" className="w-full py-4 border-2 border-primary text-primary font-bold hover:bg-primary hover:text-on-primary transition-all active:scale-95">
-                      Shop All Dogs
+                      {t('categories.shop_all', { name: t('categories.dogs') })}
                     </Button>
                   </Link>
                 </div>
@@ -84,11 +86,11 @@ const Categories = () => {
             {/* Small Pets Section */}
             <div className="md:col-span-4 bg-primary-container/20 rounded-lg p-8 flex flex-col justify-between overflow-hidden relative group border border-primary/10">
               <div className="z-10">
-                <h2 className="font-display font-bold text-3xl text-on-background mb-4">Small Pets</h2>
-                <p className="text-on-surface-variant mb-8 font-medium">Bunnies, hamsters, and birds</p>
+                <h2 className="font-display font-bold text-3xl text-on-background mb-4">{t('categories.small_pets')}</h2>
+                <p className="text-on-surface-variant mb-8 font-medium">{t('categories.small_pets_desc')}</p>
                 <Link to="/shop">
                   <Button variant="custom" className="bg-surface-container-lowest text-on-background px-6 py-3 rounded-full font-bold text-sm shadow-sm hover:shadow-md transition-all">
-                    Shop All Small Pets <ChevronRight size={14} className="opacity-50" />
+                    {t('categories.shop_all', { name: t('categories.small_pets') })} <ChevronRight size={14} className="opacity-50" />
                   </Button>
                 </Link>
               </div>
@@ -105,14 +107,9 @@ const Categories = () => {
             <div className="md:col-span-12  bg-secondary-container/10 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-secondary/10">
               <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-5/12 p-8 md:p-16 flex flex-col justify-center order-2 md:order-1">
-                  <h2 className="font-display font-bold text-4xl md:text-5xl text-on-background mb-8 tracking-tight">Cats</h2>
+                  <h2 className="font-display font-bold text-4xl md:text-5xl text-on-background mb-8 tracking-tight">{t('categories.cats')}</h2>
                   <div className="grid grid-cols-2 gap-y-6 gap-x-8 mb-12">
-                    {[
-                      { label: 'Gourmet', name: 'Organic Food' },
-                      { label: 'Hygiene', name: 'Auto Litter' },
-                      { label: 'Play', name: 'Interactive Toys' },
-                      { label: 'Home', name: 'Modern Furniture' }
-                    ].map((item) => (
+                    {t('categories.cat_items', { returnObjects: true }).map((item) => (
                       <div key={item.name} className="flex flex-col">
                         <span className="text-xs font-bold uppercase tracking-widest text-primary mb-1">{item.label}</span>
                         <span className="text-lg font-medium">{item.name}</span>
@@ -121,7 +118,7 @@ const Categories = () => {
                   </div>
                   <Link to="/shop">
                     <Button variant="primary" className="w-full text-lg">
-                      Shop All Cats
+                      {t('categories.shop_all', { name: t('categories.cats') })}
                     </Button>
                   </Link>
                 </div>
@@ -143,11 +140,11 @@ const Categories = () => {
         <div className="bg-primary text-on-primary rounded-xl p-8 md:p-16 text-center relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
           <div className="relative z-10">
-            <h3 className="font-display font-extrabold text-3xl md:text-5xl mb-6 tracking-tight">Stay in the Paws!</h3>
-            <p className="text-lg mb-10 max-w-xl mx-auto opacity-90">Get 15% off your first order when you sign up for our weekly pet tips and product alerts.</p>
+            <h3 className="font-display font-extrabold text-3xl md:text-5xl mb-6 tracking-tight">{t('categories.stay_in_paws')}</h3>
+            <p className="text-lg mb-10 max-w-xl mx-auto opacity-90">{t('categories.newsletter_desc')}</p>
             <form className="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
-              <input className="flex-grow px-6 py-4 rounded-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:ring-white focus:border-white text-lg" placeholder="Your email address" type="email" />
-              <Button variant="custom" className="bg-white text-primary font-bold px-10 py-4 rounded-full hover:bg-white/90 transition-colors whitespace-nowrap text-lg" type="submit">Join Now</Button>
+              <input className="flex-grow px-6 py-4 rounded-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:ring-white focus:border-white text-lg" placeholder={t('categories.email_placeholder')} type="email" />
+              <Button variant="custom" className="bg-white text-primary font-bold px-10 py-4 rounded-full hover:bg-white/90 transition-colors whitespace-nowrap text-lg" type="submit">{t('categories.join_now')}</Button>
             </form>
           </div>
         </div>

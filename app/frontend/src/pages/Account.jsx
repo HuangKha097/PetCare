@@ -9,10 +9,13 @@ import { logout } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { getMyOrders } from '../services/orderService';
 import { logoutAPI } from '../services/authService';
+import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../utils/i18nUtils';
 import ProductCard from '../components/ProductCard';
 
 
 const Account = () => {
+  const { i18n, t } = useTranslation();
   const { user } = useSelector((state) => state.auth);
   const { items: wishlistItems } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
@@ -52,10 +55,10 @@ const Account = () => {
   };
 
   const tabs = [
-    { id: 'profile', label: 'Overview', icon: User },
-    { id: 'orders', label: 'Orders', icon: Package },
-    { id: 'wishlist', label: 'Wishlist', icon: Heart },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'profile', label: t('account.profile'), icon: User },
+    { id: 'orders', label: t('account.orders'), icon: Package },
+    { id: 'wishlist', label: t('account.wishlist'), icon: Heart },
+    { id: 'settings', label: t('account.settings'), icon: Settings },
   ];
 
   const getStatusColor = (status) => {
@@ -105,7 +108,7 @@ const Account = () => {
                 className="w-full flex items-center gap-4 p-4 rounded-xl text-red-500 hover:bg-red-50 transition-all font-bold text-sm"
               >
                 <LogOut size={20} />
-                <span>Logout</span>
+                <span>{t('nav.logout')}</span>
               </button>
             </nav>
           </div>
@@ -119,9 +122,9 @@ const Account = () => {
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                  { label: 'Total Orders', value: orders.length, icon: Package, color: 'bg-blue-50 text-blue-600' },
-                  { label: 'Wishlist Items', value: '0', icon: Heart, color: 'bg-red-50 text-red-600' },
-                  { label: 'Recent Spending', value: `$${orders.reduce((acc, o) => acc + parseFloat(o.total_amount), 0).toFixed(2)}`, icon: ShoppingBag, color: 'bg-primary/10 text-primary' },
+                  { label: t('account.total_orders'), value: orders.length, icon: Package, color: 'bg-blue-50 text-blue-600' },
+                  { label: t('account.wishlist_items'), value: wishlistItems.length, icon: Heart, color: 'bg-red-50 text-red-600' },
+                  { label: t('account.recent_spending'), value: `$${orders.reduce((acc, o) => acc + parseFloat(o.total_amount), 0).toFixed(2)}`, icon: ShoppingBag, color: 'bg-primary/10 text-primary' },
                 ].map((stat, idx) => (
                   <div key={idx} className="bg-white p-8 rounded-xl border border-surface-container-low shadow-sm hover:shadow-xl transition-all duration-500 group">
                     <div className={`w-12 h-12 rounded-xl ${stat.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
@@ -135,7 +138,7 @@ const Account = () => {
 
               <div className="bg-white rounded-xl border border-surface-container-low p-10 shadow-sm">
                 <h2 className="text-2xl font-bold mb-10 flex items-center gap-3">
-                  <User size={24} className="text-primary" /> Profile Information
+                  <User size={24} className="text-primary" /> {t('account.profile_info')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
                   <div className="flex items-start gap-5 group">
@@ -143,7 +146,7 @@ const Account = () => {
                       <User size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Full Name</p>
+                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.full_name')}</p>
                       <p className="text-lg font-bold truncate">{user?.name}</p>
                     </div>
                   </div>
@@ -152,7 +155,7 @@ const Account = () => {
                       <Mail size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Email Address</p>
+                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.email_address')}</p>
                       <p className="text-lg font-bold truncate">{user?.email}</p>
                     </div>
                   </div>
@@ -161,8 +164,8 @@ const Account = () => {
                       <Phone size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Phone Number</p>
-                      <p className="text-lg font-bold truncate">{user?.phone || 'Not provided'}</p>
+                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.phone_number')}</p>
+                      <p className="text-lg font-bold truncate">{user?.phone || t('account.not_provided')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-5 group">
@@ -170,8 +173,8 @@ const Account = () => {
                       <MapPin size={20} className="text-on-surface-variant group-hover:text-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Default Address</p>
-                      <p className="text-lg font-bold leading-tight truncate">{user?.address ? `${user.address}, ${user.city}` : 'Not provided'}</p>
+                      <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.default_address')}</p>
+                      <p className="text-lg font-bold leading-tight truncate">{user?.address ? `${user.address}, ${user.city}` : t('account.not_provided')}</p>
                     </div>
                   </div>
                 </div>
@@ -189,10 +192,10 @@ const Account = () => {
                   <div className="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center mx-auto mb-6">
                     <ShoppingBag className="text-on-surface-variant opacity-30" size={32} />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">No orders yet</h3>
-                  <p className="text-on-surface-variant font-medium mb-8">When you buy items, your order history will appear here.</p>
+                  <h3 className="text-xl font-bold mb-2">{t('account.no_orders')}</h3>
+                  <p className="text-on-surface-variant font-medium mb-8">{t('account.no_orders_desc')}</p>
                   <button onClick={() => navigate('/shop')} className="text-primary font-bold hover:underline flex items-center gap-2 mx-auto">
-                    Go Shopping <ChevronRight size={18} />
+                    {t('account.go_shopping')} <ChevronRight size={18} />
                   </button>
                 </div>
               ) : (
@@ -201,36 +204,36 @@ const Account = () => {
                     <div className="bg-surface-container-low/30 p-6 flex flex-wrap items-center justify-between gap-6 border-b border-surface-container-low">
                       <div className="flex items-center gap-8">
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Order Date</p>
-                          <p className="text-sm font-bold">{new Date(order.created_at).toLocaleDateString('vi-VN')}</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.order_date')}</p>
+                          <p className="text-sm font-bold">{new Date(order.created_at).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Total Amount</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.order_total')}</p>
                           <p className="text-sm font-black text-primary">${order.total_amount}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Order #</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.order_number')}</p>
                           <p className="text-sm font-bold">ORD-{order.id}</p>
                         </div>
                       </div>
                       <div className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${getStatusColor(order.status)}`}>
-                        {order.status}
+                        {t(`admin_orders.${order.status.toLowerCase()}`)}
                       </div>
                     </div>
                     <div className="p-6">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2 text-xs font-bold text-on-surface-variant">
                           <MapPin size={14} className="text-primary" />
-                          <span>Shipped to: {order.city}</span>
+                          <span>{t('account.shipped_to')}: {order.city}</span>
                           <span className="mx-2 opacity-20">|</span>
                           <Package size={14} className="text-primary" />
-                          <span>{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</span>
+                          <span>{order.items.length} {order.items.length === 1 ? t('product.item') : t('product.items')}</span>
                         </div>
                         <button
                           onClick={() => toggleOrderDetails(order.id)}
                           className="text-xs font-bold text-primary hover:underline flex items-center gap-1 bg-primary/5 px-4 py-2 rounded-xl transition-all"
                         >
-                          {expandedOrderId === order.id ? <><Eye size={14} /> Hide Detail</> : <><Eye size={14} /> View Full Detail</>}
+                          {expandedOrderId === order.id ? <><Eye size={14} /> {t('account.hide_detail')}</> : <><Eye size={14} /> {t('account.view_detail')}</>}
                         </button>
                       </div>
 
@@ -240,11 +243,11 @@ const Account = () => {
                             {order.items.map((item, idx) => (
                               <div key={idx} className="flex items-center gap-4">
                                 <div className="w-16 h-16 rounded-xl overflow-hidden border border-surface-container-low flex-shrink-0">
-                                  <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                                  <img src={item.image_url} alt={getLocalizedText(item.name, i18n.language)} className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex-grow min-w-0">
-                                  <h4 className="text-sm font-bold truncate">{item.name}</h4>
-                                  <p className="text-xs font-medium text-on-surface-variant opacity-60">Qty: {item.quantity} × ${item.price}</p>
+                                  <h4 className="text-sm font-bold truncate">{getLocalizedText(item.name, i18n.language)}</h4>
+                                  <p className="text-xs font-medium text-on-surface-variant opacity-60">{t('product.stock')}: {item.quantity} × ${item.price}</p>
                                 </div>
                                 <div className="text-right">
                                   <p className="text-sm font-black">${(item.quantity * item.price).toFixed(2)}</p>
@@ -255,19 +258,19 @@ const Account = () => {
 
                           {order.note && (
                             <div className="bg-surface-container-low/50 p-4 rounded-xl border border-dashed border-surface-container-high">
-                              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-50 mb-2">Order Note</p>
+                              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant opacity-50 mb-2">{t('account.order_note')}</p>
                               <p className="text-sm italic opacity-70">"{order.note}"</p>
                             </div>
                           )}
 
                           <div className="grid grid-cols-2 gap-4 text-sm pt-4 border-t border-surface-container-low">
                             <div>
-                              <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Shipping Details</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.shipping_details')}</p>
                               <p className="font-bold text-xs">{order.address}, {order.city}</p>
                               <p className="text-xs opacity-60">{order.phone}</p>
                             </div>
                             <div className="text-right">
-                              <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">Payment Method</p>
+                              <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.payment_method')}</p>
                               <p className="font-black text-xs uppercase text-primary">{order.payment_method}</p>
                             </div>
                           </div>
@@ -286,9 +289,9 @@ const Account = () => {
               {wishlistItems.length === 0 ? (
                 <div className="bg-white rounded-xl border border-surface-container-low p-20 text-center shadow-sm">
                   <Heart className="text-red-500 opacity-20 mx-auto mb-6" size={64} />
-                  <h3 className="text-2xl font-bold mb-4">Your Wishlist is Empty</h3>
-                  <p className="text-on-surface-variant max-w-sm mx-auto mb-8">Items you love will appear here. Start curating your favorites for your pet!</p>
-                  <button onClick={() => navigate('/shop')} className="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">Browse Collection</button>
+                  <h3 className="text-2xl font-bold mb-4">{t('account.empty_wishlist')}</h3>
+                  <p className="text-on-surface-variant max-w-sm mx-auto mb-8">{t('account.empty_wishlist_desc')}</p>
+                  <button onClick={() => navigate('/shop')} className="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">{t('account.browse_collection')}</button>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -304,11 +307,11 @@ const Account = () => {
           {activeTab === 'settings' && (
             <div className="bg-white rounded-xl border border-surface-container-low p-20 text-center shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
               <Settings className="text-on-surface-variant opacity-20 mx-auto mb-6" size={64} />
-              <h3 className="text-2xl font-bold mb-4">Account Settings</h3>
-              <p className="text-on-surface-variant max-w-sm mx-auto mb-8">Update your password, manage notifications, and control your privacy settings here.</p>
+              <h3 className="text-2xl font-bold mb-4">{t('admin.settings')}</h3>
+              <p className="text-on-surface-variant max-w-sm mx-auto mb-8">{t('account.settings_desc')}</p>
               <div className="flex flex-col gap-4 max-w-xs mx-auto">
-                <button className="w-full py-4 rounded-xl bg-surface-container font-bold text-sm hover:bg-surface-container-high transition-colors">Change Password</button>
-                <button className="w-full py-4 rounded-xl border-2 border-surface-container font-bold text-sm hover:border-primary/30 transition-colors">Manage Data</button>
+                <button className="w-full py-4 rounded-xl bg-surface-container font-bold text-sm hover:bg-surface-container-high transition-colors">{t('account.change_password')}</button>
+                <button className="w-full py-4 rounded-xl border-2 border-surface-container font-bold text-sm hover:border-primary/30 transition-colors">{t('account.manage_data')}</button>
               </div>
             </div>
           )}

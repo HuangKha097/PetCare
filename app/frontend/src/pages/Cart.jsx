@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
     Trash2, Minus, Plus, ShoppingBag, ArrowRight, ShieldCheck,
     RotateCcw, Headphones, MapPin, CreditCard as CardIcon,
@@ -11,8 +12,10 @@ import { loginSuccess } from '../store/slices/authSlice';
 import Button from '../components/Button';
 import { updateProfile } from '../services/authService';
 import { createOrder } from '../services/orderService';
+import { getLocalizedText } from '../utils/i18nUtils';
 
 const Cart = () => {
+    const { i18n, t } = useTranslation();
     const { items, totalQuantity, totalAmount, status, notifications } = useSelector((state) => state.cart);
     const { user, token } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -130,11 +133,11 @@ const Cart = () => {
 
     const handleNextStep = () => {
         if (step === 2 && !validateDetails()) {
-            alert('Please fill in all shipping details before continuing.');
+            alert(t('checkout.place_order_failed')); // Use a better message if available
             return;
         }
         if (step === 3 && !validatePayment()) {
-            alert('Please provide your payment details to complete the order.');
+            alert(t('checkout.place_order_failed'));
             return;
         }
         setStep(step + 1);
@@ -143,7 +146,7 @@ const Cart = () => {
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
         if (!validatePayment()) {
-            alert('Please provide your payment details to complete the order.');
+            alert(t('checkout.place_order_failed'));
             return;
         }
         try {
@@ -153,10 +156,8 @@ const Cart = () => {
                 const isDifferent = orderInfo.phone !== user.phone || orderInfo.address !== user.address || orderInfo.city !== user.city;
 
                 if (hasExistingData && isDifferent) {
-                    const confirmOverride = window.confirm('You already have saved profile information. Do you want to override it with this new information?');
-                    if (!confirmOverride) {
-                        // User chose not to override, we just proceed with the order without patching profile
-                    } else {
+                    const confirmOverride = window.confirm(t('cart.override_confirm'));
+                    if (confirmOverride) {
                         const response = await updateProfile({
                             phone: orderInfo.phone,
                             address: `${orderInfo.address}, ${orderInfo.ward}, ${orderInfo.district}`,
@@ -165,7 +166,6 @@ const Cart = () => {
                         dispatch(loginSuccess({ user: response.data, token }));
                     }
                 } else if (!hasExistingData) {
-                    // First time saving info
                     const response = await updateProfile({
                         phone: orderInfo.phone,
                         address: `${orderInfo.address}, ${orderInfo.ward}, ${orderInfo.district}`,
@@ -190,7 +190,7 @@ const Cart = () => {
             dispatch(clearCartLocal());
         } catch (error) {
             console.error(error);
-            alert('Failed to place order. Please try again.');
+            alert(t('checkout.place_order_failed'));
         }
     };
 
@@ -206,10 +206,10 @@ const Cart = () => {
         return (
             <div className="flex flex-col items-center justify-center py-32 px-6">
                 <ShoppingBag size={64} className="text-on-surface-variant/20 mb-6" />
-                <h2 className="text-2xl font-black mb-2">Your cart is empty</h2>
-                <p className="text-on-surface-variant mb-8 text-center max-w-xs">Looks like you haven't added anything to your curator's selection yet.</p>
+                <h2 className="text-2xl font-black mb-2">{t('cart.empty_title')}</h2>
+                <p className="text-on-surface-variant mb-8 text-center max-w-xs">{t('cart.empty_desc')}</p>
                 <Link to="/shop">
-                    <Button>Start Shopping</Button>
+                    <Button>{t('cart.start_shopping')}</Button>
                 </Link>
             </div>
         );
@@ -223,17 +223,16 @@ const Cart = () => {
                     <div className="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
                         <PackageCheck size={48} />
                     </div>
-                    <h1 className="text-4xl font-black mb-4">Order Confirmed!</h1>
+                    <h1 className="text-4xl font-black mb-4">{t('checkout.success_title')}</h1>
                     <p className="text-on-surface-variant font-medium text-lg mb-10 leading-relaxed">
-                        Thank you for your purchase, <span className="text-on-background font-bold">{orderInfo.name}</span>.
-                        Your pet's treats are being prepared and will be shipped to <span className="text-on-background font-bold">{orderInfo.city}</span> soon.
+                        {t('checkout.success_desc', { name: orderInfo.name, city: orderInfo.city })}
                     </p>
                     <div className="flex flex-col gap-4">
                         <NavLink to="/account">
-                            <Button className="w-full py-4 text-base font-bold">Track My Order</Button>
+                            <Button className="w-full py-4 text-base font-bold">{t('checkout.track_order')}</Button>
                         </NavLink>
                         <NavLink to="/shop">
-                            <Button variant="outline" className="w-full py-4 text-base font-bold border-surface-container-high">Back to Shop</Button>
+                            <Button variant="outline" className="w-full py-4 text-base font-bold border-surface-container-high">{t('common.back_to_shop')}</Button>
                         </NavLink>
                     </div>
                 </div>
@@ -251,10 +250,10 @@ const Cart = () => {
                             <AlertTriangle size={22} className={notif.type === 'removed' ? 'text-red-500 mt-0.5 shrink-0' : 'text-amber-500 mt-0.5 shrink-0'} />
                             <div className="flex-1">
                                 <p className={`font-bold text-sm ${notif.type === 'removed' ? 'text-red-800' : 'text-amber-800'}`}>
-                                    {notif.type === 'removed' ? 'Items Removed' : 'Quantities Adjusted'}
+                                    {notif.type === 'removed' ? t('cart.items_removed') : t('cart.quantities_adjusted')}
                                 </p>
                                 <p className={`text-sm mt-1 ${notif.type === 'removed' ? 'text-red-600' : 'text-amber-600'}`}>
-                                    {notif.message}
+                                    {getLocalizedText(notif.message, i18n.language)}
                                 </p>
                             </div>
                             <button onClick={() => dispatch(clearNotifications())} className="p-1 hover:bg-black/5 rounded-full transition-colors shrink-0">
@@ -268,10 +267,10 @@ const Cart = () => {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                 <div>
                     <h1 className="text-4xl md:text-5xl font-black tracking-tight text-on-background mb-4">
-                        {step === 1 ? 'Your Shopping Cart' : step === 2 ? 'Shipping Details' : 'Secure Payment'}
+                        {step === 1 ? t('cart.title') : step === 2 ? t('checkout.details_title') : t('checkout.payment_title')}
                     </h1>
                     <p className="text-on-surface-variant font-medium text-lg opacity-70">
-                        {step === 1 ? `Reviewing ${totalQuantity} premium pet selections.` : step === 2 ? 'Where should we send your package?' : 'Finalize your order securely.'}
+                        {step === 1 ? t('cart.review_selection', { count: totalQuantity }) : step === 2 ? t('checkout.details_desc') : t('checkout.payment_desc')}
                     </p>
                 </div>
 
@@ -284,7 +283,7 @@ const Cart = () => {
                                     {step > s ? <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5" /> : s}
                                 </div>
                                 <span className={`font-bold text-xs md:text-sm transition-colors duration-500 ${step >= s ? 'text-on-background' : 'text-on-surface-variant opacity-40'} ${step === s ? 'block' : 'hidden md:block'}`}>
-                                    {s === 1 ? 'Cart' : s === 2 ? 'Details' : 'Pay'}
+                                    {s === 1 ? t('checkout.step_cart') : s === 2 ? t('checkout.step_details') : t('checkout.step_pay')}
                                 </span>
                             </div>
                             {s < 3 && <div className={`w-4 md:w-8 h-[2px] shrink-0 transition-colors duration-500 ${step > s ? 'bg-primary' : 'bg-surface-container-high'}`}></div>}
@@ -304,13 +303,13 @@ const Cart = () => {
                             {items.map((item) => (
                                 <div key={item.cart_item_id} className="bg-white border border-surface-container-low rounded-xl p-6 flex flex-col md:flex-row gap-6 shadow-sm group hover:shadow-xl transition-all duration-300">
                                     <div className="w-full md:w-40 aspect-square rounded-xl overflow-hidden bg-surface-container-low">
-                                        <img alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={item.images ? item.images[0] : "https://static.vecteezy.com/system/resources/previews/058/788/346/non_2x/broken-or-missing-file-icon-with-sad-face-symbol-of-technical-issue-data-loss-system-failure-used-as-placeholder-when-content-is-unavailable-illustration-vector.jpg"} />
+                                        <img alt={getLocalizedText(item.name, i18n.language)} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={item.images ? item.images[0] : "https://static.vecteezy.com/system/resources/previews/058/788/346/non_2x/broken-or-missing-file-icon-with-sad-face-symbol-of-technical-issue-data-loss-system-failure-used-as-placeholder-when-content-is-unavailable-illustration-vector.jpg"} />
                                     </div>
                                     <div className="flex-grow flex flex-col justify-between">
                                         <div className="flex justify-between items-start">
                                             <div>
-                                                <h3 className="text-xl font-bold text-on-background leading-tight">{item.name}</h3>
-                                                <p className="text-sm text-on-surface-variant mt-1 font-medium opacity-60">{item.category}</p>
+                                                <h3 className="text-xl font-bold text-on-background leading-tight">{getLocalizedText(item.name, i18n.language)}</h3>
+                                                <p className="text-sm text-on-surface-variant mt-1 font-medium opacity-60">{getLocalizedText(item.category, i18n.language)}</p>
                                             </div>
                                             <Button variant="ghost" onClick={() => handleRemove(item.cart_item_id)} className="p-2 text-on-surface-variant hover:text-red-500 transition-colors">
                                                 <Trash2 size={20} />
@@ -339,7 +338,7 @@ const Cart = () => {
                         <div className="bg-white border border-surface-container-low rounded-xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="flex justify-between items-center mb-8">
                                 <h2 className="text-2xl font-bold flex items-center gap-3">
-                                    <MapPin size={24} className="text-primary" /> Delivery Address
+                                    <MapPin size={24} className="text-primary" /> {t('checkout.delivery_address')}
                                 </h2>
                                 {(user?.phone || user?.address) && (
                                     <button
@@ -350,57 +349,57 @@ const Cart = () => {
                                         <div className="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m13 2-2 10h8l-2 10 2-10h-8z" /></svg>
                                         </div>
-                                        Quick Fill Default Info
+                                        {t('checkout.quick_fill')}
                                     </button>
                                 )}
                             </div>
                             <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Full Name (Fixed)</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.full_name')}</label>
                                     <input type="text" name="name" value={orderInfo.name} readOnly className="bg-surface-container-low px-6 py-4 rounded-xl border border-surface-container-high outline-none font-semibold text-base transition-all opacity-70 cursor-not-allowed" />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Email Address (Fixed)</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.email')}</label>
                                     <input type="email" name="email" value={orderInfo.email} readOnly className="bg-surface-container-low px-6 py-4 rounded-xl border border-surface-container-high outline-none font-semibold text-base transition-all opacity-70 cursor-not-allowed" />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Phone Number</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.phone')}</label>
                                     <input type="tel" name="phone" value={orderInfo.phone} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="09xx xxx xxx" />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">City / Province</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.city')}</label>
                                     <select name="city" value={orderInfo.city} onChange={handleCityChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all appearance-none cursor-pointer">
-                                        <option value="">Select City / Province</option>
+                                        <option value="">{t('checkout.city')}</option>
                                         {provinces.map(p => (
                                             <option key={p.code} value={p.name}>{p.name}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">District</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.district')}</label>
                                     <select name="district" value={orderInfo.district} onChange={handleDistrictChange} disabled={!orderInfo.city} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <option value="">{orderInfo.city ? 'Select District' : 'Select City First'}</option>
+                                        <option value="">{orderInfo.city ? t('checkout.district') : t('checkout.city')}</option>
                                         {districts.map(d => (
                                             <option key={d.code} value={d.name}>{d.name}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Ward / Commune</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.ward')}</label>
                                     <select name="ward" value={orderInfo.ward} onChange={handleInputChange} disabled={!orderInfo.district} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <option value="">{orderInfo.district ? 'Select Ward / Commune' : 'Select District First'}</option>
+                                        <option value="">{orderInfo.district ? t('checkout.ward') : t('checkout.district')}</option>
                                         {wards.map(w => (
                                             <option key={w.code} value={w.name}>{w.name}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Street Address</label>
-                                    <input type="text" name="address" value={orderInfo.address} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="House number, Street name..." />
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.address')}</label>
+                                    <input type="text" name="address" value={orderInfo.address} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder={t('checkout.address')} />
                                 </div>
                                 <div className="md:col-span-2 flex flex-col gap-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Order Notes (Optional)</label>
-                                    <textarea name="note" value={orderInfo.note} onChange={handleInputChange} rows="3" className="bg-surface px-6 py-4 rounded-lg border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all resize-none" placeholder="Special instructions for delivery..."></textarea>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.notes')}</label>
+                                    <textarea name="note" value={orderInfo.note} onChange={handleInputChange} rows="3" className="bg-surface px-6 py-4 rounded-lg border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all resize-none" placeholder={t('checkout.notes_placeholder')}></textarea>
                                 </div>
 
                                 <div className="md:col-span-2 pt-4">
@@ -411,7 +410,7 @@ const Cart = () => {
                                                 {orderInfo.saveDefault && <CheckCircle2 size={16} className="text-on-primary" />}
                                             </div>
                                         </div>
-                                        <span className="text-sm font-bold text-on-surface-variant group-hover:text-on-background transition-colors">Save this as my default shipping information</span>
+                                        <span className="text-sm font-bold text-on-surface-variant group-hover:text-on-background transition-colors">{t('checkout.save_default')}</span>
                                     </label>
                                 </div>
                             </form>
@@ -422,13 +421,13 @@ const Cart = () => {
                     {step === 3 && (
                         <div className="bg-white border border-surface-container-low rounded-xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
-                                <CardIcon size={24} className="text-primary" /> Choose Payment Method
+                                <CardIcon size={24} className="text-primary" /> {t('checkout.choose_payment')}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {[
-                                    { id: 'cash', label: 'Tiền mặt (COD)', icon: Truck, desc: 'Pay when receiving' },
-                                    { id: 'banking', label: 'Chuyển khoản', icon: Headphones, desc: 'Bank Transfer' },
-                                    { id: 'card', label: 'Thẻ Visa/Master', icon: CardIcon, desc: 'Online Payment' }
+                                    { id: 'cash', label: t('checkout.cash'), icon: Truck, desc: t('checkout.pay_on_receive') },
+                                    { id: 'banking', label: t('checkout.banking'), icon: Headphones, desc: t('checkout.banking') },
+                                    { id: 'card', label: t('checkout.card'), icon: CardIcon, desc: t('checkout.card') }
                                 ].map((method) => (
                                     <div
                                         key={method.id}
@@ -445,15 +444,15 @@ const Cart = () => {
                             {orderInfo.paymentMethod === 'card' && (
                                 <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
                                     <div className="md:col-span-2 flex flex-col gap-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Card Number</label>
+                                        <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.card_number')}</label>
                                         <input type="text" name="cardNumber" value={orderInfo.cardNumber} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="0000 0000 0000 0000" />
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">Expiry Date</label>
+                                        <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.expiry')}</label>
                                         <input type="text" name="expiry" value={orderInfo.expiry} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="MM / YY" />
                                     </div>
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">CVV</label>
+                                        <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60 ml-1">{t('checkout.cvv')}</label>
                                         <input type="text" name="cvv" value={orderInfo.cvv} onChange={handleInputChange} className="bg-surface px-6 py-4 rounded-xl border border-surface-container-high focus:ring-4 focus:ring-primary/10 outline-none font-semibold text-base transition-all" placeholder="***" />
                                     </div>
                                 </div>
@@ -461,22 +460,22 @@ const Cart = () => {
 
                             {orderInfo.paymentMethod === 'banking' && (
                                 <div className="mt-10 p-8 rounded-xl bg-primary/5 border border-primary/20 animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <h4 className="font-bold mb-4">Bank Transfer Information</h4>
+                                    <h4 className="font-bold mb-4">{t('checkout.bank_info')}</h4>
                                     <div className="space-y-3">
                                         <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">Bank Name:</span>
+                                            <span className="opacity-60">{t('checkout.bank_name')}:</span>
                                             <span className="font-bold">MB Bank</span>
                                         </div>
                                         <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">Account Number:</span>
+                                            <span className="opacity-60">{t('checkout.acc_number')}:</span>
                                             <span className="font-bold text-primary">1234 5678 9999</span>
                                         </div>
                                         <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">Account Holder:</span>
+                                            <span className="opacity-60">{t('checkout.acc_holder')}:</span>
                                             <span className="font-bold uppercase">PETCARE VIETNAM</span>
                                         </div>
                                         <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">Content:</span>
+                                            <span className="opacity-60">{t('checkout.transfer_content')}:</span>
                                             <span className="font-bold text-sm">ORD{Math.floor(Math.random() * 10000)}</span>
                                         </div>
                                     </div>
@@ -487,7 +486,7 @@ const Cart = () => {
                                 <div className="mt-10 p-6 rounded-xl bg-surface-container-low border border-surface-container-high flex gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
                                     <Truck size={24} className="text-primary flex-shrink-0" />
                                     <p className="text-sm font-medium leading-relaxed text-on-surface-variant">
-                                        You will pay in cash when the delivery person arrives at your address. Please keep your phone reachable.
+                                        {t('checkout.cash_desc')}
                                     </p>
                                 </div>
                             )}
@@ -498,7 +497,7 @@ const Cart = () => {
                 {/* SIDEBAR SUMMARY */}
                 <aside className="lg:col-span-4 sticky top-28">
                     <div className="bg-white border border-surface-container-low rounded-xl p-8 shadow-sm">
-                        <h2 className="text-2xl font-bold mb-8 tracking-tight">Order Summary</h2>
+                        <h2 className="text-2xl font-bold mb-8 tracking-tight">{t('cart.order_summary')}</h2>
 
                         {/* Mini Cart Preview in Sidebar if not on Cart step */}
                         {step > 1 && (
@@ -509,8 +508,8 @@ const Cart = () => {
                                             <img src={item.images ? item.images[0] : "https://static.vecteezy.com/system/resources/previews/058/788/346/non_2x/broken-or-missing-file-icon-with-sad-face-symbol-of-technical-issue-data-loss-system-failure-used-as-placeholder-when-content-is-unavailable-illustration-vector.jpg"} className="w-full h-full object-cover" alt="" />
                                         </div>
                                         <div className="flex-grow min-w-0">
-                                            <p className="text-sm font-bold truncate">{item.name}</p>
-                                            <p className="text-xs font-medium text-on-surface-variant">Qty: {item.quantity}</p>
+                                            <p className="text-sm font-bold truncate">{getLocalizedText(item.name, i18n.language)}</p>
+                                            <p className="text-xs font-medium text-on-surface-variant">{t('product.stock')}: {item.quantity}</p>
                                         </div>
                                         <p className="text-sm font-black">${(item.price * item.quantity).toFixed(2)}</p>
                                     </div>
@@ -521,23 +520,23 @@ const Cart = () => {
 
                         <div className="space-y-4 mb-8">
                             <div className="flex justify-between text-base">
-                                <span className="text-on-surface-variant font-medium">Subtotal</span>
+                                <span className="text-on-surface-variant font-medium">{t('cart.subtotal')}</span>
                                 <span className="font-bold text-on-surface">${totalAmount.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between text-base">
-                                <span className="text-on-surface-variant font-medium">Estimated Shipping</span>
-                                <span className="text-green-500 font-black uppercase text-xs tracking-widest">Free</span>
+                                <span className="text-on-surface-variant font-medium">{t('cart.shipping')}</span>
+                                <span className="text-green-500 font-black uppercase text-xs tracking-widest">{t('cart.free')}</span>
                             </div>
                             <div className="flex justify-between text-base">
-                                <span className="text-on-surface-variant font-medium">Taxes (Estimated)</span>
+                                <span className="text-on-surface-variant font-medium">{t('cart.taxes')}</span>
                                 <span className="font-bold text-on-surface">${(totalAmount * 0.08).toFixed(2)}</span>
                             </div>
                         </div>
                         <div className="flex justify-between items-end mb-8 pt-6 border-t border-surface-container-low">
-                            <span className="text-lg font-bold">Total Amount</span>
+                            <span className="text-lg font-bold">{t('cart.total')}</span>
                             <div className="text-right">
                                 <span className="text-3xl font-black text-on-background block leading-none">${(totalAmount * 1.08).toFixed(2)}</span>
-                                <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest mt-1 block">Currency in USD</span>
+                                <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest mt-1 block">{t('cart.currency_note')}</span>
                             </div>
                         </div>
 
@@ -545,7 +544,7 @@ const Cart = () => {
                         <div className="flex flex-col gap-4">
                             {step === 1 && (
                                 <Button className="w-full py-4 rounded-2xl text-base font-bold shadow-xl shadow-primary/30" onClick={() => setStep(2)}>
-                                    Checkout Now <ArrowRight size={20} />
+                                    {t('cart.checkout')} <ArrowRight size={20} />
                                 </Button>
                             )}
                             {step === 2 && (
@@ -553,7 +552,7 @@ const Cart = () => {
                                     className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validateDetails() ? 'shadow-primary/30 opacity-100' : 'opacity-60 cursor-not-allowed'}`}
                                     onClick={handleNextStep}
                                 >
-                                    Continue to Payment <ArrowRight size={20} />
+                                    {t('common.next')} <ArrowRight size={20} />
                                 </Button>
                             )}
                             {step === 3 && (
@@ -561,13 +560,13 @@ const Cart = () => {
                                     className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validatePayment() ? 'bg-green-500 hover:bg-green-600 shadow-green-500/30' : 'bg-green-500/50 cursor-not-allowed opacity-60'} text-white`}
                                     onClick={handlePlaceOrder}
                                 >
-                                    Confirm & Place Order <CheckCircle2 size={20} />
+                                    {t('checkout.confirm_order')} <CheckCircle2 size={20} />
                                 </Button>
                             )}
 
                             {step > 1 && (
                                 <button onClick={() => setStep(step - 1)} className="flex items-center justify-center gap-2 text-sm font-bold text-on-surface-variant hover:text-on-background transition-colors">
-                                    <ChevronLeft size={16} /> Back to {step === 2 ? 'Cart' : 'Details'}
+                                    <ChevronLeft size={16} /> {t('common.back')} {step === 2 ? t('checkout.step_cart') : t('checkout.step_details')}
                                 </button>
                             )}
                         </div>
@@ -577,11 +576,11 @@ const Cart = () => {
                     <div className="mt-8 grid grid-cols-2 gap-4">
                         <div className="flex flex-col items-center p-4 bg-white/50 rounded-2xl border border-surface-container-low">
                             <ShieldCheck size={20} className="text-primary mb-2" />
-                            <span className="text-[10px] font-bold uppercase tracking-widest">Safe & Secure</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">{t('cart.safe_secure')}</span>
                         </div>
                         <div className="flex flex-col items-center p-4 bg-white/50 rounded-2xl border border-surface-container-low">
                             <RotateCcw size={20} className="text-primary mb-2" />
-                            <span className="text-[10px] font-bold uppercase tracking-widest">Easy Returns</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">{t('cart.easy_returns')}</span>
                         </div>
                     </div>
                 </aside>
