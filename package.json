@@ -2,7 +2,8 @@
   "name": "petcare-fullstack",
   "version": "1.0.0",
   "scripts": {
-    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "start": "npm run backend",
+    "start:fullstack": "concurrently \"npm run backend\" \"npm run frontend\"",
     "dev": "concurrently \"npm run backend-dev\" \"npm run frontend\"",
     "backend": "cd app/backend && npm start",
     "backend-dev": "cd app/backend && npm run dev",
