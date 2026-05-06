@@ -32,7 +32,7 @@ export const createProduct = (productData) => {
 };
 
 export const updateProduct = (id, productData, adminPassword) => {
-  return API.put(`/products/${id}`, { ...productData, admin_password: adminPassword });
+  return API.put(`/products/${id}`, { ...productData, adminPassword });
 };
 
 export const updateProductStatus = (id, is_active) => {
@@ -40,5 +40,5 @@ export const updateProductStatus = (id, is_active) => {
 };
 
 export const deleteProduct = (id, adminPassword) => {
-  return API.delete(`/products/${id}`, { data: { admin_password: adminPassword } });
+  return API.delete(`/products/${id}`, { data: { adminPassword } });
 };

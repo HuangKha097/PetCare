@@ -1,6 +1,11 @@
-const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const { verifyAccessToken } = require('../utils/tokenUtils');
 
+/**
+ * Auth Middleware
+ * Verifies the JWT access token from the Authorization header.
+ * Uses tokenUtils for centralized token verification.
+ */
 module.exports = async function (req, res, next) {
     // Get token from header
     const token = req.header('Authorization')?.split(' ')[1];
@@ -10,7 +15,7 @@ module.exports = async function (req, res, next) {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = verifyAccessToken(token);
         
         // Verify user is still active in DB
         const [users] = await db.execute('SELECT id, role, is_active FROM users WHERE id = ?', [decoded.userId]);
@@ -28,6 +33,10 @@ module.exports = async function (req, res, next) {
         req.userRole = user.role;
         next();
     } catch (err) {
+        // Differentiate between expired and invalid tokens for the frontend
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token expired', code: 'TOKEN_EXPIRED' });
+        }
         res.status(401).json({ message: 'Token is not valid' });
     }
 };

@@ -35,7 +35,11 @@ const Login = () => {
                 : await registerAPI(formData);
 
             if (isLogin) {
-                dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
+                dispatch(loginSuccess({ 
+                    user: response.data.user, 
+                    token: response.data.token, 
+                    refreshToken: response.data.refreshToken 
+                }));
                 if (response.data.user.role === 'admin') {
                     navigate('/admin/dashboard');
                 } else {

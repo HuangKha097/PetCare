@@ -5,9 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../store/slices/cartSlice';
 import { toggleWishlist } from '../store/slices/wishlistSlice';
+import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../utils/i18nUtils';
 import Button from './Button';
 
 const ProductCard = ({ product }) => {
+    const { i18n, t } = useTranslation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isAuthenticated } = useSelector((state) => state.auth);
@@ -52,12 +55,12 @@ const ProductCard = ({ product }) => {
                 <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
                     {isOutOfStock && (
                         <div className="bg-error/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
-                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-white">Out of Stock</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-white">{t('product.out_of_stock')}</span>
                         </div>
                     )}
                     {!isOutOfStock && rating > 4.7 && (
                         <div className="glassmorphism px-3 py-1.5 rounded-full shadow-sm border border-white/40 backdrop-blur-xl">
-                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-primary-dark">Best Seller</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.1em] text-primary-dark">{t('product.best_seller')}</span>
                         </div>
                     )}
                 </div>
@@ -72,7 +75,7 @@ const ProductCard = ({ product }) => {
 
                 <Link to={`/product/${product.id}`} className="block w-full h-full">
                     <img
-                        alt={product.name}
+                        alt={getLocalizedText(product.name, i18n.language)}
                         className="w-full h-full object-cover transform transition-transform duration-1000 "
                         src={product.images ? product.images[0] : "https://static.vecteezy.com/system/resources/previews/058/788/346/non_2x/broken-or-missing-file-icon-with-sad-face-symbol-of-technical-issue-data-loss-system-failure-used-as-placeholder-when-content-is-unavailable-illustration-vector.jpg"} />
 
@@ -85,7 +88,7 @@ const ProductCard = ({ product }) => {
                         onClick={handleAddToCart}
                         className="flex-1 bg-white/90 backdrop-blur-md text-on-background hover:bg-primary hover:text-on-background border-none shadow-xl py-3 rounded-lg font-black text-xs uppercase tracking-widest"
                     >
-                        Quick Add
+                        {t('product.quick_add')}
                     </Button>
                     <Link to={`/product/${product.id}`} className="w-12 h-12 rounded-lg bg-white/90 backdrop-blur-md flex items-center justify-center shadow-xl hover:bg-on-background hover:text-white transition-colors">
                         <Eye size={20} />
@@ -117,13 +120,13 @@ const ProductCard = ({ product }) => {
 
                 <Link to={`/product/${product.id}`}>
                     <h4 className="font-display font-bold text-xl leading-[1.3] mb-2 text-on-background group-hover:text-primary transition-colors line-clamp-2">
-                        {product.name}
+                        {getLocalizedText(product.name, i18n.language)}
                     </h4>
                 </Link>
 
                 <div className="mt-auto pt-4 border-t border-surface-container-low flex items-end justify-between">
                     <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-1 opacity-50">Member Price</span>
+                        <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-1 opacity-50">{t('product.member_price')}</span>
                         <div className="flex items-baseline gap-1">
                             <span className="text-2xl font-black text-on-background tracking-tight">
                                 ${price.toFixed(2)}

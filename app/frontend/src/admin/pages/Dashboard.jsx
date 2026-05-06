@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import API from '../../api/axios';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { DollarSign, ShoppingBag, Users, Package, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { getLocalizedText } from '../../utils/i18nUtils';
 
 const StatCard = ({ title, value, prevValue, icon: Icon, prefix = '' }) => {
     const isIncrease = value >= prevValue;
@@ -27,6 +29,7 @@ const StatCard = ({ title, value, prevValue, icon: Icon, prefix = '' }) => {
 };
 
 const Dashboard = () => {
+    const { i18n, t } = useTranslation();
     const [days, setDays] = useState(30);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -61,8 +64,8 @@ const Dashboard = () => {
             {/* Header & Filters */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-on-background mb-1">Dashboard Overview</h1>
-                    <p className="text-on-surface-variant font-medium">Your business performance at a glance.</p>
+                    <h1 className="text-3xl font-black tracking-tight text-on-background mb-1">{t('admin.dashboard')}</h1>
+                    <p className="text-on-surface-variant font-medium">{t('admin.dashboard_desc')}</p>
                 </div>
                 <div className="flex bg-white border border-surface-container-low rounded-lg p-1">
                     {[7, 30, 90].map(d => (
@@ -79,16 +82,16 @@ const Dashboard = () => {
 
             {/* Stat Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard title="Total Revenue" value={overview.revenue} prevValue={overview.prevRevenue} icon={DollarSign} prefix="$" />
-                <StatCard title="Total Orders" value={overview.orders} prevValue={overview.prevOrders} icon={ShoppingBag} />
-                <StatCard title="New Customers" value={overview.users} prevValue={0} icon={Users} />
-                <StatCard title="Active Products" value={overview.activeProducts} prevValue={0} icon={Package} />
+                <StatCard title={t('admin.revenue')} value={overview.revenue} prevValue={overview.prevRevenue} icon={DollarSign} prefix="$" />
+                <StatCard title={t('admin.orders')} value={overview.orders} prevValue={overview.prevOrders} icon={ShoppingBag} />
+                <StatCard title={t('admin.customers')} value={overview.users} prevValue={0} icon={Users} />
+                <StatCard title={t('admin.active_products')} value={overview.activeProducts} prevValue={0} icon={Package} />
             </div>
 
             {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-surface-container-low shadow-sm">
-                    <h3 className="font-bold text-lg mb-6">Revenue Trend</h3>
+                    <h3 className="font-bold text-lg mb-6">{t('admin.revenue_trend')}</h3>
                     <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -106,7 +109,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="bg-white p-6 rounded-2xl border border-surface-container-low shadow-sm">
-                    <h3 className="font-bold text-lg mb-6">Orders Volume</h3>
+                    <h3 className="font-bold text-lg mb-6">{t('admin.orders_volume')}</h3>
                     <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={chartData} margin={{ top: 5, right: 0, bottom: 5, left: -20 }}>
@@ -127,17 +130,17 @@ const Dashboard = () => {
             {/* Best Sellers */}
             <div className="bg-white rounded-2xl border border-surface-container-low shadow-sm overflow-hidden">
                 <div className="p-6 border-b border-surface-container-low flex justify-between items-center">
-                    <h3 className="font-bold text-lg text-on-background">Top Best Sellers</h3>
+                    <h3 className="font-bold text-lg text-on-background">{t('admin.top_sellers')}</h3>
                     <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full">Top 5</span>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-surface-container-lowest border-b border-surface-container-low text-xs uppercase tracking-widest text-on-surface-variant font-bold">
-                                <th className="p-4 pl-6 font-semibold">Product</th>
-                                <th className="p-4 font-semibold">Price</th>
-                                <th className="p-4 font-semibold">Stock</th>
-                                <th className="p-4 pr-6 font-semibold text-right">Total Sold</th>
+                                <th className="p-4 pl-6 font-semibold">{t('admin.products')}</th>
+                                <th className="p-4 font-semibold">{t('product.price')}</th>
+                                <th className="p-4 font-semibold">{t('product.stock')}</th>
+                                <th className="p-4 pr-6 font-semibold text-right">{t('admin.total_sold')}</th>
                             </tr>
                         </thead>
                         <tbody className="text-sm font-medium">
@@ -148,7 +151,7 @@ const Dashboard = () => {
                                             <div className="w-10 h-10 rounded-lg overflow-hidden border border-surface-container-low shrink-0 bg-white">
                                                 <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
                                             </div>
-                                            <span className="font-bold text-on-background line-clamp-1">{product.name}</span>
+                                            <span className="font-bold text-on-background line-clamp-1">{getLocalizedText(product.name, i18n.language)}</span>
                                         </div>
                                     </td>
                                     <td className="p-4">${Number(product.price).toFixed(2)}</td>
@@ -156,9 +159,9 @@ const Dashboard = () => {
                                         {product.stock_quantity > 10 ? (
                                             <span className="text-green-600">{product.stock_quantity}</span>
                                         ) : product.stock_quantity > 0 ? (
-                                            <span className="text-amber-600 font-bold">{product.stock_quantity} (Low)</span>
+                                            <span className="text-amber-600 font-bold">{product.stock_quantity} ({t('product.low_stock')})</span>
                                         ) : (
-                                            <span className="text-error font-bold">Out of Stock</span>
+                                            <span className="text-error font-bold">{t('product.out_of_stock')}</span>
                                         )}
                                     </td>
                                     <td className="p-4 pr-6 text-right font-black text-primary text-base">

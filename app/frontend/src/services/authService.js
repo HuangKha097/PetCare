@@ -20,3 +20,11 @@ export const getMe = () => {
 export const updateProfile = (profileData) => {
   return API.patch('/auth/profile', profileData);
 };
+
+export const refreshToken = (refreshToken) => {
+  return API.post('/auth/refresh-token', { refreshToken });
+};
+
+export const logoutAPI = (refreshToken) => {
+  return API.post('/auth/logout', { refreshToken });
+};

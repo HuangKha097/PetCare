@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Search, Menu, User, LogOut, X } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { logout } from '../store/slices/authSlice';
+import { logoutAPI } from '../services/authService';
 import Button from './Button';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
+  const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const closeMenu = () => setIsMobileMenuOpen(false);
   const { totalQuantity } = useSelector((state) => state.cart);
@@ -14,7 +18,11 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) await logoutAPI(refreshToken);
+    } catch (_) { /* ignore */ }
     dispatch(logout());
   };
 
@@ -32,9 +40,8 @@ const Header = () => {
             <Link to="/" className="text-2xl font-black text-primary-dark tracking-tighter">PetCare <span className="text-primary italic">🐾</span></Link>
 
             <nav className="hidden md:flex gap-8 ml-8">
-              <NavLink to="/shop" className={navLinkClass}>Shop</NavLink>
-              <NavLink to="/categories" className={navLinkClass}>Categories</NavLink>
-              <NavLink to="/blog" className={navLinkClass} >Blog</NavLink>
+              <NavLink to="/shop" className={navLinkClass}>{t('nav.shop')}</NavLink>
+              <NavLink to="/blog" className={navLinkClass}>{t('nav.blog')}</NavLink>
             </nav>
           </div>
 
@@ -52,10 +59,12 @@ const Header = () => {
               )}
             </Link>
 
+            <LanguageSwitcher />
+
             {user ? (
               <div className="flex items-center gap-3 ml-2 border-l border-surface-container-high pl-4">
                 <Link to="/account" className="hidden lg:flex flex-col items-end hover:text-primary transition-colors">
-                  <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Welcome back</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest opacity-40">{t('nav.welcome_back')}</span>
                   <span className="text-xs font-bold text-on-surface">{user.name}</span>
                 </Link>
 
@@ -63,7 +72,7 @@ const Header = () => {
             ) : (
               <Link to="/login" className="hidden md:block">
                 <Button className="py-2.5 px-6 text-xs uppercase tracking-widest">
-                  Sign In
+                  {t('nav.sign_in')}
                 </Button>
               </Link>
             )}
@@ -90,9 +99,8 @@ const Header = () => {
           </div>
 
           <nav className="flex flex-col gap-6 text-xl">
-            <NavLink to="/shop" className={navLinkClass} onClick={closeMenu}>Shop</NavLink>
-            <NavLink to="/categories" className={navLinkClass} onClick={closeMenu}>Categories</NavLink>
-            <NavLink to="/blog" className={navLinkClass} onClick={closeMenu}>Blog</NavLink>
+            <NavLink to="/shop" className={navLinkClass} onClick={closeMenu}>{t('nav.shop')}</NavLink>
+            <NavLink to="/blog" className={navLinkClass} onClick={closeMenu}>{t('nav.blog')}</NavLink>
           </nav>
 
           <div className="mt-auto pt-8 border-t border-surface-container-high">

@@ -5,10 +5,13 @@ import { getProductById } from '../services/productService';
 import { getReviewsByProduct, createReview } from '../services/reviewService';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { addToCart } from '../store/slices/cartSlice';
+import { getLocalizedText } from '../utils/i18nUtils';
 import Button from '../components/Button';
 
 const ProductDetail = () => {
+  const { i18n, t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -101,11 +104,11 @@ const ProductDetail = () => {
     <main className="pt-12 pb-20 max-w-7xl mx-auto px-6 lg:px-8">
       {/* Breadcrumbs */}
       <nav className="mb-8 flex items-center gap-2 text-on-surface-variant text-sm uppercase tracking-widest font-semibold">
-        <Link className="hover:text-primary transition-colors" to="/">Home</Link>
+        <Link className="hover:text-primary transition-colors" to="/">{t('nav.home')}</Link>
         <ChevronRight size={14} />
-        <Link className="hover:text-primary transition-colors" to="/shop">Shop</Link>
+        <Link className="hover:text-primary transition-colors" to="/shop">{t('nav.shop')}</Link>
         <ChevronRight size={14} />
-        <span className="font-bold text-on-surface">{product.name}</span>
+        <span className="font-bold text-on-surface">{getLocalizedText(product.name, i18n.language)}</span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
@@ -115,7 +118,7 @@ const ProductDetail = () => {
           <div className="relative aspect-square overflow-hidden rounded-xl bg-surface-container-low shadow-sm group">
             <img
               key={activeImg}
-              alt={product.name}
+              alt={getLocalizedText(product.name, i18n.language)}
               className="w-full h-full object-cover transition-opacity duration-300"
               src={images[activeImg]}
             />
@@ -156,7 +159,7 @@ const ProductDetail = () => {
                   className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${i === activeImg ? 'border-primary-dark shadow-md scale-105' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                 >
-                  <img src={url} alt={`${product.name} view ${i + 1}`} className="w-full h-full object-cover" />
+                  <img src={url} alt={`${getLocalizedText(product.name, i18n.language)} view ${i + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -174,14 +177,14 @@ const ProductDetail = () => {
                 </span>
               )}
             </div>
-            <h2 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-on-surface mb-2">{product.name}</h2>
+            <h2 className="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-on-surface mb-2">{getLocalizedText(product.name, i18n.language)}</h2>
             <div className="flex items-center gap-3">
               <div className="flex text-primary">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={18} fill={i < Math.round(product.rating) ? "currentColor" : "none"} />
                 ))}
               </div>
-              <span className="text-on-surface-variant text-sm font-medium">{product.rating} ({reviews.length} reviews)</span>
+              <span className="text-on-surface-variant text-sm font-medium">{product.rating} ({reviews.length} {t('product.reviews').toLowerCase()})</span>
             </div>
           </header>
 
@@ -193,15 +196,15 @@ const ProductDetail = () => {
               <div className="mt-3">
                 {product.stock_quantity > 10 ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-green-600 bg-green-50 px-3 py-1.5 rounded-full">
-                    <CheckCircle size={14} /> In Stock
+                    <CheckCircle size={14} /> {t('product.in_stock')}
                   </span>
                 ) : product.stock_quantity > 0 ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full">
-                    <PackageX size={14} /> Only {product.stock_quantity} left
+                    <PackageX size={14} /> {product.stock_quantity} {t('product.low_stock')}
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full">
-                    <PackageX size={14} /> Out of Stock
+                    <PackageX size={14} /> {t('product.out_of_stock')}
                   </span>
                 )}
               </div>
@@ -231,7 +234,7 @@ const ProductDetail = () => {
               className={`w-full sm:flex-1 text-xl ${product.stock_quantity === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={product.stock_quantity === 0}
             >
-              <ShoppingCart size={24} /> {product.stock_quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
+              <ShoppingCart size={24} /> {product.stock_quantity === 0 ? t('product.out_of_stock') : t('product.add_to_cart')}
             </Button>
           </div>
 
@@ -240,7 +243,7 @@ const ProductDetail = () => {
             className="text-on-surface-variant hover:text-error py-2 p-0 w-max"
             onClick={handleToggleWishlist}
           >
-            <Heart size={20} /> Add to Wishlist
+            <Heart size={20} /> {t('product.add_to_wishlist')}
           </Button>
         </section>
       </div>
@@ -248,14 +251,14 @@ const ProductDetail = () => {
       {/* ── Tabs ── */}
       <section className="mt-24">
         <div className="flex border-b border-surface-variant overflow-x-auto scrollbar-hide">
-          {['Description', 'Ingredients', 'Reviews'].map(tab => (
+          {[{key:'Description', label: t('product.description')}, {key:'Ingredients', label: t('product.ingredients')}, {key:'Reviews', label: t('product.reviews')}].map(tab => (
             <Button
               variant="custom"
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors whitespace-nowrap ${activeTab === tab ? 'border-b-2 border-primary text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`px-8 py-4 text-sm font-bold uppercase tracking-widest transition-colors whitespace-nowrap ${activeTab === tab.key ? 'border-b-2 border-primary text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
             >
-              {tab}
+              {tab.label}
             </Button>
           ))}
         </div>
@@ -265,7 +268,7 @@ const ProductDetail = () => {
             <div className="grid md:grid-cols-2 gap-12">
               <div className="space-y-4">
                 <h3 className="text-2xl font-display font-bold">Nature's Purest Nutrition</h3>
-                <p className="text-on-surface-variant leading-relaxed">{product.description}</p>
+                <p className="text-on-surface-variant leading-relaxed whitespace-pre-line">{getLocalizedText(product.description, i18n.language)}</p>
               </div>
               <div className="bg-primary-container/20 rounded-xl p-8 border border-primary/10">
                 <h4 className="font-bold mb-4 flex items-center gap-2 text-primary">
@@ -283,8 +286,8 @@ const ProductDetail = () => {
           {activeTab === 'Ingredients' && (
             <div className="bg-surface-container-low rounded-xl p-8 border border-surface-container">
               <h3 className="text-xl font-bold mb-4">Complete List of Ingredients</h3>
-              <p className="text-on-surface-variant leading-relaxed font-medium italic">
-                {product.ingredients || 'Information pending update from the manufacturer.'}
+              <p className="text-on-surface-variant leading-relaxed font-medium italic whitespace-pre-line">
+                {getLocalizedText(product.ingredients, i18n.language) || 'Information pending update from the manufacturer.'}
               </p>
             </div>
           )}
@@ -294,7 +297,7 @@ const ProductDetail = () => {
               {/* Submit Review */}
               {isAuthenticated ? (
                 <div className="bg-white rounded-2xl shadow-sm border border-surface-container p-6 md:p-8">
-                  <h3 className="text-xl font-bold mb-6">Write a Review</h3>
+                  <h3 className="text-xl font-bold mb-6">{t('product.write_review')}</h3>
                   <form onSubmit={handleReviewSubmit} className="space-y-4">
                     <div>
                       <label className="block text-xs font-black uppercase tracking-widest text-on-surface-variant mb-2">Your Rating</label>
@@ -323,7 +326,7 @@ const ProductDetail = () => {
                       />
                     </div>
                     <Button type="submit" disabled={submittingReview} className="w-full md:w-auto px-10">
-                      {submittingReview ? 'Submitting...' : 'Post Review'} <Send size={18} className="ml-2" />
+                      {submittingReview ? '...' : t('product.post_review')} <Send size={18} className="ml-2" />
                     </Button>
                   </form>
                 </div>

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, MoreVertical, Edit2, Trash2, Eye, EyeOff } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getAllProductsAdmin, updateProductStatus, deleteProduct } from '../../services/productService';
+import { getLocalizedText } from '../../utils/i18nUtils';
 
 const ProductManagement = () => {
+    const { i18n, t } = useTranslation();
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -80,8 +83,9 @@ const ProductManagement = () => {
 
     const filteredProducts = products.filter(p => {
         const searchLower = searchTerm.toLowerCase();
+        const localizedName = getLocalizedText(p.name, i18n.language);
         const matchesSearch = 
-            (p.name && p.name.toLowerCase().includes(searchLower)) || 
+            (localizedName && localizedName.toLowerCase().includes(searchLower)) || 
             (p.sku && p.sku.toLowerCase().includes(searchLower)) ||
             (p.category && p.category.toLowerCase().includes(searchLower)) ||
             (p.brand && p.brand.toLowerCase().includes(searchLower));
@@ -105,14 +109,14 @@ const ProductManagement = () => {
         <div className="w-full space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-on-background mb-1">Products</h1>
-                    <p className="text-on-surface-variant font-medium">Manage your catalog, stock, and visibility.</p>
+                    <h1 className="text-3xl font-black tracking-tight text-on-background mb-1">{t('admin.products')}</h1>
+                    <p className="text-on-surface-variant font-medium">{t('admin.products_desc')}</p>
                 </div>
                 <button 
                     onClick={() => navigate('/admin/products/add')}
                     className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20"
                 >
-                    <Plus size={20} /> Add Product
+                    <Plus size={20} /> {t('admin.add_product')}
                 </button>
             </div>
 
@@ -123,7 +127,7 @@ const ProductManagement = () => {
                         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50" />
                         <input 
                             type="text" 
-                            placeholder="Search by Name, SKU, Category, Brand..." 
+                            placeholder={t('admin.search')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-10 pr-4 py-2 bg-white border border-surface-container-low rounded-lg text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none transition-all"
@@ -135,9 +139,9 @@ const ProductManagement = () => {
                             onChange={(e) => setStatusFilter(e.target.value)}
                             className="w-full sm:w-auto px-4 py-2 bg-white border border-surface-container-low rounded-lg text-sm font-bold outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
                         >
-                            <option value="all">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Hidden</option>
+                            <option value="all">{t('admin.all_status')}</option>
+                            <option value="active">{t('admin.active')}</option>
+                            <option value="inactive">{t('admin.hidden')}</option>
                         </select>
                     </div>
                 </div>
@@ -147,12 +151,12 @@ const ProductManagement = () => {
                     <table className="w-full text-left border-collapse min-w-[800px]">
                         <thead>
                             <tr className="bg-surface-container-lowest border-b border-surface-container-low text-xs uppercase tracking-widest text-on-surface-variant font-bold">
-                                <th className="p-4 pl-6 font-semibold w-24">Image</th>
-                                <th className="p-4 font-semibold">Product Details</th>
-                                <th className="p-4 font-semibold">Price</th>
-                                <th className="p-4 font-semibold">Stock</th>
+                                <th className="p-4 pl-6 font-semibold w-24">{t('admin.image')}</th>
+                                <th className="p-4 font-semibold">{t('admin.details')}</th>
+                                <th className="p-4 font-semibold">{t('product.price')}</th>
+                                <th className="p-4 font-semibold">{t('product.stock')}</th>
                                 <th className="p-4 font-semibold">Status</th>
-                                <th className="p-4 pr-6 font-semibold text-right">Actions</th>
+                                <th className="p-4 pr-6 font-semibold text-right">{t('admin.actions')}</th>
                             </tr>
                         </thead>
                         <tbody className="text-sm">
@@ -171,7 +175,7 @@ const ProductManagement = () => {
                                             </div>
                                         </td>
                                         <td className="p-4">
-                                            <div className="font-bold text-on-background text-base line-clamp-1">{product.name}</div>
+                                            <div className="font-bold text-on-background text-base line-clamp-1">{getLocalizedText(product.name, i18n.language)}</div>
                                             <div className="text-on-surface-variant font-medium mt-1 flex gap-3">
                                                 <span>SKU: {product.sku || 'N/A'}</span>
                                                 <span>•</span>
@@ -198,7 +202,7 @@ const ProductManagement = () => {
                                                 }`}
                                             >
                                                 {product.is_active ? <Eye size={14} /> : <EyeOff size={14} />}
-                                                {product.is_active ? 'Active' : 'Hidden'}
+                                                {product.is_active ? t('admin.active') : t('admin.hidden')}
                                             </button>
                                         </td>
                                         <td className="p-4 pr-6">
@@ -290,7 +294,7 @@ const ProductManagement = () => {
                         </div>
                         <h2 className="text-xl font-black mb-2">Delete Product?</h2>
                         <p className="text-sm font-medium text-on-surface-variant mb-4">
-                            Are you sure you want to deactivate <span className="font-bold text-on-background">"{productToDelete.name}"</span>? It will be hidden from the public store.
+                            Are you sure you want to deactivate <span className="font-bold text-on-background">"{getLocalizedText(productToDelete.name, i18n.language)}"</span>? It will be hidden from the public store.
                         </p>
                         <p className="text-xs font-bold text-error mb-6 uppercase tracking-wider">
                             Requires Admin Password

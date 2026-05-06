@@ -38,14 +38,14 @@ async function setup() {
     await conn.query(`
       CREATE TABLE IF NOT EXISTS products (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        description TEXT,
+        name JSON NOT NULL,
+        description JSON,
         price DECIMAL(10, 2) NOT NULL,
         category VARCHAR(100),
         image_url VARCHAR(500),
         rating DECIMAL(3, 2) DEFAULT 0.0,
         images JSON,
-        ingredients TEXT,
+        ingredients JSON,
         brand VARCHAR(50),
         pet_type VARCHAR(50),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -127,6 +127,20 @@ async function setup() {
         date VARCHAR(50) NOT NULL,
         image_url VARCHAR(500) NOT NULL,
         category VARCHAR(100) NOT NULL
+      )
+    `);
+
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS refresh_tokens (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        token VARCHAR(255) NOT NULL UNIQUE,
+        expires_at DATETIME NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        INDEX idx_token (token),
+        INDEX idx_user_id (user_id),
+        INDEX idx_expires_at (expires_at)
       )
     `);
 

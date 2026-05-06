@@ -1,14 +1,26 @@
 const db = require('../config/db');
+const { createMultilingualField } = require('../services/translationService');
 
-// Helper to parse product images
+// Helper to parse product images and multilingual fields
 const parseProduct = (p) => {
+    if (!p) return null;
+    
+    const safeParse = (str) => {
+        try { return typeof str === 'string' && str.startsWith('{') ? JSON.parse(str) : str; }
+        catch { return str; }
+    };
+
     const images = p.images
         ? (typeof p.images === 'string' ? JSON.parse(p.images) : p.images)
         : [p.image_url].filter(Boolean);
+        
     return {
         ...p,
         images,
-        image_url: (images && images.length > 0) ? images[0] : p.image_url
+        image_url: (images && images.length > 0) ? images[0] : p.image_url,
+        name: safeParse(p.name),
+        description: safeParse(p.description),
+        ingredients: safeParse(p.ingredients)
     };
 };
 
@@ -107,10 +119,27 @@ exports.createProduct = async (req, res) => {
 
         const mainImage = imageArray[0];
 
+        // Translate fields
+        const translatedName = await createMultilingualField(name);
+        const translatedDesc = await createMultilingualField(description);
+        const translatedIngr = ingredients ? await createMultilingualField(ingredients) : null;
+
         const [result] = await db.execute(
             `INSERT INTO products (name, description, price, category, image_url, images, ingredients, brand, pet_type, stock_quantity, sku, is_active) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
-            [name, description, price, category, mainImage, JSON.stringify(imageArray), ingredients || null, brand || null, pet_type || null, stock_quantity || 0, sku || null]
+            [
+                JSON.stringify(translatedName), 
+                JSON.stringify(translatedDesc), 
+                price, 
+                category, 
+                mainImage, 
+                JSON.stringify(imageArray), 
+                translatedIngr ? JSON.stringify(translatedIngr) : null, 
+                brand || null, 
+                pet_type || null, 
+                stock_quantity || 0, 
+                sku || null
+            ]
         );
         const [created] = await db.execute('SELECT * FROM products WHERE id = ?', [result.insertId]);
         res.status(201).json(parseProduct(created[0]));
@@ -138,6 +167,13 @@ exports.updateProduct = async (req, res) => {
             mainImage = imageArray[0];
         }
 
+        const safe = (val) => val === undefined ? null : val;
+
+        // Translate if fields are being updated
+        const translatedName = name !== undefined ? await createMultilingualField(name) : undefined;
+        const translatedDesc = description !== undefined ? await createMultilingualField(description) : undefined;
+        const translatedIngr = ingredients !== undefined ? await createMultilingualField(ingredients) : undefined;
+
         await db.execute(
             `UPDATE products SET 
                 name = COALESCE(?, name), 
@@ -153,7 +189,21 @@ exports.updateProduct = async (req, res) => {
                 sku = COALESCE(?, sku),
                 is_active = COALESCE(?, is_active)
              WHERE id = ?`,
-            [name, description, price, category, mainImage, images ? JSON.stringify(imageArray) : null, ingredients, brand, pet_type, stock_quantity, sku, is_active, req.params.id]
+            [
+                safe(translatedName ? JSON.stringify(translatedName) : undefined), 
+                safe(translatedDesc ? JSON.stringify(translatedDesc) : undefined), 
+                safe(price), 
+                safe(category), 
+                safe(mainImage), 
+                images ? JSON.stringify(imageArray) : null, 
+                safe(translatedIngr ? JSON.stringify(translatedIngr) : undefined), 
+                safe(brand), 
+                safe(pet_type), 
+                safe(stock_quantity), 
+                safe(sku), 
+                safe(is_active), 
+                req.params.id
+            ]
         );
         
         const [updated] = await db.execute('SELECT * FROM products WHERE id = ?', [req.params.id]);

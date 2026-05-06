@@ -37,7 +37,7 @@ import UserManagement from './admin/pages/UserManagement';
 
 const UserLayout = () => {
     const { user, isAuthenticated } = useSelector((state) => state.auth);
-    
+
     // Redirect admin trying to access user pages
     if (isAuthenticated && user?.role === 'admin') {
         return <Navigate to="/admin/dashboard" replace />;
@@ -75,7 +75,7 @@ function App() {
                 <Route path="/admin" element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="products" element={<ProductManagement />} />
-                    <Route path="products/new" element={<ProductForm />} />
+                    <Route path="products/add" element={<ProductForm />} />
                     <Route path="products/edit/:id" element={<ProductForm />} />
                     <Route path="orders" element={<OrderManagement />} />
                     <Route path="users" element={<UserManagement />} />

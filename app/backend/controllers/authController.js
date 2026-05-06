@@ -1,6 +1,14 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const {
+    generateAccessToken,
+    generateRefreshToken,
+    verifyRefreshToken,
+    revokeRefreshToken,
+    revokeAllUserTokens,
+} = require('../utils/tokenUtils');
+
+// ─── Register ────────────────────────────────────────────────────────────────
 
 exports.register = async (req, res) => {
     try {
@@ -29,6 +37,8 @@ exports.register = async (req, res) => {
     }
 };
 
+// ─── Login ───────────────────────────────────────────────────────────────────
+
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -49,14 +59,18 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign(
-            { userId: user.id, email: user.email, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
-        );
+        // Generate tokens using tokenUtils
+        const accessToken = generateAccessToken({
+            userId: user.id,
+            email: user.email,
+            role: user.role,
+        });
+
+        const refreshToken = await generateRefreshToken(user.id);
 
         res.json({
-            token,
+            token: accessToken,
+            refreshToken,
             user: { 
                 id: user.id, 
                 name: user.name, 
@@ -74,6 +88,80 @@ exports.login = async (req, res) => {
     }
 };
 
+// ─── Refresh Token ───────────────────────────────────────────────────────────
+
+exports.refreshToken = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return res.status(400).json({ message: 'Refresh token is required' });
+        }
+
+        // Verify the refresh token exists and is not expired
+        const storedToken = await verifyRefreshToken(refreshToken);
+        if (!storedToken) {
+            return res.status(401).json({ message: 'Invalid or expired refresh token' });
+        }
+
+        // Get the user associated with this token
+        const [users] = await db.execute(
+            'SELECT id, email, role, is_active FROM users WHERE id = ?',
+            [storedToken.user_id]
+        );
+
+        if (users.length === 0) {
+            await revokeRefreshToken(refreshToken);
+            return res.status(401).json({ message: 'User no longer exists' });
+        }
+
+        const user = users[0];
+
+        if (!user.is_active) {
+            await revokeAllUserTokens(user.id);
+            return res.status(403).json({ message: 'Account is banned' });
+        }
+
+        // Rotate: revoke old refresh token and generate new ones
+        await revokeRefreshToken(refreshToken);
+
+        const newAccessToken = generateAccessToken({
+            userId: user.id,
+            email: user.email,
+            role: user.role,
+        });
+
+        const newRefreshToken = await generateRefreshToken(user.id);
+
+        res.json({
+            token: newAccessToken,
+            refreshToken: newRefreshToken,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// ─── Logout ──────────────────────────────────────────────────────────────────
+
+exports.logout = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+
+        if (refreshToken) {
+            await revokeRefreshToken(refreshToken);
+        }
+
+        res.json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// ─── Get Current User ────────────────────────────────────────────────────────
+
 exports.getMe = async (req, res) => {
     try {
         const [users] = await db.execute('SELECT id, name, email, phone, address, city, role FROM users WHERE id = ?', [req.user]);
@@ -86,6 +174,8 @@ exports.getMe = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+// ─── Update Profile ──────────────────────────────────────────────────────────
 
 exports.updateProfile = async (req, res) => {
     try {

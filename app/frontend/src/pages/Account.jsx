@@ -8,6 +8,7 @@ import {
 import { logout } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { getMyOrders } from '../services/orderService';
+import { logoutAPI } from '../services/authService';
 import ProductCard from '../components/ProductCard';
 
 
@@ -41,7 +42,11 @@ const Account = () => {
     fetchUserData();
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) await logoutAPI(refreshToken);
+    } catch (_) { /* ignore */ }
     dispatch(logout());
     navigate('/login');
   };

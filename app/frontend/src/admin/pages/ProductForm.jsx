@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, UploadCloud, X, Plus, Save } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getProductById, createProduct, updateProduct } from '../../services/productService';
 import API from '../../api/axios';
 
@@ -8,6 +9,7 @@ const CATEGORIES = ['Food', 'Toys', 'Accessories', 'Health', 'Grooming', 'Beds']
 const PET_TYPES = ['Dog', 'Cat', 'Bird', 'Fish', 'Small Pet', 'Universal'];
 
 const ProductForm = () => {
+    const { i18n, t } = useTranslation();
     const { id } = useParams();
     const isEdit = Boolean(id);
     const navigate = useNavigate();
@@ -45,16 +47,20 @@ const ProductForm = () => {
         try {
             const res = await getProductById(id);
             const p = res.data;
+            
+            // Helper to get English text for the form
+            const getEn = (val) => (val && typeof val === 'object') ? (val.en || '') : (val || '');
+
             setFormData({
-                name: p.name || '',
+                name: getEn(p.name),
                 sku: p.sku || '',
                 brand: p.brand || '',
                 category: p.category || CATEGORIES[0],
                 pet_type: p.pet_type || PET_TYPES[0],
                 price: p.price || '',
                 stock_quantity: p.stock_quantity || '',
-                description: p.description || '',
-                ingredients: p.ingredients || '',
+                description: getEn(p.description),
+                ingredients: getEn(p.ingredients),
                 images: p.images || []
             });
         } catch (error) {
@@ -81,16 +87,20 @@ const ProductForm = () => {
 
         setUploadingImage(true);
         const formPayload = new FormData();
-        formPayload.append('image', file);
+        formPayload.append('images', file);
 
         try {
             const res = await API.post('/upload', formPayload, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            setFormData({ ...formData, images: [...formData.images, res.data.imageUrl] });
+            // Backend returns { urls: [url1, url2, ...] }
+            const uploadedUrls = res.data.urls || [];
+            if (uploadedUrls.length > 0) {
+                setFormData({ ...formData, images: [...formData.images, ...uploadedUrls] });
+            }
         } catch (error) {
             console.error('Upload failed', error);
-            alert('Failed to upload image');
+            alert(error.response?.data?.message || 'Failed to upload image');
         } finally {
             setUploadingImage(false);
         }
@@ -132,18 +142,19 @@ const ProductForm = () => {
 
             if (isEdit) {
                 await updateProduct(id, payload, password);
-                alert('Product updated successfully!');
+                alert(t('admin.update_success'));
+                setShowPasswordModal(false);
             } else {
                 await createProduct(payload);
-                alert('Product created successfully!');
+                alert(t('admin.create_success'));
             }
             navigate('/admin/products');
         } catch (error) {
             console.error('Submit failed', error);
             if (error.response?.status === 401) {
-                setPasswordError('Invalid admin password');
+                setPasswordError(t('admin.invalid_password'));
             } else {
-                alert(error.response?.data?.message || 'Failed to save product');
+                alert(error.response?.data?.message || t('admin.save_failed'));
                 if (isEdit) setShowPasswordModal(false);
             }
         } finally {
@@ -152,7 +163,7 @@ const ProductForm = () => {
     };
 
     if (loading) {
-        return <div className="p-12 text-center">Loading...</div>;
+        return <div className="p-12 text-center">{t('admin.loading')}</div>;
     }
 
     return (
@@ -166,57 +177,62 @@ const ProductForm = () => {
                     <ArrowLeft size={20} />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-on-background mb-1">
-                        {isEdit ? 'Edit Product' : 'Add New Product'}
-                    </h1>
-                    <p className="text-on-surface-variant font-medium">
-                        {isEdit ? 'Update details, price, and stock.' : 'Fill in the details to add a new product to your catalog.'}
-                    </p>
+                    <h1 className="text-3xl font-black tracking-tight text-on-background">{isEdit ? t('admin.edit_existing_product') : t('admin.add_new_product')}</h1>
+                    <p className="text-on-surface-variant font-medium mt-1">{t('admin.form_desc')}</p>
                 </div>
             </div>
 
             <form onSubmit={handleSubmitClick} className="space-y-6">
                 {/* Basic Details */}
-                <div className="bg-white rounded-2xl border border-surface-container-low p-6 shadow-sm space-y-6">
-                    <h3 className="font-bold text-lg border-b pb-4">Basic Information</h3>
+                <div className="bg-white rounded-2xl border border-surface-container-low shadow-sm p-6">
+                    <h2 className="text-xl font-bold mb-6 text-on-background">{t('admin.basic_info')}</h2>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-5">
                         <div>
-                            <label className="block text-sm font-bold text-on-surface-variant mb-2">Product Name <span className="text-error">*</span></label>
+                            <label className="block text-sm font-bold text-on-surface-variant mb-1.5">{t('admin.product_name')} *</label>
                             <input 
-                                required type="text" name="name" value={formData.name} onChange={handleChange}
-                                className="w-full px-4 py-2 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20" 
+                                type="text" 
+                                required
+                                value={formData.name}
+                                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                className="w-full px-4 py-2.5 bg-surface-container-lowest border border-surface-container-low rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                placeholder="e.g., Premium Salmon Cat Food"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-bold text-on-surface-variant mb-2">SKU <span className="text-error">*</span></label>
+                            <label className="block text-sm font-bold text-on-surface-variant mb-1.5">SKU *</label>
                             <input 
                                 required type="text" name="sku" value={formData.sku} onChange={handleChange}
-                                className="w-full px-4 py-2 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20 uppercase" 
+                                className="w-full px-4 py-2.5 bg-surface-container-lowest border border-surface-container-low rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all uppercase" 
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-bold text-on-surface-variant mb-2">Brand</label>
+                            <label className="block text-sm font-bold text-on-surface-variant mb-1.5">{t('admin.brand')}</label>
                             <input 
-                                type="text" name="brand" value={formData.brand} onChange={handleChange}
-                                className="w-full px-4 py-2 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20" 
+                                type="text" 
+                                value={formData.brand}
+                                onChange={(e) => setFormData({...formData, brand: e.target.value})}
+                                className="w-full px-4 py-2.5 bg-surface-container-lowest border border-surface-container-low rounded-xl text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                placeholder="e.g., Purina"
                             />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label className="block text-sm font-bold text-on-surface-variant mb-2">Category</label>
+                                <label className="block text-sm font-bold text-on-surface-variant mb-1.5">{t('admin.category')} *</label>
                                 <select 
-                                    name="category" value={formData.category} onChange={handleChange}
-                                    className="w-full px-4 py-2 bg-surface-container-lowest border rounded-xl font-bold outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+                                    value={formData.category}
+                                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                                    className="w-full px-4 py-2.5 bg-surface-container-lowest border border-surface-container-low rounded-xl text-sm font-bold focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                                 >
                                     {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-bold text-on-surface-variant mb-2">Pet Type</label>
+                                <label className="block text-sm font-bold text-on-surface-variant mb-1.5">{t('admin.pet_type')}</label>
                                 <select 
                                     name="pet_type" value={formData.pet_type} onChange={handleChange}
-                                    className="w-full px-4 py-2 bg-surface-container-lowest border rounded-xl font-bold outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+                                    className="w-full px-4 py-2.5 bg-surface-container-lowest border border-surface-container-low rounded-xl text-sm font-bold focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none cursor-pointer"
                                 >
                                     {PET_TYPES.map(c => <option key={c} value={c}>{c}</option>)}
                                 </select>
@@ -227,18 +243,18 @@ const ProductForm = () => {
 
                 {/* Pricing & Inventory */}
                 <div className="bg-white rounded-2xl border border-surface-container-low p-6 shadow-sm space-y-6">
-                    <h3 className="font-bold text-lg border-b pb-4">Pricing & Inventory</h3>
+                    <h3 className="font-bold text-lg border-b pb-4">{t('admin.pricing_stock')}</h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-bold text-on-surface-variant mb-2">Price (USD) <span className="text-error">*</span></label>
+                            <label className="block text-sm font-bold text-on-surface-variant mb-2">{t('product.price')} (USD) <span className="text-error">*</span></label>
                             <input 
                                 required type="number" step="0.01" min="0" name="price" value={formData.price} onChange={handleChange}
                                 className="w-full px-4 py-2 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20" 
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-bold text-on-surface-variant mb-2">Stock Quantity <span className="text-error">*</span></label>
+                            <label className="block text-sm font-bold text-on-surface-variant mb-2">{t('admin.stock_quantity')} <span className="text-error">*</span></label>
                             <input 
                                 required type="number" min="0" name="stock_quantity" value={formData.stock_quantity} onChange={handleChange}
                                 className="w-full px-4 py-2 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20" 
@@ -249,17 +265,17 @@ const ProductForm = () => {
 
                 {/* Description & Details */}
                 <div className="bg-white rounded-2xl border border-surface-container-low p-6 shadow-sm space-y-6">
-                    <h3 className="font-bold text-lg border-b pb-4">Description & Details</h3>
+                    <h3 className="font-bold text-lg border-b pb-4">{t('admin.details')}</h3>
                     
                     <div>
-                        <label className="block text-sm font-bold text-on-surface-variant mb-2">Product Description <span className="text-error">*</span></label>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-2">{t('product.description')} <span className="text-error">*</span></label>
                         <textarea 
                             required name="description" rows="5" value={formData.description} onChange={handleChange}
                             className="w-full px-4 py-3 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20" 
                         ></textarea>
                     </div>
                     <div>
-                        <label className="block text-sm font-bold text-on-surface-variant mb-2">Ingredients / Materials</label>
+                        <label className="block text-sm font-bold text-on-surface-variant mb-2">{t('product.ingredients')} / Materials</label>
                         <textarea 
                             name="ingredients" rows="3" value={formData.ingredients} onChange={handleChange}
                             className="w-full px-4 py-3 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20" 
@@ -270,7 +286,7 @@ const ProductForm = () => {
                 {/* Images */}
                 <div className="bg-white rounded-2xl border border-surface-container-low p-6 shadow-sm space-y-6">
                     <div className="flex items-center justify-between border-b pb-4">
-                        <h3 className="font-bold text-lg">Product Images</h3>
+                        <h3 className="font-bold text-lg">{t('admin.product_image')}</h3>
                         <span className="text-sm font-bold text-on-surface-variant">{formData.images.length}/5 Images</span>
                     </div>
                     
@@ -347,9 +363,14 @@ const ProductForm = () => {
 
                         <input 
                             type="password"
-                            placeholder="Admin Password"
+                            placeholder={t('admin.admin_password')}
                             value={adminPassword}
                             onChange={(e) => setAdminPassword(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && adminPassword && !submitting) {
+                                    executeSubmit(adminPassword);
+                                }
+                            }}
                             className="w-full px-4 py-3 bg-surface-container-lowest border rounded-xl font-medium outline-none focus:ring-2 focus:ring-primary/20 mb-6"
                             autoFocus
                         />
@@ -363,14 +384,14 @@ const ProductForm = () => {
                                 }}
                                 className="px-5 py-2.5 rounded-xl font-bold text-on-surface-variant hover:bg-surface-container transition-colors"
                             >
-                                Cancel
+                                {t('admin.cancel')}
                             </button>
                             <button 
                                 onClick={() => executeSubmit(adminPassword)}
                                 disabled={!adminPassword || submitting}
                                 className="px-5 py-2.5 bg-primary text-white rounded-xl font-bold shadow-md shadow-primary/20 hover:bg-primary-dark disabled:opacity-50 transition-colors"
                             >
-                                {submitting ? 'Verifying...' : 'Confirm Update'}
+                                {submitting ? t('admin.verifying') : t('admin.confirm_update')}
                             </button>
                         </div>
                     </div>

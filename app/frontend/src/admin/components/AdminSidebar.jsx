@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, ShoppingBag, BarChart3, Users, LogOut } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
+import { logoutAPI } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 
 const navItems = [
@@ -18,7 +19,11 @@ const AdminSidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (refreshToken) await logoutAPI(refreshToken);
+        } catch (_) { /* ignore */ }
         dispatch(logout());
         navigate('/login');
     };
