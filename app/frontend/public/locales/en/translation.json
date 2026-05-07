@@ -41,7 +41,9 @@
     "join_pack": "Join the Pack",
     "newsletter_title": "Want 20% off your first order?",
     "newsletter_desc": "Subscribe to our newsletter for exclusive offers, pet care tips, and new arrivals.",
-    "email_placeholder": "Your email address"
+    "email_placeholder": "Your email address",
+    "general_inquiry": "General Inquiry",
+    "inquiry_success": "Thank you! We will contact you soon."
   },
   "services": {
     "vet_consult": {

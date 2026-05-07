@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Button from '../components/Button';
+import { submitInquiry } from '../services/inquiryService';
 
 const Categories = () => {
   const { t } = useTranslation();
+  const [inquiryEmail, setInquiryEmail] = useState('');
+  const [selectedService, setSelectedService] = useState('General');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleInquirySubmit = async (e) => {
+    e.preventDefault();
+    if (!inquiryEmail) return;
+
+    try {
+      setSubmitting(true);
+      await submitInquiry({ email: inquiryEmail, service_type: selectedService });
+      alert(t('home.inquiry_success'));
+      setInquiryEmail('');
+    } catch (err) {
+      console.error(err);
+      alert(t('common.error'));
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="pb-32">
       {/* Hero Section */}
@@ -142,9 +163,31 @@ const Categories = () => {
           <div className="relative z-10">
             <h3 className="font-display font-extrabold text-3xl md:text-5xl mb-6 tracking-tight">{t('categories.stay_in_paws')}</h3>
             <p className="text-lg mb-10 max-w-xl mx-auto opacity-90">{t('categories.newsletter_desc')}</p>
-            <form className="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
-              <input className="flex-grow px-6 py-4 rounded-full bg-white/20 border-white/30 text-white placeholder:text-white/60 focus:ring-white focus:border-white text-lg" placeholder={t('categories.email_placeholder')} type="email" />
-              <Button variant="custom" className="bg-white text-primary font-bold px-10 py-4 rounded-full hover:bg-white/90 transition-colors whitespace-nowrap text-lg" type="submit">{t('categories.join_now')}</Button>
+            <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={handleInquirySubmit}>
+              <div className="flex-grow flex items-center bg-white/20 border border-white/30 rounded-xl focus-within:ring-2 focus-within:ring-white/50 transition-all overflow-hidden group">
+                <input 
+                  className="flex-grow bg-transparent border-none px-6 py-4 outline-none font-medium text-white placeholder:text-white/60" 
+                  placeholder={t('categories.email_placeholder')} 
+                  type="email" 
+                  value={inquiryEmail}
+                  onChange={(e) => setInquiryEmail(e.target.value)}
+                  required
+                />
+                <div className="h-8 w-[1px] bg-white/20 hidden sm:block"></div>
+                <select 
+                  className="bg-transparent border-none px-4 py-4 outline-none font-bold cursor-pointer text-white text-sm min-w-[140px] appearance-none"
+                  value={selectedService}
+                  onChange={(e) => setSelectedService(e.target.value)}
+                >
+                  <option value="General" className="text-on-background">{t('home.general_inquiry')}</option>
+                  <option value="Dogs" className="text-on-background">{t('categories.dogs')}</option>
+                  <option value="Cats" className="text-on-background">{t('categories.cats')}</option>
+                  <option value="Small Pets" className="text-on-background">{t('categories.small_pets')}</option>
+                </select>
+              </div>
+              <Button variant="custom" className="bg-white text-primary font-bold px-10 py-4 rounded-xl hover:bg-white/90 transition-all active:scale-95 shadow-xl shadow-black/10" type="submit" disabled={submitting}>
+                {submitting ? '...' : t('categories.join_now')}
+              </Button>
             </form>
           </div>
         </div>

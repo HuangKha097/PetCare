@@ -41,7 +41,9 @@
     "join_pack": "Tham gia cùng chúng tôi",
     "newsletter_title": "Muốn giảm giá 20% cho đơn hàng đầu tiên?",
     "newsletter_desc": "Đăng ký nhận bản tin để nhận các ưu đãi độc quyền, mẹo chăm sóc thú cưng và sản phẩm mới.",
-    "email_placeholder": "Địa chỉ email của bạn"
+    "email_placeholder": "Địa chỉ email của bạn",
+    "general_inquiry": "Tư vấn chung",
+    "inquiry_success": "Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất."
   },
   "services": {
     "vet_consult": {

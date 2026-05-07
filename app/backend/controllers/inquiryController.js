@@ -2,14 +2,16 @@ const db = require('../config/db');
 
 exports.createInquiry = async (req, res) => {
     try {
-        const { email, service_type } = req.body;
+        console.log('Inquiry Request Body:', req.body);
+        const { email, service_type, name, message } = req.body;
         if (!email) {
             return res.status(400).json({ message: 'Email is required' });
         }
 
+        console.log('Inserting into DB:', [email, service_type || 'General', name || null, message || null]);
         await db.execute(
-            'INSERT INTO inquiries (email, service_type) VALUES (?, ?)',
-            [email, service_type || 'General']
+            'INSERT INTO inquiries (email, service_type, name, message) VALUES (?, ?, ?, ?)',
+            [email, service_type || 'General', name || null, message || null]
         );
 
         res.status(201).json({ message: 'Inquiry submitted successfully' });

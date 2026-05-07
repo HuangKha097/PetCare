@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { submitInquiry } from '../services/inquiryService';
+import Button from '../components/Button';
 
 // ── Brand SVG icons ──────────────────────────────────────────────────────────
 const TikTokIcon = () => (
@@ -37,6 +39,7 @@ const ContactUs = () => {
   const { t } = useTranslation();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const channels = [
     {
@@ -103,9 +106,24 @@ const ContactUs = () => {
     { icon: Clock, label: t('contact.label_message').includes('Message') ? 'Support Hours' : 'Giờ hỗ trợ', value: t('contact.hours_value'), sub: t('contact.hours_sub'), href: null },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSent(true);
+    console.log('Submitting Contact Form:', form);
+    try {
+      setSubmitting(true);
+      await submitInquiry({
+        name: form.name,
+        email: form.email,
+        message: form.message,
+        service_type: 'Contact Form'
+      });
+      setSent(true);
+    } catch (error) {
+      console.error('Failed to send inquiry:', error);
+      alert(t('common.error') || 'Failed to send message.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -237,12 +255,13 @@ const ContactUs = () => {
                   className="w-full px-4 py-3.5 rounded-xl bg-surface-container-low border border-transparent focus:border-primary/30 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all font-medium text-on-background outline-none text-sm resize-none"
                 />
               </div>
-              <button
+              <Button
                 type="submit"
+                disabled={submitting}
                 className="w-full flex items-center justify-center gap-2 bg-primary text-on-background px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark hover:scale-[1.02] active:scale-95 transition-all text-base"
               >
-                {t('contact.send_btn')} <Send size={18} />
-              </button>
+                {submitting ? '...' : t('contact.send_btn')} <Send size={18} />
+              </Button>
             </form>
           )}
         </div>

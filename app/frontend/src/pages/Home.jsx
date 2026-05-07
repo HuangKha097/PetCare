@@ -214,27 +214,28 @@ const Home = () => {
           <h2 className="text-4xl md:text-5xl font-black mb-6">{t('home.newsletter_title')}</h2>
           <p className="text-lg mb-10 opacity-80">{t('home.newsletter_desc')}</p>
           <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={handleInquirySubmit}>
-            <div className="flex-grow flex flex-col md:flex-row gap-4">
+            <div className="flex-grow flex items-center bg-surface-container-lowest border border-surface-container-low rounded-xl focus-within:ring-2 focus-within:ring-primary transition-all overflow-hidden group">
               <input 
-                className="flex-[2] bg-surface-container-lowest border border-surface-container-low rounded-xl px-6 py-4 focus:ring-2 focus:ring-primary transition-all outline-none font-medium" 
+                className="flex-grow bg-transparent border-none px-6 py-4 outline-none font-medium text-on-surface" 
                 placeholder={t('home.email_placeholder')} 
                 type="email" 
                 value={inquiryEmail}
                 onChange={(e) => setInquiryEmail(e.target.value)}
                 required
               />
+              <div className="h-8 w-[1px] bg-surface-container-high hidden sm:block"></div>
               <select 
-                className="flex-1 bg-surface-container-lowest border border-surface-container-low rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary transition-all outline-none font-bold cursor-pointer"
+                className="bg-transparent border-none px-4 py-4 outline-none font-bold cursor-pointer text-primary-dark text-sm min-w-[140px] hover:text-primary transition-colors"
                 value={selectedService}
                 onChange={(e) => setSelectedService(e.target.value)}
               >
-                <option value="General">{t('home.general_inquiry') || 'General Inquiry'}</option>
+                <option value="General">{t('home.general_inquiry')}</option>
                 {services.map(s => (
                   <option key={s.id} value={s.title}>{s.title}</option>
                 ))}
               </select>
             </div>
-            <Button className="w-full md:w-auto text-lg px-10" disabled={submitting}>
+            <Button type="submit" className="w-full md:w-auto text-lg px-10 shadow-lg shadow-primary/20" disabled={submitting}>
               {submitting ? '...' : t('common.subscribe')}
             </Button>
           </form>
