@@ -10,6 +10,7 @@ import { getPopularProducts } from '../services/productService';
 const Home = () => {
   const { t } = useTranslation();
   const [popularProducts, setPopularProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = [
     { name: t('category.Dog'), icon: Dog },
@@ -33,6 +34,8 @@ const Home = () => {
         setPopularProducts(response.data);
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPopularProducts();
@@ -112,11 +115,16 @@ const Home = () => {
               {t('common.view_all')} <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {popularProducts.map(product => (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center h-96 gap-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              <p className="text-xs font-bold uppercase tracking-widest opacity-40">{t('shop.loading_essentials')}</p>
+            </div>
+          ) : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {popularProducts && popularProducts.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </div>
+          </div>}
         </div>
       </section>
 

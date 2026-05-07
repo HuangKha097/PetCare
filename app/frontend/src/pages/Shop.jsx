@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight, Filter, ChevronDown, ChevronLeft, Star, X, Search } from 'lucide-react';
 import { getProducts } from '../services/productService';
 import ProductCard from '../components/ProductCard';
+import SkeletonProductCard from '../components/SkeletonProductCard';
 import Button from '../components/Button';
-import Pagination from '../components/Pagination';
 
 const Shop = () => {
     const { t } = useTranslation();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
     const [category, setCategory] = useState('All Food');
     const [selectedBrand, setSelectedBrand] = useState('');
@@ -18,9 +19,23 @@ const Shop = () => {
     const [sort, setSort] = useState('');
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-    // Pagination State
-    const [currentPage, setCurrentPage] = useState(1);
-    const productsPerPage = 9;
+    // Pagination State for Infinite Scroll
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [totalResults, setTotalResults] = useState(0);
+    const limit = 9;
+
+    const observer = useRef();
+    const lastProductElementRef = useCallback(node => {
+        if (loading || loadingMore) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [loading, loadingMore, hasMore]);
 
     const categories = [
         { name: t('shop.all_food'), value: 'All Food' },
@@ -36,20 +51,30 @@ const Shop = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                setLoading(true);
-                const params = {};
+                if (page === 1) setLoading(true);
+                else setLoadingMore(true);
+
+                const params = {
+                    page,
+                    limit,
+                    sort
+                };
                 if (category !== 'All Food') params.category = category;
                 if (selectedBrand) params.brand = selectedBrand;
                 if (priceRange < 99) params.maxPrice = priceRange;
-                if (sort) params.sort = sort;
 
                 const response = await getProducts(params);
-                setProducts(response.data);
+                const { products: newProducts, pagination } = response.data;
+
+                setProducts(prev => page === 1 ? newProducts : [...prev, ...newProducts]);
+                setHasMore(page < pagination.totalPages);
+                setTotalResults(pagination.totalCount);
             } catch (err) {
                 setError(t('common.error'));
                 console.error(err);
             } finally {
                 setLoading(false);
+                setLoadingMore(false);
             }
         };
 
@@ -58,22 +83,12 @@ const Shop = () => {
         }, 300);
 
         return () => clearTimeout(timeoutId);
-    }, [category, selectedBrand, priceRange, sort, t]);
-
-    // Calculate pagination
-    const filteredProducts = products;
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-    const paginate = (pageNumber) => {
-        setCurrentPage(pageNumber);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }, [category, selectedBrand, priceRange, sort, page, t]);
 
     useEffect(() => {
-        setCurrentPage(1);
+        setPage(1);
+        setProducts([]);
+        setHasMore(true);
     }, [category, selectedBrand, priceRange, sort]);
 
     const resetFilters = () => {
@@ -220,37 +235,54 @@ const Shop = () => {
                         <div className="flex items-center justify-between mb-8 pb-4 border-b border-surface-container-low">
                             <p className="text-sm font-bold text-on-surface-variant opacity-60">
                                 {t('shop.showing_results', {
-                                    first: indexOfFirstProduct + 1,
-                                    last: Math.min(indexOfLastProduct, filteredProducts.length),
-                                    total: filteredProducts.length
+                                    first: products.length > 0 ? 1 : 0,
+                                    last: products.length,
+                                    total: totalResults
                                 })}
                             </p>
                         </div>
 
-                        {loading ? (
-                            <div className="flex flex-col items-center justify-center h-96 gap-4">
-                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-                                <p className="text-xs font-bold uppercase tracking-widest opacity-40">{t('shop.loading_essentials')}</p>
+                        {loading && page === 1 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                                {[...Array(6)].map((_, i) => (
+                                    <SkeletonProductCard key={i} />
+                                ))}
                             </div>
                         ) : error ? (
                             <div className="bg-red-50 p-8 rounded-xl text-center border border-red-100">
                                 <p className="text-red-500 font-bold">{error}</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-                                {currentProducts.map((product) => (
-                                    <ProductCard key={product.id} product={product} />
-                                ))}
-                            </div>
-                        )}
+                            <>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                                    {products.map((product, index) => {
+                                        if (products.length === index + 1) {
+                                            return (
+                                                <div ref={lastProductElementRef} key={product.id}>
+                                                    <ProductCard product={product} />
+                                                </div>
+                                            );
+                                        } else {
+                                            return <ProductCard key={product.id} product={product} />;
+                                        }
+                                    })}
+                                </div>
 
-                        {/* Pagination */}
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            paginate={paginate}
-                            className="mt-20 flex justify-center gap-3"
-                        />
+                                {loadingMore && (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-8">
+                                        {[...Array(3)].map((_, i) => (
+                                            <SkeletonProductCard key={`more-${i}`} />
+                                        ))}
+                                    </div>
+                                )}
+
+                                {!hasMore && products.length > 0 && (
+                                    <div className="text-center mt-12 opacity-40">
+                                        <p className="text-xs font-black uppercase tracking-[0.2em]">{t('shop.all_loaded') || 'All products loaded'}</p>
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

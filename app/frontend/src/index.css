@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800;900&display=swap&subset=vietnamese');
 
 @theme {
   --color-primary: #F4D35E;
@@ -10,10 +11,10 @@
   --color-surface-container-lowest: #ffffff;
   --color-on-background: #2c2f2f;
   --color-on-surface-variant: #5c5f5f;
-  
-  --font-sans: "Poppins", sans-serif;
-  --font-display: "Poppins", sans-serif;
-  
+
+  --font-sans: "Inter", "Noto Sans", sans-serif;
+  --font-display: "Inter", "Noto Sans", sans-serif;
+
   --radius-xl: 1rem;
 }
 
@@ -21,7 +22,13 @@
   body {
     @apply bg-surface text-on-background font-sans antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display tracking-tight;
   }
 }
@@ -36,16 +43,40 @@
   .glassmorphism {
     @apply bg-white/80 backdrop-blur-md;
   }
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
+
   .custom-scrollbar::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-surface-container-high rounded-full;
   }
+
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-primary/40;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(224, 226, 225, 0.3) 25%,
+      rgba(224, 226, 225, 0.6) 37%,
+      rgba(224, 226, 225, 0.3) 63%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
   }
 }

@@ -26,7 +26,12 @@ const parseProduct = (p) => {
 
 exports.getAllProducts = async (req, res) => {
     try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 9;
+        const offset = (page - 1) * limit;
+
         let query = 'SELECT * FROM products';
+        let countQuery = 'SELECT COUNT(*) as total FROM products';
         let params = [];
         let conditions = ['is_active = TRUE'];
 
@@ -59,7 +64,9 @@ exports.getAllProducts = async (req, res) => {
         }
 
         if (conditions.length > 0) {
-            query += ' WHERE ' + conditions.join(' AND ');
+            const whereClause = ' WHERE ' + conditions.join(' AND ');
+            query += whereClause;
+            countQuery += whereClause;
         }
 
         if (req.query.sort === 'price_asc') {
@@ -70,8 +77,27 @@ exports.getAllProducts = async (req, res) => {
             query += ' ORDER BY created_at DESC';
         }
 
-        const [products] = await db.execute(query, params);
-        res.json(products.map(parseProduct));
+        // Get total count for pagination
+        const [countResult] = await db.execute(countQuery, params);
+        const totalCount = countResult[0].total;
+        const totalPages = Math.ceil(totalCount / limit);
+
+        // Add LIMIT and OFFSET for pagination
+        query += ' LIMIT ? OFFSET ?';
+        params.push(limit, offset);
+
+        // Use db.query instead of db.execute for LIMIT/OFFSET to avoid prepared statement issues
+        const [products] = await db.query(query, params);
+        
+        res.json({
+            products: products.map(parseProduct),
+            pagination: {
+                totalCount,
+                totalPages,
+                currentPage: page,
+                limit
+            }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

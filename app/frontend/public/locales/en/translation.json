@@ -161,7 +161,8 @@
     "category_organic": "Organic",
     "category_puppy": "Puppy",
     "category_protein": "High Protein",
-    "category_senior": "Senior"
+    "category_senior": "Senior",
+    "loading_essentials": "Loading..."
   },
   "categories": {
     "title": "Shop by Category",
@@ -222,19 +223,51 @@
     "values_subtitle": "Core Values",
     "values_title": "What We Believe In",
     "values": [
-      { "title": "Pets First", "desc": "Every product decision starts with one question: is it safe, healthy, and genuinely beneficial for animals?" },
-      { "title": "Ethical Sourcing", "desc": "We only work with suppliers who share our commitment to responsible, sustainable, and cruelty-free farming." },
-      { "title": "Vet Approved", "desc": "Our in-house board of licensed veterinarians reviews every product before it hits our shelves." },
-      { "title": "Honest Reviews", "desc": "We publish all reviews — including the critical ones — because transparency builds the trust your pet deserves." }
+      {
+        "title": "Pets First",
+        "desc": "Every product decision starts with one question: is it safe, healthy, and genuinely beneficial for animals?"
+      },
+      {
+        "title": "Ethical Sourcing",
+        "desc": "We only work with suppliers who share our commitment to responsible, sustainable, and cruelty-free farming."
+      },
+      {
+        "title": "Vet Approved",
+        "desc": "Our in-house board of licensed veterinarians reviews every product before it hits our shelves."
+      },
+      {
+        "title": "Honest Reviews",
+        "desc": "We publish all reviews — including the critical ones — because transparency builds the trust your pet deserves."
+      }
     ],
     "journey_subtitle": "Our Journey",
     "journey_title": "Milestones That Shaped PetCare",
     "milestones": [
-      { "year": "2018", "title": "The Beginning", "desc": "Founded in a small apartment, PetCare started as a passion project after our founder struggled to find truly healthy food for Max." },
-      { "year": "2020", "title": "Going Online", "desc": "We launched our first online store and sold out of our curated food collection within 48 hours." },
-      { "year": "2022", "title": "Vet Partner Program", "desc": "We partnered with over 30 veterinarians and animal nutritionists to co-develop and approve every product." },
-      { "year": "2024", "title": "Nationwide Reach", "desc": "PetCare expanded shipping to all 63 provinces, serving over 50,000 happy pets and their families." },
-      { "year": "2026", "title": "The Future", "desc": "We are launching subscription boxes, vet-led health blogs, and same-day delivery in major cities." }
+      {
+        "year": "2018",
+        "title": "The Beginning",
+        "desc": "Founded in a small apartment, PetCare started as a passion project after our founder struggled to find truly healthy food for Max."
+      },
+      {
+        "year": "2020",
+        "title": "Going Online",
+        "desc": "We launched our first online store and sold out of our curated food collection within 48 hours."
+      },
+      {
+        "year": "2022",
+        "title": "Vet Partner Program",
+        "desc": "We partnered with over 30 veterinarians and animal nutritionists to co-develop and approve every product."
+      },
+      {
+        "year": "2024",
+        "title": "Nationwide Reach",
+        "desc": "PetCare expanded shipping to all 63 provinces, serving over 50,000 happy pets and their families."
+      },
+      {
+        "year": "2026",
+        "title": "The Future",
+        "desc": "We are launching subscription boxes, vet-led health blogs, and same-day delivery in major cities."
+      }
     ],
     "cta_title": "Still have questions?",
     "cta_desc": "Our FAQ page covers shipping, returns, ingredients, and everything in between.",
@@ -330,46 +363,101 @@
       "ordering": {
         "label": "Ordering & Shipping",
         "items": [
-          { "q": "How long does delivery take?", "a": "Standard delivery takes 2–4 business days. We offer next-day express delivery for orders placed before 12 PM in HCMC and Hanoi. National shipping usually reaches all 63 provinces within 5 business days." },
-          { "q": "Do you offer free shipping?", "a": "Yes! Orders over $50 qualify for free standard shipping. We also frequently have free shipping promos for new customers — check the homepage banner for the latest offer." },
-          { "q": "Can I track my order?", "a": "Absolutely. Once your order ships, you'll receive a confirmation email with a tracking link. You can also view your order status at any time in the Account → Orders tab." },
-          { "q": "What if my order arrives damaged?", "a": "We're so sorry if that happens. Please take photos of the damaged item and contact us within 48 hours of delivery. We'll send a free replacement or issue a full refund — no questions asked." }
+          {
+            "q": "How long does delivery take?",
+            "a": "Standard delivery takes 2–4 business days. We offer next-day express delivery for orders placed before 12 PM in HCMC and Hanoi. National shipping usually reaches all 63 provinces within 5 business days."
+          },
+          {
+            "q": "Do you offer free shipping?",
+            "a": "Yes! Orders over $50 qualify for free standard shipping. We also frequently have free shipping promos for new customers — check the homepage banner for the latest offer."
+          },
+          {
+            "q": "Can I track my order?",
+            "a": "Absolutely. Once your order ships, you'll receive a confirmation email with a tracking link. You can also view your order status at any time in the Account → Orders tab."
+          },
+          {
+            "q": "What if my order arrives damaged?",
+            "a": "We're so sorry if that happens. Please take photos of the damaged item and contact us within 48 hours of delivery. We'll send a free replacement or issue a full refund — no questions asked."
+          }
         ]
       },
       "returns": {
         "label": "Returns & Refunds",
         "items": [
-          { "q": "What is your return policy?", "a": "We offer a 30-day hassle-free return policy for all unopened, unused products in their original packaging. Just contact our support team to start the return." },
-          { "q": "Can I return opened food if my pet doesn't like it?", "a": "Yes! We stand by our products 100%. If your pet refuses a food product within 14 days of receipt, contact us and we'll refund the store credit or help you find a replacement — even for opened goods." },
-          { "q": "How long do refunds take?", "a": "After receiving and inspecting your return, refunds are processed within 3–5 business days. The time for the funds to reach your account depends on your bank, usually 7–10 days." }
+          {
+            "q": "What is your return policy?",
+            "a": "We offer a 30-day hassle-free return policy for all unopened, unused products in their original packaging. Just contact our support team to start the return."
+          },
+          {
+            "q": "Can I return opened food if my pet doesn't like it?",
+            "a": "Yes! We stand by our products 100%. If your pet refuses a food product within 14 days of receipt, contact us and we'll refund the store credit or help you find a replacement — even for opened goods."
+          },
+          {
+            "q": "How long do refunds take?",
+            "a": "After receiving and inspecting your return, refunds are processed within 3–5 business days. The time for the funds to reach your account depends on your bank, usually 7–10 days."
+          }
         ]
       },
       "products": {
         "label": "Products & Ingredients",
         "items": [
-          { "q": "Are all products vet-approved?", "a": "Every single product on PetCare is vetted by our internal board of over 30 licensed veterinarians and nutritionists. Products that don't meet our standards never make it to our shelves." },
-          { "q": "Do you sell grain-free options?", "a": "Yes — we have a dedicated 'Grain Free' category in the shop. Use the category filters on the Shop page to browse all grain-free food, treats, and snacks." },
-          { "q": "Where are your products sourced from?", "a": "We source from trusted local farms and global suppliers that meet our strict ethical and sustainability standards. Look for the 'Ethically Sourced' badge on each product page." },
-          { "q": "Do you have products for cats?", "a": "We do! While we started with dog nutrition, we've expanded our cat range significantly. Filter by 'Cat' in the Shop or browse the category pages to see all feline-friendly products." }
+          {
+            "q": "Are all products vet-approved?",
+            "a": "Every single product on PetCare is vetted by our internal board of over 30 licensed veterinarians and nutritionists. Products that don't meet our standards never make it to our shelves."
+          },
+          {
+            "q": "Do you sell grain-free options?",
+            "a": "Yes — we have a dedicated 'Grain Free' category in the shop. Use the category filters on the Shop page to browse all grain-free food, treats, and snacks."
+          },
+          {
+            "q": "Where are your products sourced from?",
+            "a": "We source from trusted local farms and global suppliers that meet our strict ethical and sustainability standards. Look for the 'Ethically Sourced' badge on each product page."
+          },
+          {
+            "q": "Do you have products for cats?",
+            "a": "We do! While we started with dog nutrition, we've expanded our cat range significantly. Filter by 'Cat' in the Shop or browse the category pages to see all feline-friendly products."
+          }
         ]
       },
       "account": {
         "label": "Account & Payment",
         "items": [
-          { "q": "What payment methods do you accept?", "a": "We accept all major credit/debit cards (Visa, Mastercard), bank transfers, and popular e-wallets including MoMo and ZaloPay. Cash on Delivery (COD) is also available in eligible areas." },
-          { "q": "Is my payment information safe?", "a": "Yes. All payments are processed through encrypted, PCI-DSS compliant payment gateways. We never store your full card details on our servers." },
-          { "q": "How do I update my profile or address?", "a": "Log in and navigate to Account → Settings. You can update your name, phone number, shipping address, and city at any time. Changes will apply immediately to future orders." },
-          { "q": "Can I order without an account?", "a": "Currently, creating a free account is required to place an order — this allows you to track deliveries, manage wishlists, and view your order history. Sign up takes less than a minute!" }
+          {
+            "q": "What payment methods do you accept?",
+            "a": "We accept all major credit/debit cards (Visa, Mastercard), bank transfers, and popular e-wallets including MoMo and ZaloPay. Cash on Delivery (COD) is also available in eligible areas."
+          },
+          {
+            "q": "Is my payment information safe?",
+            "a": "Yes. All payments are processed through encrypted, PCI-DSS compliant payment gateways. We never store your full card details on our servers."
+          },
+          {
+            "q": "How do I update my profile or address?",
+            "a": "Log in and navigate to Account → Settings. You can update your name, phone number, shipping address, and city at any time. Changes will apply immediately to future orders."
+          },
+          {
+            "q": "Can I order without an account?",
+            "a": "Currently, creating a free account is required to place an order — this allows you to track deliveries, manage wishlists, and view your order history. Sign up takes less than a minute!"
+          }
         ]
       }
     }
   },
-  "product": { 
-    "price": "Price", "stock": "Stock", "add_to_cart": "Add to Cart", "out_of_stock": "Out of Stock", 
-    "quick_add": "Quick Add", "best_seller": "Best Seller", "member_price": "Member Price", 
-    "add_to_wishlist": "Wishlist", "in_stock": "In Stock", "low_stock": "Low Stock", 
-    "reviews": "Reviews", "description": "Description", "ingredients": "Ingredients", 
-    "write_review": "Write Review", "post_review": "Post Review",
+  "product": {
+    "price": "Price",
+    "stock": "Stock",
+    "add_to_cart": "Add to Cart",
+    "out_of_stock": "Out of Stock",
+    "quick_add": "Quick Add",
+    "best_seller": "Best Seller",
+    "member_price": "Member Price",
+    "add_to_wishlist": "Wishlist",
+    "in_stock": "In Stock",
+    "low_stock": "Low Stock",
+    "reviews": "Reviews",
+    "description": "Description",
+    "ingredients": "Ingredients",
+    "write_review": "Write Review",
+    "post_review": "Post Review",
     "premium_selection": "Premium Selection",
     "free_shipping_note": "Free shipping on orders over $50",
     "natures_purest": "Nature's Purest Nutrition",
