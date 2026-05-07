@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingBag, BarChart3, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, BarChart3, Users, LogOut, Mail } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { logout } from '../../store/slices/authSlice';
@@ -20,6 +20,7 @@ const AdminSidebar = () => {
         { name: t('admin_orders.title'), path: '/admin/orders', icon: ShoppingBag },
         { name: t('admin_users.title'), path: '/admin/users', icon: Users },
         { name: t('admin.inventory'), path: '/admin/inventory', icon: BarChart3 },
+        { name: 'Inquiries', path: '/admin/inquiries', icon: Mail },
     ];
 
     const handleLogout = async () => {

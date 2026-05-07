@@ -34,6 +34,7 @@ import ProductForm from './admin/pages/ProductForm';
 import OrderManagement from './admin/pages/OrderManagement';
 import InventoryMonitoring from './admin/pages/InventoryMonitoring';
 import UserManagement from './admin/pages/UserManagement';
+import InquiryManagement from './admin/pages/InquiryManagement';
 
 const UserLayout = () => {
     const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -80,6 +81,7 @@ function App() {
                     <Route path="orders" element={<OrderManagement />} />
                     <Route path="users" element={<UserManagement />} />
                     <Route path="inventory" element={<InventoryMonitoring />} />
+                    <Route path="inquiries" element={<InquiryManagement />} />
                 </Route>
 
                 {/* User Routes */}

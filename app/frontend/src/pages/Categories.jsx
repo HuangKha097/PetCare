@@ -104,7 +104,7 @@ const Categories = () => {
             </div>
 
             {/* Cats Section */}
-            <div className="md:col-span-12  bg-secondary-container/10 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-secondary/10">
+            <div className="md:col-span-12  bg-secondary-container/10 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ">
               <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-5/12 p-8 md:p-16 flex flex-col justify-center order-2 md:order-1">
                   <h2 className="font-display font-bold text-4xl md:text-5xl text-on-background mb-8 tracking-tight">{t('categories.cats')}</h2>

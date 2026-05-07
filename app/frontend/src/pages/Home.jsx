@@ -3,14 +3,19 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart, ArrowRight, Truck, Gift, Zap, Star, Stethoscope, Scissors, Heart, ShieldCheck, Dog, Cat, Bone, Gamepad2, Tag } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
+import SkeletonProductCard from '../components/SkeletonProductCard';
 import Button from '../components/Button';
 import { doctors } from './DoctorDetail';
 import { getPopularProducts } from '../services/productService';
+import { submitInquiry } from '../services/inquiryService';
 
 const Home = () => {
   const { t } = useTranslation();
   const [popularProducts, setPopularProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [inquiryEmail, setInquiryEmail] = useState('');
+  const [selectedService, setSelectedService] = useState('General');
+  const [submitting, setSubmitting] = useState(false);
 
   const categories = [
     { name: t('category.Dog'), icon: Dog },
@@ -40,6 +45,23 @@ const Home = () => {
     };
     fetchPopularProducts();
   }, []);
+
+  const handleInquirySubmit = async (e) => {
+    e.preventDefault();
+    if (!inquiryEmail) return;
+
+    try {
+      setSubmitting(true);
+      await submitInquiry({ email: inquiryEmail, service_type: selectedService });
+      alert(t('home.inquiry_success') || 'Thank you! We will contact you soon.');
+      setInquiryEmail('');
+    } catch (err) {
+      console.error(err);
+      alert(t('common.error') || 'Failed to submit inquiry.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -116,9 +138,10 @@ const Home = () => {
             </Link>
           </div>
           {loading ? (
-            <div className="flex flex-col items-center justify-center h-96 gap-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-              <p className="text-xs font-bold uppercase tracking-widest opacity-40">{t('shop.loading_essentials')}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <SkeletonProductCard key={i} />
+              ))}
             </div>
           ) : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {popularProducts && popularProducts.map(product => (
@@ -190,9 +213,30 @@ const Home = () => {
           <span className="text-on-secondary-container font-bold tracking-widest uppercase mb-4 block">{t('home.join_pack')}</span>
           <h2 className="text-4xl md:text-5xl font-black mb-6">{t('home.newsletter_title')}</h2>
           <p className="text-lg mb-10 opacity-80">{t('home.newsletter_desc')}</p>
-          <form className="flex flex-col md:flex-row gap-4 max-w-xl mx-auto" onSubmit={(e) => e.preventDefault()}>
-            <input className="flex-grow bg-surface-container-lowest border border-surface-container-low rounded-xl px-6 py-4 focus:ring-2 focus:ring-primary transition-all outline-none" placeholder={t('home.email_placeholder')} type="email" />
-            <Button className="w-full sm:w-auto text-lg">{t('common.subscribe')}</Button>
+          <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={handleInquirySubmit}>
+            <div className="flex-grow flex flex-col md:flex-row gap-4">
+              <input 
+                className="flex-[2] bg-surface-container-lowest border border-surface-container-low rounded-xl px-6 py-4 focus:ring-2 focus:ring-primary transition-all outline-none font-medium" 
+                placeholder={t('home.email_placeholder')} 
+                type="email" 
+                value={inquiryEmail}
+                onChange={(e) => setInquiryEmail(e.target.value)}
+                required
+              />
+              <select 
+                className="flex-1 bg-surface-container-lowest border border-surface-container-low rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary transition-all outline-none font-bold cursor-pointer"
+                value={selectedService}
+                onChange={(e) => setSelectedService(e.target.value)}
+              >
+                <option value="General">{t('home.general_inquiry') || 'General Inquiry'}</option>
+                {services.map(s => (
+                  <option key={s.id} value={s.title}>{s.title}</option>
+                ))}
+              </select>
+            </div>
+            <Button className="w-full md:w-auto text-lg px-10" disabled={submitting}>
+              {submitting ? '...' : t('common.subscribe')}
+            </Button>
           </form>
         </div>
       </section>
