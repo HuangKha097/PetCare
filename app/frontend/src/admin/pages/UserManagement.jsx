@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Trash2, Shield, User, MoreVertical, X, Lock, Eye, Edit2, Ban, CheckCircle, ShoppingBag, MapPin, Phone, Mail, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getAllUsers, getUserDetails, updateUserInfo, toggleUserStatus, deleteUser } from '../../services/adminService';
+import { getLocalizedText } from '../../utils/i18nUtils';
 
 const UserManagement = () => {
     const { t, i18n } = useTranslation();

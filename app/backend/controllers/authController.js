@@ -37,6 +37,87 @@ exports.register = async (req, res) => {
     }
 };
 
+// ─── Google Login ────────────────────────────────────────────────────────────
+
+exports.googleLogin = async (req, res) => {
+    try {
+        const { idToken } = req.body; 
+
+        if (!idToken) {
+            return res.status(400).json({ message: 'Token is required' });
+        }
+
+        const googleRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${idToken}` }
+        });
+
+        if (!googleRes.ok) {
+            const errorText = await googleRes.text();
+            console.error('Google UserInfo Error:', errorText);
+            return res.status(401).json({ message: 'Invalid Google token' });
+        }
+
+        const payload = await googleRes.json();
+        const { sub: googleId, email, name, picture } = payload;
+
+        let [users] = await db.execute('SELECT * FROM users WHERE google_id = ? OR email = ?', [googleId, email]);
+        
+        let user;
+        if (users.length === 0) {
+            // Create new user. Since password_hash is required, use a random hash.
+            const dummyPassword = Math.random().toString(36).slice(-16);
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(dummyPassword, salt);
+
+            const [result] = await db.execute(
+                'INSERT INTO users (name, email, google_id, password_hash, role, is_active) VALUES (?, ?, ?, ?, ?, ?)',
+                [name, email, googleId, hashedPassword, 'user', 1]
+            );
+            
+            const [newUser] = await db.execute('SELECT * FROM users WHERE id = ?', [result.insertId]);
+            user = newUser[0];
+        } else {
+            user = users[0];
+            
+            if (!user.google_id) {
+                await db.execute('UPDATE users SET google_id = ? WHERE id = ?', [googleId, user.id]);
+                user.google_id = googleId;
+            }
+
+            if (!user.is_active) {
+                return res.status(403).json({ message: 'Your account has been banned. Please contact support.' });
+            }
+        }
+
+        const accessToken = generateAccessToken({
+            userId: user.id,
+            email: user.email,
+            role: user.role,
+        });
+
+        const refreshToken = await generateRefreshToken(user.id);
+
+        res.json({
+            token: accessToken,
+            refreshToken,
+            user: { 
+                id: user.id, 
+                name: user.name, 
+                email: user.email, 
+                role: user.role || 'user', 
+                is_active: user.is_active,
+                phone: user.phone,
+                address: user.address,
+                city: user.city,
+                picture: picture
+            }
+        });
+    } catch (error) {
+        console.error('Google Login Error Detail:', error);
+        res.status(500).json({ message: 'Google authentication failed' });
+    }
+};
+
 // ─── Login ───────────────────────────────────────────────────────────────────
 
 exports.login = async (req, res) => {

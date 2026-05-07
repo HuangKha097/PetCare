@@ -5,6 +5,12 @@ const routes = require("./routes");
 
 const app = express();
 
+// COOP Header for Google Login
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  next();
+});
+
 // CORS Configuration
 const allowedOrigins = [
   "https://petcarenow.netlify.app",

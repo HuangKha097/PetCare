@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PawPrint, Eye, EyeOff, Mail, Lock, User as UserIcon } from 'lucide-react';
-import { login as loginAPI, register as registerAPI } from '../services/authService';
+import { login as loginAPI, register as registerAPI, googleLogin as googleLoginAPI } from '../services/authService';
+import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../store/slices/authSlice';
 import Button from '../components/Button';
@@ -57,6 +58,41 @@ const Login = () => {
             setLoading(false);
         }
     };
+
+    const handleGoogleSuccess = async (tokenResponse) => {
+        setError('');
+        setLoading(true);
+        try {
+            // tokenResponse.access_token is for implicit flow, but we need ID token or just send access_token if backend supports it.
+            // However, @react-oauth/google's useGoogleLogin by default returns an access token.
+            // If we want an ID token, we should use the GoogleLogin component or configure useGoogleLogin for it.
+            // Let's use the simplest approach for now: custom button with useGoogleLogin.
+            
+            const response = await googleLoginAPI(tokenResponse.access_token);
+            
+            dispatch(loginSuccess({ 
+                user: response.data.user, 
+                token: response.data.token, 
+                refreshToken: response.data.refreshToken 
+            }));
+            
+            if (response.data.user.role === 'admin') {
+                navigate('/admin/dashboard');
+            } else {
+                navigate('/');
+            }
+        } catch (err) {
+            console.error('Google Login Error:', err);
+            setError(err.response?.data?.message || 'Google Login failed');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: handleGoogleSuccess,
+        onError: () => setError('Google Login Failed'),
+    });
 
     return (
         <div className="min-h-[calc(100vh-68px)] bg-surface flex items-center justify-center py-12 px-6">
@@ -174,7 +210,11 @@ const Login = () => {
                         </div>
 
                         <div className="flex justify-center">
-                            <button className="flex items-center justify-center gap-3 px-8 py-4 rounded-2xl border border-surface-container-high bg-white hover:bg-surface-container-low transition-all active:scale-95 shadow-sm group">
+                            <button 
+                                onClick={() => loginWithGoogle()}
+                                disabled={loading}
+                                className="flex items-center justify-center gap-3 px-8 py-4 rounded-2xl border border-surface-container-high bg-white hover:bg-surface-container-low transition-all active:scale-95 shadow-sm group disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-6 h-6 group-hover:scale-110 transition-transform" alt="Google" />
                                 <span className="text-sm font-bold text-on-surface-variant group-hover:text-on-surface transition-colors">{t('auth.continue_google') || 'Continue with Google'}</span>
                             </button>

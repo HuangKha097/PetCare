@@ -13,6 +13,10 @@ export const register = (userData) => {
   return API.post('/auth/register', userData);
 };
 
+export const googleLogin = (idToken) => {
+  return API.post('/auth/google-login', { idToken });
+};
+
 export const getMe = () => {
   return API.get('/auth/me');
 };
