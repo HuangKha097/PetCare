@@ -37,7 +37,7 @@ const Header = () => {
           <div className="flex items-center gap-4 md:gap-6">
             <button 
               onClick={() => setIsMobileMenuOpen(true)} 
-              className="p-3 bg-primary/10 rounded-2xl hover:bg-primary/20 transition-all active:scale-90 group"
+              className="md:hidden p-3 bg-primary/10 rounded-2xl hover:bg-primary/20 transition-all active:scale-90 group"
             >
               <Menu className="text-primary group-hover:rotate-12 transition-transform" size={20} />
             </button>
