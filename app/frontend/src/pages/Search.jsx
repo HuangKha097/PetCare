@@ -36,9 +36,11 @@ const Search = () => {
       if (filters.maxPrice) params.append('maxPrice', filters.maxPrice);
 
       const response = await searchProducts(params.toString());
-      setResults(response.data);
+      const products = response.data.products || response.data;
+      setResults(Array.isArray(products) ? products : []);
     } catch (err) {
       console.error(err);
+      setResults([]);
     } finally {
       setLoading(false);
     }
@@ -74,190 +76,187 @@ const Search = () => {
     filters.petType || filters.brand || filters.sort || filters.minPrice || filters.maxPrice;
 
   return (
-    <main className="pt-12 pb-32">
-
+    <main className="pt-8 pb-32 bg-surface min-h-screen">
       {/* ── Search Header ── */}
-      <section className="px-4 py-6 md:py-14 max-w-3xl mx-auto text-center">
-        <h1 className="font-display text-3xl md:text-5xl font-black tracking-tight text-on-background mb-1">
-          {t('search.title_top')} <span className="text-primary">{t('search.title_highlight')}</span>
-        </h1>
-        <p className="text-on-surface-variant mb-6 text-sm md:text-base font-medium">
-          {t('search.subtitle')}
-        </p>
+      <section className="px-6 py-12 md:py-24 max-w-5xl mx-auto text-center space-y-8 md:space-y-10">
+        <div className="space-y-4 animate-fade-in-up">
+          <span className="text-primary-dark font-black tracking-[0.2em] uppercase text-[10px] md:text-xs">
+            {t('search.discovery') || 'Discovery Engine'}
+          </span>
+          <h1 className="text-4xl md:text-8xl font-black text-on-background tracking-tighter leading-[1.1] md:leading-tight">
+            {t('search.title_top')} <span className="text-primary">{t('search.title_highlight')}</span>
+          </h1>
+          <p className="text-lg md:text-2xl text-on-surface-variant font-medium max-w-2xl mx-auto opacity-70 leading-relaxed">
+            {t('search.subtitle')}
+          </p>
+        </div>
 
-        <form onSubmit={handleSearch}>
-          <div className="flex items-center bg-surface-container-lowest rounded-full px-3 py-1.5 shadow-sm border-2 border-outline-variant/25 focus-within:border-primary focus-within:shadow-lg transition-all duration-200">
-            <SearchIcon className="shrink-0 text-outline ml-1" size={20} />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={t('search.placeholder')}
-              className="flex-grow min-w-0 bg-transparent border-none focus:outline-none focus:ring-0 text-sm md:text-base font-medium text-on-surface placeholder:text-on-surface-variant/50 px-2"
-            />
-            <button
-              type="submit"
-              className="shrink-0 bg-primary text-on-primary font-bold text-xs md:text-sm px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:brightness-105 active:scale-95 transition-all duration-150"
-            >
-              {t('search.search_btn')}
-            </button>
+        <form onSubmit={handleSearch} className="max-w-3xl mx-auto animate-fade-in-up animation-delay-100">
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-[3rem] blur opacity-15 group-focus-within:opacity-40 transition duration-1000"></div>
+            <div className="relative flex items-center bg-surface rounded-[3rem] p-1.5 md:p-2 pr-1.5 md:pr-2 border border-surface-container-high shadow-xl transition-all duration-300 group-focus-within:border-primary">
+              <SearchIcon className="ml-4 md:ml-6 text-on-surface-variant/40 shrink-0" size={20} />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={t('search.placeholder')}
+                className="flex-grow bg-transparent border-none focus:outline-none focus:ring-0 text-base md:text-xl font-bold text-on-surface placeholder:text-on-surface-variant/30 px-3 md:px-4 min-w-0"
+              />
+              <button
+                type="submit"
+                className="bg-primary text-on-background font-black text-xs md:text-base px-6 md:px-12 py-3 md:py-4 rounded-[2.5rem] hover:bg-primary-dark shadow-lg shadow-primary/10 transition-all active:scale-95 shrink-0"
+              >
+                {t('search.search_btn')}
+              </button>
+            </div>
           </div>
         </form>
 
         {query && !loading && results.length > 0 && (
-          <p className="mt-4 text-on-surface-variant text-sm font-medium">
+          <div className="animate-fade-in-up animation-delay-200 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant text-[10px] md:text-sm font-bold">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
             {t('search.showing_results', {
               first: indexOfFirstResult + 1,
               last: Math.min(indexOfLastResult, results.length),
               total: results.length,
               query: query
             })}
-          </p>
+          </div>
         )}
       </section>
 
       {/* ── Filter Bar ── */}
-      <section className="sticky top-[64px] md:top-[68px] z-40 bg-surface/95 backdrop-blur-sm border-b  border-outline-variant/10">
-        {/* Mobile: toggle row */}
-        <div className="md:hidden flex items-center justify-between px-4 py-2.5">
-          <button
-            onClick={() => setShowFilters((v) => !v)}
-            className="flex items-center gap-2 text-sm font-bold text-on-surface"
-          >
-            <SlidersHorizontal size={16} className="text-primary" />
-            {t('search.filters')}
-            {hasActiveFilters && (
-              <span className="bg-primary text-on-primary text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center">
-                !
-              </span>
-            )}
-          </button>
-          {hasActiveFilters && (
+      <section className="sticky top-[68px] md:top-[104px] z-40 bg-surface/90 backdrop-blur-md border-y border-surface-container-low shadow-sm transition-all duration-500">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
+          {/* Mobile Toggle Row */}
+          <div className="md:hidden flex items-center justify-between gap-4">
             <button
-              onClick={clearFilters}
-              className="flex items-center gap-1 text-xs font-bold text-primary"
+              onClick={() => setShowFilters((v) => !v)}
+              className={`flex-grow flex items-center justify-center gap-3 px-6 py-3 rounded-2xl text-sm font-black transition-all ${
+                showFilters ? 'bg-primary text-on-background shadow-lg shadow-primary/20' : 'bg-surface-container-low text-on-surface'
+              }`}
             >
-              <X size={12} /> {t('search.clear_filters')}
+              <SlidersHorizontal size={18} />
+              {t('search.filters')}
+              {hasActiveFilters && (
+                <div className="w-2 h-2 rounded-full bg-secondary"></div>
+              )}
             </button>
-          )}
-        </div>
+            {hasActiveFilters && (
+              <button onClick={clearFilters} className="shrink-0 p-3 rounded-2xl bg-surface-container-low text-primary">
+                <X size={20} />
+              </button>
+            )}
+          </div>
 
-        {/* Mobile: collapsible filter panel */}
-        {showFilters && (
-          <div className="md:hidden px-4 py-3 flex flex-col gap-2 border-t border-outline-variant/10">
-            <FilterSelect value={filters.petType} onChange={(e) => setFilter('petType', e.target.value)}>
-              <option value="">{t('search.all_categories')}</option>
-              <option value="dogs">{t('search.dogs')}</option>
-              <option value="cats">{t('search.cats')}</option>
-              <option value="small-pets">{t('search.small_pets')}</option>
-            </FilterSelect>
-            <FilterSelect value={filters.brand} onChange={(e) => setFilter('brand', e.target.value)}>
-              <option value="">{t('search.all_brands')}</option>
-              <option value="Royal Canin">Royal Canin</option>
-              <option value="Blue Buffalo">Blue Buffalo</option>
-              <option value="Purina Pro">Purina Pro</option>
-              <option value="Orijen">Orijen</option>
-              <option value="Acana">Acana</option>
-            </FilterSelect>
-            <FilterSelect value={filters.sort} onChange={(e) => setFilter('sort', e.target.value)}>
-              <option value="">{t('search.sort_by')}</option>
-              <option value="newest">{t('search.newest')}</option>
-              <option value="price_asc">{t('search.price_asc')}</option>
-              <option value="price_desc">{t('search.price_desc')}</option>
-            </FilterSelect>
-            <div className="flex items-center gap-1.5 px-4 py-2.5 bg-surface-container-high rounded-xl border-2 border-transparent focus-within:border-primary transition-all duration-200 w-fit">
-              <span className="text-xs font-bold text-on-surface-variant">$</span>
-              <input
-                type="number" placeholder={t('search.min_price')}
-                className="w-16 bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 focus:outline-none"
-                value={filters.minPrice}
-                onChange={(e) => setFilter('minPrice', e.target.value)}
-              />
-              <span className="text-on-surface-variant text-xs font-bold">–</span>
-              <input
-                type="number" placeholder={t('search.max_price')}
-                className="w-16 bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 focus:outline-none"
-                value={filters.maxPrice}
-                onChange={(e) => setFilter('maxPrice', e.target.value)}
-              />
+          {/* Filters Content */}
+          <div className={`${showFilters ? 'flex' : 'hidden'} md:flex flex-col md:flex-row md:items-center gap-4 mt-4 md:mt-0 overflow-hidden`}>
+            <div className="flex flex-wrap items-center gap-2 md:gap-3">
+              <FilterSelect value={filters.petType} onChange={(e) => setFilter('petType', e.target.value)}>
+                <option value="">{t('search.all_categories')}</option>
+                <option value="dogs">{t('search.dogs')}</option>
+                <option value="cats">{t('search.cats')}</option>
+                <option value="small-pets">{t('search.small_pets')}</option>
+              </FilterSelect>
+              <FilterSelect value={filters.brand} onChange={(e) => setFilter('brand', e.target.value)}>
+                <option value="">{t('search.all_brands')}</option>
+                <option value="Royal Canin">Royal Canin</option>
+                <option value="Blue Buffalo">Blue Buffalo</option>
+                <option value="Purina Pro">Purina Pro</option>
+                <option value="Orijen">Orijen</option>
+                <option value="Acana">Acana</option>
+              </FilterSelect>
+              <FilterSelect value={filters.sort} onChange={(e) => setFilter('sort', e.target.value)}>
+                <option value="">{t('search.sort_by')}</option>
+                <option value="newest">{t('search.newest')}</option>
+                <option value="price_asc">{t('search.price_asc')}</option>
+                <option value="price_desc">{t('search.price_desc')}</option>
+              </FilterSelect>
             </div>
-          </div>
-        )}
 
-        {/* Desktop: full inline filter row */}
-        <div className="hidden md:flex max-w-7xl mx-auto px-6 py-3 items-center gap-3 flex-wrap">
-          <FilterSelect value={filters.petType} onChange={(e) => setFilter('petType', e.target.value)}>
-            <option value="">{t('search.all_categories')}</option>
-            <option value="dogs">{t('search.dogs')}</option>
-            <option value="cats">{t('search.cats')}</option>
-            <option value="small-pets">{t('search.small_pets')}</option>
-          </FilterSelect>
-          <FilterSelect value={filters.brand} onChange={(e) => setFilter('brand', e.target.value)}>
-            <option value="">{t('search.all_brands')}</option>
-            <option value="Royal Canin">Royal Canin</option>
-            <option value="Blue Buffalo">Blue Buffalo</option>
-            <option value="Purina Pro">Purina Pro</option>
-            <option value="Orijen">Orijen</option>
-            <option value="Acana">Acana</option>
-          </FilterSelect>
-          <FilterSelect value={filters.sort} onChange={(e) => setFilter('sort', e.target.value)}>
-            <option value="">{t('search.sort_by')}</option>
-            <option value="newest">{t('search.newest')}</option>
-            <option value="price_asc">{t('search.price_asc')}</option>
-            <option value="price_desc">{t('search.price_desc')}</option>
-          </FilterSelect>
-          <div className="flex items-center gap-1.5 px-4 py-2.5 bg-surface-container-high rounded-xl border-2 border-transparent focus-within:border-primary transition-all duration-200">
-            <span className="text-xs font-bold text-on-surface-variant">$</span>
-            <input
-              type="number" placeholder={t('search.min_price')}
-              className="w-14 bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 focus:outline-none"
-              value={filters.minPrice}
-              onChange={(e) => setFilter('minPrice', e.target.value)}
-            />
-            <span className="text-on-surface-variant text-xs font-bold">–</span>
-            <input
-              type="number" placeholder={t('search.max_price')}
-              className="w-14 bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 focus:outline-none"
-              value={filters.maxPrice}
-              onChange={(e) => setFilter('maxPrice', e.target.value)}
-            />
-          </div>
-          {hasActiveFilters && (
-            <>
-              <div className="h-6 w-px bg-outline-variant/30" />
-              <button onClick={clearFilters} className="flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary/80 transition-colors">
+            <div className="flex items-center gap-2 bg-surface-container-low p-1.5 rounded-2xl border border-surface-container-high w-full md:w-auto">
+              <div className="flex-grow flex items-center px-4 py-2.5 gap-2 bg-surface rounded-xl shadow-inner border border-surface-container-high/50">
+                <span className="text-[10px] font-black text-on-surface-variant opacity-40">$</span>
+                <input
+                  type="number" 
+                  placeholder={t('search.min')}
+                  className="w-full md:w-16 bg-transparent border-none p-0 text-sm font-black focus:ring-0 focus:outline-none"
+                  value={filters.minPrice}
+                  onChange={(e) => setFilter('minPrice', e.target.value)}
+                />
+              </div>
+              <span className="text-on-surface-variant opacity-20 font-black px-1">/</span>
+              <div className="flex-grow flex items-center px-4 py-2.5 gap-2 bg-surface rounded-xl shadow-inner border border-surface-container-high/50">
+                <span className="text-[10px] font-black text-on-surface-variant opacity-40">$</span>
+                <input
+                  type="number" 
+                  placeholder={t('search.max')}
+                  className="w-full md:w-16 bg-transparent border-none p-0 text-sm font-black focus:ring-0 focus:outline-none"
+                  value={filters.maxPrice}
+                  onChange={(e) => setFilter('maxPrice', e.target.value)}
+                />
+              </div>
+            </div>
+
+            {hasActiveFilters && (
+              <button 
+                onClick={clearFilters} 
+                className="hidden md:flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-primary hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20"
+              >
                 <X size={14} /> {t('search.clear_filters')}
               </button>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </section>
 
       {/* ── Results Grid ── */}
-      <section className="max-w-7xl mx-auto px-4 md:px-6 mt-8 md:mt-12">
+      <section className="max-w-7xl mx-auto px-4 md:px-6 mt-12 md:mt-16">
         {loading ? (
-          <div className="flex justify-center py-24">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
+          <div className="flex flex-col items-center justify-center py-32 space-y-6">
+            <div className="relative w-16 h-16">
+              <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+            </div>
+            <p className="text-on-surface-variant font-black uppercase tracking-widest text-[10px] animate-pulse">Inventory Scanning...</p>
           </div>
         ) : results.length > 0 ? (
-          <>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-              {currentResults.map((product) => (
-                <ProductCard key={product.id} product={product} />
+          <div className="space-y-16">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-10">
+              {currentResults.map((product, index) => (
+                <div 
+                  key={product.id} 
+                  className="animate-fade-in-up"
+                  style={{ animationDelay: `${(index % 4) * 100}ms` }}
+                >
+                  <ProductCard product={product} />
+                </div>
               ))}
             </div>
 
-            <Pagination 
-              currentPage={currentPage} 
-              totalPages={totalPages} 
-              paginate={paginate} 
-            />
-          </>
+            <div className="pt-8">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                paginate={paginate}
+              />
+            </div>
+          </div>
         ) : (
-          <div className="text-center py-24">
-            <SearchIcon size={56} className="mx-auto text-on-surface-variant/20 mb-4" />
-            <h3 className="text-xl font-bold text-on-surface mb-1">{t('search.no_results')}</h3>
-            <p className="text-on-surface-variant text-sm">{t('search.no_results_desc')}</p>
+          <div className="text-center py-32 md:py-40 max-w-xl mx-auto px-6 space-y-8 animate-fade-in-up">
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-surface-container-low rounded-[2rem] md:rounded-[3rem] flex items-center justify-center mx-auto shadow-inner border border-surface-container-high">
+              <SearchIcon size={40} className="text-on-surface-variant opacity-20" />
+            </div>
+            <div className="space-y-3">
+              <h3 className="text-2xl md:text-3xl font-black text-on-background tracking-tight">{t('search.no_results')}</h3>
+              <p className="text-base md:text-lg text-on-surface-variant font-medium opacity-60 leading-relaxed">
+                {t('search.no_results_desc') || "We couldn't find any matches. Try adjusting your filters or checking your spelling."}
+              </p>
+            </div>
+            <button onClick={clearFilters} className="bg-primary text-on-background font-black text-sm px-10 py-4 rounded-full shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all w-full md:w-auto">
+              {t('search.reset_filters') || 'Reset All Filters'}
+            </button>
           </div>
         )}
       </section>

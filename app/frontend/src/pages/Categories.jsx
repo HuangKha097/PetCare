@@ -28,75 +28,108 @@ const Categories = () => {
     }
   };
   return (
-    <div className="pb-32">
-      {/* Hero Section */}
-      <section className="px-6 py-8 md:py-16 max-w-7xl mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
-          <div className="z-10 relative">
-            <span className="inline-block px-4 py-1 rounded-full bg-primary-container text-on-primary-container text-[10px] font-bold uppercase tracking-widest mb-6">{t('categories.subtitle')}</span>
-            <h1 className="font-display font-extrabold text-5xl md:text-7xl leading-tight text-on-background tracking-tight mb-6">
-              {t('categories.title').split(' ').slice(0, -1).join(' ')} <span className="text-primary italic">{t('categories.title').split(' ').slice(-1)}</span>
-            </h1>
-            <p className="text-on-surface-variant text-lg md:text-xl max-w-md leading-relaxed mb-10">
-              {t('categories.desc')}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <div className="flex -space-x-3">
-                {[
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuCvl5lhvo0c1a6LHszpwh55nhzzkudIGNlLtkjwNwIoRL6hG-QeMMCcOVVQlwlX_uwz-0AIiL9u_S1YrM1BWjI2J0NsDhTxTEljXdGtVUjvvNq0fMP8G2q6fDQYyq6IiNKjn93UDX0zoO1_LgtSu8PiIWdRqTKO4eZZr04TtK4un6XXbVWwbA7FEraum5aFNzODQ-gVnyihAERc6NDNJak8BmS76q314Mm1r-X8Y42ZDqJSWzP13A_vI3tSFKtHDk-DBJkwKeL98AYU",
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuDObMgf4qfpHx99A7Y4qTYaL1xwQDJ29eZ4terISnG2d-CtpogGdGmRHRuMXWQL8uNxw-fX9bKf3nsG4gZQxk56TbsLFngd7-IOneLrzgYQrlL3G-sicpFh3xYxT3MWTvlD62kwaBszf29EXfOs49f0L29eCcdUlc5-zRJJkyScFbckUQ6-FThO7zASJvFTrN8dDqKFp1fObU57_wlqsF5GjlAQobF-COiTgi2uNfytoSlZ3mtkha9yT7jf8cgh8oHc-8h7NLoogZJ9",
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuAMaVNO0zBcwQ2aGpsst7fUfgVABnjgOl8dwhIjGVgEU9eqF49KoflTJgSkOx7ub6geKbIAi0dD0sYuUF8D-XTAEQK0pyC_X1znn5JNA4hNP5b-fMWE9qckSJmeN512O_Jg0n9Uvy_Zz_vXDhLSW_dp7VFTFNa50WC58lo63puohjbRfP8EInoDrzC3X3mqfa_UNCz207g8FCmw7O9yt0DxEMAKx_3ErzfbyGETCYfz-2fKdnOPZ9cGCdBN1T86wJyWGHGBeKSKXYAa"
-                ].map((src, i) => (
-                  <div key={i} className="w-12 h-12 rounded-full border-4 border-surface overflow-hidden bg-surface-container">
-                    <img className="w-full h-full object-cover" src={src} alt="Pet" />
-                  </div>
-                ))}
+    <div className="bg-surface min-h-screen">
+      {/* ── Categories Hero ── */}
+      <section className="relative px-6 pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden bg-white">
+        {/* Sun-Drenched Background Accents */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute top-1/2 -left-24 w-64 h-64 bg-surface-container-high rounded-full blur-2xl opacity-40"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16 md:gap-24">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary-dark font-black text-[10px] tracking-widest uppercase">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                {t('categories.subtitle')}
               </div>
-              <div className="flex flex-col justify-center">
-                <p className="text-sm font-bold text-on-background">{t('categories.joined_by')}</p>
-                <p className="text-xs text-on-surface-variant">{t('categories.quality_guaranteed')}</p>
+              
+              <h1 className="text-5xl md:text-8xl font-black text-on-background leading-[1.05] tracking-tighter">
+                {t('categories.title').split(' ').slice(0, -1).join(' ')} <span className="text-primary italic">{t('categories.title').split(' ').slice(-1)}</span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-on-surface-variant font-medium max-w-xl leading-relaxed opacity-90">
+                {t('categories.desc')}
+              </p>
+
+              <div className="flex items-center gap-6 pt-4">
+                <div className="flex -space-x-4">
+                  {[
+                    "https://images.unsplash.com/photo-1543466835-00a732f3804c?w=100&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=100&auto=format&fit=crop&q=60",
+                    "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=100&auto=format&fit=crop&q=60"
+                  ].map((src, i) => (
+                    <div key={i} className="w-14 h-14 rounded-full border-4 border-white overflow-hidden shadow-sm group-hover:scale-110 transition-transform">
+                      <img className="w-full h-full object-cover" src={src} alt="Pet" />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <div className="text-sm font-black text-on-background tracking-wide">{t('categories.joined_by')}</div>
+                  <div className="text-xs text-on-surface-variant font-bold opacity-60 uppercase tracking-widest">{t('categories.quality_guaranteed')}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="relative">
-            <div className="absolute inset-0 bg-primary-container rounded-xl rotate-3 -z-10 translate-x-4"></div>
-            <div className="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl relative aspect-[4/5]">
-              <img
-                className="w-full h-full object-cover transform transition-transform hover:scale-105 duration-700"
-                src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="Puppy"
-              />
+
+            <div className="relative group">
+              {/* Decorative Frame */}
+              <div className="absolute -inset-4 bg-primary/5 rounded-[3rem] rotate-3 group-hover:rotate-0 transition-transform duration-1000"></div>
+              <div className="absolute -inset-4 border border-primary/10 rounded-[3rem] -rotate-3 group-hover:rotate-0 transition-transform duration-1000 delay-75"></div>
+              
+              <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[4/5] bg-surface-container-low">
+                <img
+                  className="w-full h-full object-cover transform transition-transform group-hover:scale-105 duration-1000"
+                  src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=715&auto=format&fit=crop"
+                  alt="PetCare Categories"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+
+              {/* Floating Badge */}
+              <div className="absolute -bottom-8 -right-8 glassmorphism p-6 rounded-3xl shadow-2xl border border-white/50 animate-fade-in-up">
+                <div className="text-primary-dark font-black text-[10px] tracking-widest uppercase mb-1">Curated List</div>
+                <div className="text-lg font-black leading-tight">Expert Verified</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Category Grid */}
-      <section className="px-6 py-16 bg-surface-container-low">
+      {/* ── Category Discovery Grid ── */}
+      <section className="px-6 py-24 md:py-32 bg-surface">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-            {/* Dogs Section */}
-            <div className="md:col-span-8 bg-surface-container-lowest rounded-lg p-8 md:p-12 shadow-sm hover:shadow-xl transition-all duration-300 group">
-              <div className="flex flex-col md:flex-row gap-12 items-center">
-                <div className="w-full md:w-1/2 overflow-hidden rounded-lg">
-                  <img
-                    className="w-full aspect-square object-cover transform group-hover:scale-110 transition-transform duration-500"
-                    src="https://plus.unsplash.com/premium_photo-1718652942341-3cbe0512171e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8c2hpYmF8ZW58MHx8MHx8fDA%3D"
-                    alt="Dog"
-                  />
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            
+            {/* Dogs: The "Lead" Editorial Card */}
+            <div className="md:col-span-8 bg-white rounded-[2rem] p-8 md:p-16 border border-surface-container-low shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(244,211,94,0.15)] transition-all duration-700 group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000"></div>
+              
+              <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center relative z-10">
+                <div className="w-full lg:w-1/2">
+                  <div className="relative rounded-3xl overflow-hidden aspect-square shadow-xl group-hover:rotate-1 transition-transform duration-700">
+                    <img
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000"
+                      src="https://plus.unsplash.com/premium_photo-1718652942341-3cbe0512171e?w=800&auto=format&fit=crop"
+                      alt="Dog Category"
+                    />
+                  </div>
                 </div>
-                <div className="w-full md:w-1/2">
-                  <h2 className="font-display font-bold text-4xl text-on-background mb-6">{t('categories.dogs')}</h2>
-                  <ul className="space-y-4 mb-10">
+                <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
+                  <div>
+                    <span className="text-primary-dark font-black text-[10px] tracking-widest uppercase mb-4 block">Section 01</span>
+                    <h2 className="text-4xl md:text-5xl font-black text-on-background tracking-tighter leading-none">{t('categories.dogs')}</h2>
+                  </div>
+                  
+                  <ul className="space-y-4">
                     {t('categories.dog_items', { returnObjects: true }).map((item) => (
-                      <li key={item} className="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group/item">
-                        <span className="w-2 h-2 rounded-full bg-primary-container group-hover/item:bg-primary transition-colors"></span>
-                        <span className="font-medium text-lg font-body">{item}</span>
+                      <li key={item} className="flex items-center justify-center lg:justify-start gap-3 text-on-surface-variant hover:text-primary transition-colors cursor-pointer group/item">
+                        <span className="w-1.5 h-1.5 rounded-full bg-surface-container-high group-hover/item:bg-primary group-hover/item:scale-150 transition-all"></span>
+                        <span className="font-bold text-lg tracking-tight">{item}</span>
                       </li>
                     ))}
                   </ul>
-                  <Link to="/shop">
-                    <Button variant="outline" className="w-full py-4 border-2 border-primary text-primary font-bold hover:bg-primary hover:text-on-primary transition-all active:scale-95">
+
+                  <Link to="/shop" className="block">
+                    <Button className="w-full py-4.5 text-lg shadow-xl shadow-primary/10">
                       {t('categories.shop_all', { name: t('categories.dogs') })}
                     </Button>
                   </Link>
@@ -104,91 +137,120 @@ const Categories = () => {
               </div>
             </div>
 
-            {/* Small Pets Section */}
-            <div className="md:col-span-4 bg-primary-container/20 rounded-lg p-8 flex flex-col justify-between overflow-hidden relative group border border-primary/10">
-              <div className="z-10">
-                <h2 className="font-display font-bold text-3xl text-on-background mb-4">{t('categories.small_pets')}</h2>
-                <p className="text-on-surface-variant mb-8 font-medium">{t('categories.small_pets_desc')}</p>
+            {/* Small Pets: The High-Contrast Vertical Card */}
+            <div className="md:col-span-4 bg-primary text-on-background rounded-[2rem] p-10 flex flex-col justify-between overflow-hidden relative group shadow-lg shadow-primary/10">
+              <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.4),transparent)] opacity-60"></div>
+              
+              <div className="relative z-10 space-y-6">
+                <div>
+                  <span className="font-black text-[10px] tracking-widest uppercase opacity-60 block mb-2">Section 02</span>
+                  <h2 className="text-3xl md:text-4xl font-black tracking-tighter leading-none">{t('categories.small_pets')}</h2>
+                </div>
+                <p className="font-bold leading-relaxed opacity-80">{t('categories.small_pets_desc')}</p>
                 <Link to="/shop">
-                  <Button variant="custom" className="bg-surface-container-lowest text-on-background px-6 py-3 rounded-full font-bold text-sm shadow-sm hover:shadow-md transition-all">
-                    {t('categories.shop_all', { name: t('categories.small_pets') })} <ChevronRight size={14} className="opacity-50" />
-                  </Button>
+                  <button className="bg-on-background text-primary px-8 py-3 rounded-full font-black text-[10px] tracking-widest uppercase hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/20">
+                    {t('categories.shop_all', { name: t('categories.small_pets') })}
+                  </button>
                 </Link>
               </div>
-              <div className="mt-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+
+              <div className="relative mt-12 transform group-hover:-translate-y-2 transition-transform duration-700">
+                <div className="absolute inset-0 bg-black/10 blur-2xl rounded-full scale-90 translate-y-8 group-hover:scale-100 transition-transform"></div>
                 <img
-                  className="w-full rounded-xl object-cover aspect-[4/3] shadow-lg"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDjEW3zisw_me31rdJyvZjU52vZOke3-l898ZaYDH6mdi_7HrkJRXYB2B-wBXy85B608MD0AnJFdz0i9_hZWLRUDSUwKHzzE-2XddJpJgUq7L37jxYFI6JxtE_mcAQIcFnstI3l1d7DFl50FpqqbCBFTG9kAdV2ZMs4RcCX8774h6GdJWv583RXjocCKWMaozJh1qRxezO_BLwPu_j3ZKTQXUxmeseNsKYyyY6_H2b_-PQi3l7lExJQ8pp6UDLy99moo7t7rLiIeMF"
-                  alt="Bunny"
+                  className="w-full rounded-2xl object-cover aspect-[4/3] shadow-2xl relative z-10"
+                  src="https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600&auto=format&fit=crop"
+                  alt="Small Pets"
                 />
               </div>
             </div>
 
-            {/* Cats Section */}
-            <div className="md:col-span-12  bg-secondary-container/10 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ">
-              <div className="flex flex-col md:flex-row">
-                <div className="w-full md:w-5/12 p-8 md:p-16 flex flex-col justify-center order-2 md:order-1">
-                  <h2 className="font-display font-bold text-4xl md:text-5xl text-on-background mb-8 tracking-tight">{t('categories.cats')}</h2>
-                  <div className="grid grid-cols-2 gap-y-6 gap-x-8 mb-12">
+            {/* Cats: The Panoramic Feature Card */}
+            <div className="md:col-span-12 bg-white rounded-[2rem] overflow-hidden border border-surface-container-low shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] transition-all duration-700 group">
+              <div className="flex flex-col lg:flex-row">
+                <div className="w-full lg:w-5/12 p-10 md:p-20 flex flex-col justify-center space-y-12 order-2 lg:order-1">
+                  <div>
+                    <span className="text-primary-dark font-black text-[10px] tracking-widest uppercase mb-4 block">Section 03</span>
+                    <h2 className="text-4xl md:text-6xl font-black text-on-background tracking-tighter leading-none">{t('categories.cats')}</h2>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-y-10 gap-x-12">
                     {t('categories.cat_items', { returnObjects: true }).map((item) => (
-                      <div key={item.name} className="flex flex-col">
-                        <span className="text-xs font-bold uppercase tracking-widest text-primary mb-1">{item.label}</span>
-                        <span className="text-lg font-medium">{item.name}</span>
+                      <div key={item.name} className="space-y-1 group/item cursor-pointer">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-primary block group-hover/item:translate-x-1 transition-transform">{item.label}</span>
+                        <span className="text-xl font-bold block text-on-background tracking-tight">{item.name}</span>
                       </div>
                     ))}
                   </div>
+
                   <Link to="/shop">
-                    <Button variant="primary" className="w-full text-lg">
+                    <Button variant="outline" className="w-full py-4.5 text-lg border-surface-container-high hover:bg-surface-container-lowest">
                       {t('categories.shop_all', { name: t('categories.cats') })}
                     </Button>
                   </Link>
                 </div>
-                <div className="w-full  md:w-7/12 order-1 md:order-2 aspect-video md:aspect-auto h-96 md:h-auto">
+                <div className="w-full lg:w-7/12 order-1 lg:order-2 relative overflow-hidden h-[400px] lg:h-auto">
                   <img
-                    className="w-full h-[80vh] object-cover"
-                    src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2F0fGVufDB8fDB8fHww"
-                    alt="Cat"
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
+                    src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1200&auto=format&fit=crop"
+                    alt="Cat Category"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-r from-white via-white/20 to-transparent hidden lg:block"></div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="px-6 py-20 max-w-7xl mx-auto">
-        <div className="bg-primary text-on-primary rounded-xl p-8 md:p-16 text-center relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-          <div className="relative z-10">
-            <h3 className="font-display font-extrabold text-3xl md:text-5xl mb-6 tracking-tight">{t('categories.stay_in_paws')}</h3>
-            <p className="text-lg mb-10 max-w-xl mx-auto opacity-90">{t('categories.newsletter_desc')}</p>
-            <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={handleInquirySubmit}>
-              <div className="flex-grow flex items-center bg-white/20 border border-white/30 rounded-xl focus-within:ring-2 focus-within:ring-white/50 transition-all overflow-hidden group">
-                <input 
-                  className="flex-grow bg-transparent border-none px-6 py-4 outline-none font-medium text-white placeholder:text-white/60" 
-                  placeholder={t('categories.email_placeholder')} 
-                  type="email" 
-                  value={inquiryEmail}
-                  onChange={(e) => setInquiryEmail(e.target.value)}
-                  required
-                />
-                <div className="h-8 w-[1px] bg-white/20 hidden sm:block"></div>
-                <select 
-                  className="bg-transparent border-none px-4 py-4 outline-none font-bold cursor-pointer text-white text-sm min-w-[140px] appearance-none"
-                  value={selectedService}
-                  onChange={(e) => setSelectedService(e.target.value)}
-                >
-                  <option value="General" className="text-on-background">{t('home.general_inquiry')}</option>
-                  <option value="Dogs" className="text-on-background">{t('categories.dogs')}</option>
-                  <option value="Cats" className="text-on-background">{t('categories.cats')}</option>
-                  <option value="Small Pets" className="text-on-background">{t('categories.small_pets')}</option>
-                </select>
+      {/* ── Sun-Drenched Newsletter ── */}
+      <section className="px-6 py-24 md:py-32 bg-surface">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-primary rounded-[3rem] p-10 md:p-24 text-center relative overflow-hidden shadow-2xl shadow-primary/20 group">
+            {/* Abstract Decorative Elements */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[100px] group-hover:scale-110 transition-transform duration-1000"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-[80px]"></div>
+            
+            <div className="relative z-10 space-y-10">
+              <div className="space-y-4">
+                <span className="inline-block px-6 py-2 rounded-full bg-on-background text-primary font-black text-[10px] tracking-[0.2em] uppercase">
+                  {t('home.join_pack')}
+                </span>
+                <h3 className="text-4xl md:text-7xl font-black text-on-background tracking-tighter leading-none max-w-3xl mx-auto">
+                  {t('categories.stay_in_paws')}
+                </h3>
+                <p className="text-xl md:text-2xl font-bold text-on-background/70 max-w-xl mx-auto leading-relaxed">
+                  {t('categories.newsletter_desc')}
+                </p>
               </div>
-              <Button variant="custom" className="bg-white text-primary font-bold px-10 py-4 rounded-xl hover:bg-white/90 transition-all active:scale-95 shadow-xl shadow-black/10" type="submit" disabled={submitting}>
-                {submitting ? '...' : t('categories.join_now')}
-              </Button>
-            </form>
+
+              <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={handleInquirySubmit}>
+                <div className="flex-grow flex items-center bg-white/30 backdrop-blur-md border border-white/40 rounded-2xl focus-within:ring-4 focus-within:ring-on-background/10 transition-all overflow-hidden group/form">
+                  <input 
+                    className="flex-grow bg-transparent border-none px-8 py-5 outline-none font-bold text-on-background placeholder:text-on-background/40 text-lg" 
+                    placeholder={t('categories.email_placeholder')} 
+                    type="email" 
+                    value={inquiryEmail}
+                    onChange={(e) => setInquiryEmail(e.target.value)}
+                    required
+                  />
+                  <div className="h-10 w-[1px] bg-on-background/10 hidden sm:block"></div>
+                  <select 
+                    className="bg-transparent border-none px-6 py-5 outline-none font-black cursor-pointer text-on-background text-[10px] tracking-widest uppercase min-w-[160px] appearance-none hover:bg-white/10 transition-colors"
+                    value={selectedService}
+                    onChange={(e) => setSelectedService(e.target.value)}
+                  >
+                    <option value="General" className="text-on-background">{t('home.general_inquiry')}</option>
+                    <option value="Dogs" className="text-on-background">{t('categories.dogs')}</option>
+                    <option value="Cats" className="text-on-background">{t('categories.cats')}</option>
+                    <option value="Small Pets" className="text-on-background">{t('categories.small_pets')}</option>
+                  </select>
+                </div>
+                <Button className="w-full md:w-auto text-lg px-12 py-5 bg-on-background text-primary hover:bg-on-background/90 shadow-2xl shadow-black/20" type="submit" disabled={submitting}>
+                  {submitting ? '...' : t('categories.join_now')}
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </section>

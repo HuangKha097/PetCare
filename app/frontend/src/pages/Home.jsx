@@ -66,35 +66,81 @@ const Home = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-primary-container px-6 py-12 md:py-24 overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
-          <div className="z-10 text-center md:text-left flex-1">
-            <h2 className="text-4xl md:text-7xl font-black text-on-background leading-tight mb-6">
-              {t('home.hero_title')}
-            </h2>
-            <p className="text-lg md:text-xl text-on-surface-variant font-medium mb-10 max-w-lg">
-              {t('home.hero_desc')}
+      <section className="relative bg-surface px-6 pt-16 pb-24 md:pt-32 md:pb-40 overflow-hidden">
+        {/* Background Blob */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] opacity-20 pointer-events-none">
+          <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-primary">
+            <path d="M856.5,296Q913,500,816.5,658.5Q720,817,500,883.5Q280,950,166.5,771Q53,592,93,391Q133,190,316.5,145Q500,100,700,150Q900,200,856.5,296Z" />
+          </svg>
+        </div>
+
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-16 relative z-10">
+          <div className="flex-1 text-center md:text-left space-y-8 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary-dark font-bold text-sm tracking-wide uppercase">
+              <Star size={14} className="fill-current" />
+              {t('home.trusted_by_thousands') || 'Trusted by 10k+ Pet Parents'}
+            </div>
+
+            <h1 className="text-5xl md:text-7xl font-black text-on-background leading-[1.1] tracking-tight">
+              {t('home.hero_title_new') || 'Unconditional Love, Unmatched Care.'}
+            </h1>
+
+            <p className="text-xl md:text-2xl text-on-surface-variant font-medium max-w-xl leading-relaxed opacity-90">
+              {t('home.hero_desc_new') || 'From premium organic treats to expert veterinary advice, give your best friend the quality they deserve.'}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+
+            <div className="flex flex-col sm:flex-row gap-5 pt-4 justify-center md:justify-start">
               <Link to="/shop">
-                <Button className="w-full sm:w-auto px-8 py-3.5 text-base">
+                <Button className="w-full sm:w-auto px-10 py-4.5 text-lg shadow-xl shadow-primary/30 bg-primary hover:bg-primary-dark text-on-background">
                   {t('common.shop_now')}
                 </Button>
               </Link>
               <Link to="/categories">
-                <Button variant="outline" className="px-8 py-3.5 text-base w-full sm:w-auto">
+                <Button variant="outline" className="px-10 py-4.5 text-lg w-full sm:w-auto border-surface-container-high hover:bg-white">
                   {t('common.browse_categories')}
                 </Button>
               </Link>
             </div>
+
+            <div className="flex items-center gap-6 pt-8 justify-center md:justify-start opacity-60">
+              <div className="flex flex-col">
+                <span className="text-2xl font-black">24/7</span>
+                <span className="text-xs font-bold uppercase tracking-widest">{t('home.support') || 'Expert Support'}</span>
+              </div>
+              <div className="w-[1px] h-10 bg-on-background/10"></div>
+              <div className="flex flex-col">
+                <span className="text-2xl font-black">100%</span>
+                <span className="text-xs font-bold uppercase tracking-widest">{t('home.organic') || 'Organic Choice'}</span>
+              </div>
+            </div>
           </div>
-          <div className="relative flex-1 w-full max-w-md md:max-w-xl">
-            <div className="absolute -top-10 -right-10 w-64 h-64 bg-secondary-container rounded-full opacity-50 blur-3xl"></div>
-            <img
-              alt="Happy Cat Retriever"
-              className="relative z-10 w-full aspect-square object-cover rounded-xl shadow-2xl rotate-3"
-              src="https://vuipet.com/wp-content/uploads/2021/06/meo-long-ngan.jpg"
-            />
+
+          <div className="flex-1 w-full relative group animate-fade-in-up animation-delay-200">
+            {/* Visual elements around the image */}
+            <div className="absolute -top-12 -left-12 w-32 h-32 bg-primary-container rounded-full opacity-50 blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
+            <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-secondary-container rounded-full opacity-30 blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
+
+            <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl rotate-2 group-hover:rotate-0 transition-transform duration-700 aspect-square md:aspect-[4/5]">
+              <img
+                alt="Premium Pet Care"
+                className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000"
+                src="https://images2.alphacoders.com/745/thumb-1920-745829.jpg"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            </div>
+
+            {/* Floating Badge */}
+            <div className="absolute -bottom-6 -left-6 z-20 glassmorphism p-5 rounded-2xl shadow-xl border border-white/50 animate-bounce transition-all">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-on-background">
+                  <Heart className="fill-current" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">{t('home.member_choice') || 'Member Choice'}</div>
+                  <div className="text-sm font-black">Top Rated Care</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -215,16 +261,16 @@ const Home = () => {
           <p className="text-lg mb-10 opacity-80">{t('home.newsletter_desc')}</p>
           <form className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" onSubmit={handleInquirySubmit}>
             <div className="flex-grow flex items-center bg-surface-container-lowest border border-surface-container-low rounded-xl focus-within:ring-2 focus-within:ring-primary transition-all overflow-hidden group">
-              <input 
-                className="flex-grow bg-transparent border-none px-6 py-4 outline-none font-medium text-on-surface" 
-                placeholder={t('home.email_placeholder')} 
-                type="email" 
+              <input
+                className="flex-grow bg-transparent border-none px-6 py-4 outline-none font-medium text-on-surface"
+                placeholder={t('home.email_placeholder')}
+                type="email"
                 value={inquiryEmail}
                 onChange={(e) => setInquiryEmail(e.target.value)}
                 required
               />
               <div className="h-8 w-[1px] bg-surface-container-high hidden sm:block"></div>
-              <select 
+              <select
                 className="bg-transparent border-none px-4 py-4 outline-none font-bold cursor-pointer text-primary-dark text-sm min-w-[140px] hover:text-primary transition-colors"
                 value={selectedService}
                 onChange={(e) => setSelectedService(e.target.value)}

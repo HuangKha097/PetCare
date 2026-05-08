@@ -24,15 +24,15 @@ const BlogDetail = () => {
           getBlogById(id),
           getBlogs()
         ]);
-        
+
         setBlog(blogRes.data);
-        
+
         // Filter out current blog and take up to 3 for related section
         const related = allBlogsRes.data
           .filter(b => b.id !== parseInt(id))
           .slice(0, 3);
         setRelatedBlogs(related);
-        
+
       } catch (err) {
         console.error(err);
         setError(t('blog.failed_load'));
@@ -101,10 +101,10 @@ const BlogDetail = () => {
               <Share2 size={16} /> {t('blog.share')}
             </Button>
           </div>
-          
-          <div 
+
+          <div
             className="prose prose-lg prose-headings:font-display prose-headings:font-black prose-a:text-primary hover:prose-a:text-primary-dark prose-img:rounded-2xl max-w-none text-on-surface leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: getLocalizedText(blog.content, i18n.language) }} 
+            dangerouslySetInnerHTML={{ __html: getLocalizedText(blog.content, i18n.language) }}
           />
         </div>
       </div>

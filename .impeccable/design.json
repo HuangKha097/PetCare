@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-08T14:56:00Z",
+  "title": "Design System: PetCare",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Golden Retriever", "canonical": "oklch(88.5% 0.15 85.5)", "tonalRamp": ["#4a3f12", "#7a691e", "#a9922a", "#d6b541", "#F4D35E", "#f8e28f", "#fbeec0", "#fdf6f0"] },
+      "surface": { "role": "neutral", "displayName": "Morning Mist", "canonical": "oklch(96.5% 0.005 160)", "tonalRamp": ["#1a1d1d", "#2c2f2f", "#444747", "#5c5f5f", "#8d9190", "#c0c4c3", "#e0e2e1", "#f5f7f6"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Hero Display", "purpose": "Used for main marketing headlines to establish authority and warmth." }
+    },
+    "shadows": [
+      { "name": "hover-lift", "value": "0 16px 40px -8px rgba(0,0,0,0.10)", "purpose": "Indicates interactivity on cards and elevated containers." }
+    ],
+    "motion": [
+      { "name": "scale-pop", "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "purpose": "Tactile feedback for button interactions." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main call-to-action button for the PetCare ecosystem.",
+      "html": "<button class=\"ds-btn-primary\">SHOP NOW</button>",
+      "css": ".ds-btn-primary { background: #F4D35E; color: #2c2f2f; padding: 12px 32px; border-radius: 16px; font-weight: 700; border: none; cursor: pointer; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s; box-shadow: 0 4px 12px rgba(244, 211, 94, 0.2); } .ds-btn-primary:hover { transform: scale(1.05); background: #d6b541; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Modern Menagerie",
+    "overview": "PetCare balances the warmth of a local pet community with the precision of a professional medical institution. It avoids the cluttered, high-saturation tropes of legacy pet stores, opting instead for a refined, editorial-inspired aesthetic.",
+    "keyCharacteristics": [
+      "Warm Precision: Organic curves meet a rigorous grid.",
+      "Sun-Drenched Neutrals: A primary yellow accent supported by soft, layered grays.",
+      "Emotional Typography: Bold, black-weight headlines that feel authoritative yet friendly."
+    ],
+    "rules": [
+      { "name": "The 10% Gold Rule", "body": "The primary yellow accent is used on ≤10% of any given screen. Its rarity makes it a powerful signal for action.", "section": "colors" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. Shadows are a reactive state, appearing only when the user interacts with an element.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do lead with high-quality pet photography.",
+      "Do use the full 16px radius for all interactive containers.",
+      "Do maintain ample whitespace (64px+) between major sections."
+    ],
+    "donts": [
+      "Don't use generic pet icons or cartoonish illustrations.",
+      "Don't use pure #000 or #fff for backgrounds; always use tinted neutrals.",
+      "Don't use gradients or glassmorphism as a default."
+    ]
+  }
+}
