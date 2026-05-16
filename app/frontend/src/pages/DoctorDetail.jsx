@@ -3,8 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Phone, Mail, MapPin, Clock, Star, CalendarDays, CheckCircle, Award, Stethoscope, ChevronRight } from 'lucide-react';
 
-// ── Shared doctors data (import-friendly: also used in Home.jsx via this file)
-// ── Shared doctors data (import-friendly: also used in Home.jsx via this file)
+
 export const doctors = [
   {
     id: 1,
@@ -89,7 +88,7 @@ const DoctorDetail = () => {
   return (
     <div className="bg-surface min-h-screen pb-24">
 
-      {/* Breadcrumb */}
+
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-0">
         <nav className="flex items-center gap-2 text-xs font-bold text-on-surface-variant opacity-60">
           <Link to="/" className="hover:text-primary-dark transition-colors">{t('nav.home')}</Link>
@@ -98,15 +97,15 @@ const DoctorDetail = () => {
         </nav>
       </div>
 
-      {/* Hero */}
+
       <section className="max-w-6xl mx-auto px-6 pt-8">
         <div className="bg-white rounded-xl shadow-sm border border-surface-container-low overflow-hidden">
           <div className="flex flex-col md:flex-row gap-0">
-            {/* Photo */}
+
             <div className="w-full md:w-72 h-72 md:h-auto flex-shrink-0">
               <img src={doc.image_url} alt={doc.name} className="w-full h-full object-cover" />
             </div>
-            {/* Info */}
+
             <div className="flex-grow p-8 md:p-10">
               <span className="inline-block bg-primary/20 text-primary-dark text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full mb-4">
                 {t(`doctor.${doc.key}.specialty`)}
@@ -114,7 +113,7 @@ const DoctorDetail = () => {
               <h1 className="font-display font-black text-3xl md:text-4xl text-on-background mb-2">{t(`doctor.${doc.key}.name`)}</h1>
               <p className="text-on-surface-variant font-medium mb-6 max-w-xl">{t(`doctor.${doc.key}.bio`)}</p>
 
-              {/* Stats */}
+
               <div className="flex flex-wrap gap-6 mb-8">
                 <div className="flex items-center gap-2">
                   <Star size={18} className="text-yellow-400 fill-yellow-400" />
@@ -127,7 +126,7 @@ const DoctorDetail = () => {
                 </div>
               </div>
 
-              {/* CTA */}
+
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
                   href={`tel:${doc.phone}`}
@@ -147,13 +146,13 @@ const DoctorDetail = () => {
         </div>
       </section>
 
-      {/* Body: 2-column */}
+
       <section className="max-w-6xl mx-auto px-6 pt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* Left — Education & Specializations */}
+
         <div className="lg:col-span-2 space-y-6">
 
-          {/* Education */}
+
           <div className="bg-white rounded-xl border border-surface-container-low shadow-sm p-8">
             <h2 className="font-bold text-lg text-on-background mb-5 flex items-center gap-2">
               <Award size={20} className="text-primary-dark" /> {t('doctor.education')}
@@ -168,7 +167,7 @@ const DoctorDetail = () => {
             </ul>
           </div>
 
-          {/* Specializations */}
+
           <div className="bg-white rounded-xl border border-surface-container-low shadow-sm p-8">
             <h2 className="font-bold text-lg text-on-background mb-5 flex items-center gap-2">
               <Stethoscope size={20} className="text-primary-dark" /> {t('doctor.specializations')}
@@ -182,7 +181,7 @@ const DoctorDetail = () => {
             </div>
           </div>
 
-          {/* Contact */}
+
           <div className="bg-white rounded-xl border border-surface-container-low shadow-sm p-8">
             <h2 className="font-bold text-lg text-on-background mb-5 flex items-center gap-2">
               <Phone size={20} className="text-primary-dark" /> {t('doctor.contact_info')}
@@ -219,7 +218,7 @@ const DoctorDetail = () => {
           </div>
         </div>
 
-        {/* Right — Schedule */}
+
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-surface-container-low shadow-sm p-8 sticky top-24">
             <h2 className="font-bold text-lg text-on-background mb-5 flex items-center gap-2">
@@ -246,7 +245,7 @@ const DoctorDetail = () => {
 
       </section>
 
-      {/* Back button */}
+
       <div className="max-w-6xl mx-auto px-6 pt-8">
         <button
           onClick={() => navigate(-1)}

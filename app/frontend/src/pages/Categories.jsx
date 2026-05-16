@@ -29,9 +29,9 @@ const Categories = () => {
   };
   return (
     <div className="bg-surface min-h-screen">
-      {/* ── Categories Hero ── */}
+
       <section className="relative px-6 pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden bg-white">
-        {/* Sun-Drenched Background Accents */}
+
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-60"></div>
         <div className="absolute top-1/2 -left-24 w-64 h-64 bg-surface-container-high rounded-full blur-2xl opacity-40"></div>
 
@@ -71,7 +71,7 @@ const Categories = () => {
             </div>
 
             <div className="relative group">
-              {/* Decorative Frame */}
+
               <div className="absolute -inset-4 bg-primary/5 rounded-[3rem] rotate-3 group-hover:rotate-0 transition-transform duration-1000"></div>
               <div className="absolute -inset-4 border border-primary/10 rounded-[3rem] -rotate-3 group-hover:rotate-0 transition-transform duration-1000 delay-75"></div>
               
@@ -84,7 +84,7 @@ const Categories = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
 
-              {/* Floating Badge */}
+
               <div className="absolute -bottom-8 -right-8 glassmorphism p-6 rounded-3xl shadow-2xl border border-white/50 animate-fade-in-up">
                 <div className="text-primary-dark font-black text-[10px] tracking-widest uppercase mb-1">Curated List</div>
                 <div className="text-lg font-black leading-tight">Expert Verified</div>
@@ -94,12 +94,12 @@ const Categories = () => {
         </div>
       </section>
 
-      {/* ── Category Discovery Grid ── */}
+
       <section className="px-6 py-24 md:py-32 bg-surface">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             
-            {/* Dogs: The "Lead" Editorial Card */}
+
             <div className="md:col-span-8 bg-white rounded-[2rem] p-8 md:p-16 border border-surface-container-low shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(244,211,94,0.15)] transition-all duration-700 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000"></div>
               
@@ -137,7 +137,7 @@ const Categories = () => {
               </div>
             </div>
 
-            {/* Small Pets: The High-Contrast Vertical Card */}
+
             <div className="md:col-span-4 bg-primary text-on-background rounded-[2rem] p-10 flex flex-col justify-between overflow-hidden relative group shadow-lg shadow-primary/10">
               <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.4),transparent)] opacity-60"></div>
               
@@ -164,7 +164,7 @@ const Categories = () => {
               </div>
             </div>
 
-            {/* Cats: The Panoramic Feature Card */}
+
             <div className="md:col-span-12 bg-white rounded-[2rem] overflow-hidden border border-surface-container-low shadow-sm hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] transition-all duration-700 group">
               <div className="flex flex-col lg:flex-row">
                 <div className="w-full lg:w-5/12 p-10 md:p-20 flex flex-col justify-center space-y-12 order-2 lg:order-1">
@@ -203,11 +203,11 @@ const Categories = () => {
         </div>
       </section>
 
-      {/* ── Sun-Drenched Newsletter ── */}
+
       <section className="px-6 py-24 md:py-32 bg-surface">
         <div className="max-w-7xl mx-auto">
           <div className="bg-primary rounded-[3rem] p-10 md:p-24 text-center relative overflow-hidden shadow-2xl shadow-primary/20 group">
-            {/* Abstract Decorative Elements */}
+
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-[100px] group-hover:scale-110 transition-transform duration-1000"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-[80px]"></div>
             

@@ -215,7 +215,7 @@ const Cart = () => {
         );
     }
 
-    // Success Screen
+
     if (step === 4) {
         return (
             <div className="min-h-[80vh] flex items-center justify-center px-6">
@@ -242,7 +242,7 @@ const Cart = () => {
 
     return (
         <main className="mt-28 mb-24 max-w-7xl mx-auto w-full px-6">
-            {/* Out-of-stock Notifications */}
+
             {notifications && notifications.length > 0 && (
                 <div className="mb-8 space-y-3">
                     {notifications.map((notif, idx) => (
@@ -263,7 +263,7 @@ const Cart = () => {
                     ))}
                 </div>
             )}
-            {/* Page Title & Step Indicator */}
+
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                 <div>
                     <h1 className="text-4xl md:text-5xl font-black tracking-tight text-on-background mb-4">
@@ -274,7 +274,7 @@ const Cart = () => {
                     </p>
                 </div>
 
-                {/* Step Indicator */}
+
                 <div className="flex items-center justify-center md:justify-start gap-2 md:gap-4 bg-white p-2 px-4 md:px-6 rounded-[2rem] md:rounded-full border border-surface-container-low shadow-sm w-full md:w-auto">
                     {[1, 2, 3].map((s) => (
                         <React.Fragment key={s}>
@@ -294,10 +294,10 @@ const Cart = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-                {/* Main Content (Changes based on Step) */}
+
                 <div className="lg:col-span-8">
 
-                    {/* STEP 1: CART LIST */}
+
                     {step === 1 && (
                         <div className="space-y-6">
                             {items.map((item) => (
@@ -333,7 +333,7 @@ const Cart = () => {
                         </div>
                     )}
 
-                    {/* STEP 2: SHIPPING DETAILS */}
+
                     {step === 2 && (
                         <div className="bg-white border border-surface-container-low rounded-xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="flex justify-between items-center mb-8">
@@ -417,7 +417,7 @@ const Cart = () => {
                         </div>
                     )}
 
-                    {/* STEP 3: PAYMENT */}
+
                     {step === 3 && (
                         <div className="bg-white border border-surface-container-low rounded-xl p-10 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
@@ -494,12 +494,12 @@ const Cart = () => {
                     )}
                 </div>
 
-                {/* SIDEBAR SUMMARY */}
+
                 <aside className="lg:col-span-4 sticky top-28">
                     <div className="bg-white border border-surface-container-low rounded-xl p-8 shadow-sm">
                         <h2 className="text-2xl font-bold mb-8 tracking-tight">{t('cart.order_summary')}</h2>
 
-                        {/* Mini Cart Preview in Sidebar if not on Cart step */}
+
                         {step > 1 && (
                             <div className="mb-8 space-y-4">
                                 {items.map(item => (
@@ -540,7 +540,7 @@ const Cart = () => {
                             </div>
                         </div>
 
-                        {/* CTA Buttons */}
+
                         <div className="flex flex-col gap-4">
                             {step === 1 && (
                                 <Button className="w-full py-4 rounded-2xl text-base font-bold shadow-xl shadow-primary/30" onClick={() => setStep(2)}>
@@ -572,7 +572,7 @@ const Cart = () => {
                         </div>
                     </div>
 
-                    {/* Safety Badges */}
+
                     <div className="mt-8 grid grid-cols-2 gap-4">
                         <div className="flex flex-col items-center p-4 bg-white/50 rounded-2xl border border-surface-container-low">
                             <ShieldCheck size={20} className="text-primary mb-2" />

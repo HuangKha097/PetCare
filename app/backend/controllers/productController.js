@@ -1,7 +1,7 @@
 const db = require('../config/db');
 const { createMultilingualField } = require('../services/translationService');
 
-// Helper to parse product images and multilingual fields
+
 const parseProduct = (p) => {
     if (!p) return null;
     
@@ -77,16 +77,16 @@ exports.getAllProducts = async (req, res) => {
             query += ' ORDER BY created_at DESC';
         }
 
-        // Get total count for pagination
+
         const [countResult] = await db.execute(countQuery, params);
         const totalCount = countResult[0].total;
         const totalPages = Math.ceil(totalCount / limit);
 
-        // Add LIMIT and OFFSET for pagination
+
         query += ' LIMIT ? OFFSET ?';
         params.push(limit, offset);
 
-        // Use db.query instead of db.execute for LIMIT/OFFSET to avoid prepared statement issues
+
         const [products] = await db.query(query, params);
         
         res.json({
@@ -129,7 +129,7 @@ exports.getPopularProducts = async (req, res) => {
     }
 };
 
-// ── Admin: Create Product ──
+
 exports.createProduct = async (req, res) => {
     try {
         const { name, description, price, category, image_url, images, ingredients, brand, pet_type, stock_quantity, sku } = req.body;
@@ -145,7 +145,7 @@ exports.createProduct = async (req, res) => {
 
         const mainImage = imageArray[0];
 
-        // Translate fields
+
         const translatedName = await createMultilingualField(name);
         const translatedDesc = await createMultilingualField(description);
         const translatedIngr = ingredients ? await createMultilingualField(ingredients) : null;
@@ -175,10 +175,10 @@ exports.createProduct = async (req, res) => {
     }
 };
 
-// ── Admin: Update Product ──
+
 exports.updateProduct = async (req, res) => {
     try {
-        // We do not extract admin_password here, it's used in the middleware
+
         const { name, description, price, category, images, ingredients, brand, pet_type, stock_quantity, sku, is_active } = req.body;
         
         let imageArray = images;
@@ -195,7 +195,7 @@ exports.updateProduct = async (req, res) => {
 
         const safe = (val) => val === undefined ? null : val;
 
-        // Translate if fields are being updated
+
         const translatedName = name !== undefined ? await createMultilingualField(name) : undefined;
         const translatedDesc = description !== undefined ? await createMultilingualField(description) : undefined;
         const translatedIngr = ingredients !== undefined ? await createMultilingualField(ingredients) : undefined;
@@ -243,7 +243,7 @@ exports.updateProduct = async (req, res) => {
     }
 };
 
-// ── Admin: Delete Product (soft delete) ──
+
 exports.deleteProduct = async (req, res) => {
     try {
         await db.execute('UPDATE products SET is_active = FALSE WHERE id = ?', [req.params.id]);
@@ -254,7 +254,7 @@ exports.deleteProduct = async (req, res) => {
     }
 };
 
-// ── Admin: Quick Toggle Status ──
+
 exports.updateProductStatus = async (req, res) => {
     try {
         const { is_active } = req.body;
@@ -269,7 +269,7 @@ exports.updateProductStatus = async (req, res) => {
     }
 };
 
-// ── Admin: Get ALL products (including inactive) ──
+
 exports.getAllProductsAdmin = async (req, res) => {
     try {
         const [products] = await db.execute('SELECT * FROM products ORDER BY created_at DESC');

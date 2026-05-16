@@ -1,6 +1,6 @@
 const pool = require("../config/db");
 
-// Get all blogs
+
 exports.getAllBlogs = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT id, title, excerpt, author, date, image_url, category FROM blogs ORDER BY id ASC");
@@ -11,7 +11,7 @@ exports.getAllBlogs = async (req, res) => {
   }
 };
 
-// Get a single blog by ID
+
 exports.getBlogById = async (req, res) => {
   try {
     const { id } = req.params;

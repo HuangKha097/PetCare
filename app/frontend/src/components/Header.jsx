@@ -79,7 +79,6 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Desktop Only Tools - Moved to Burger Menu on Mobile to save space */}
             <div className="hidden md:flex items-center gap-1 pr-6 border-r border-on-background/5">
               <Link to="/search" className="p-2.5 hover:bg-surface-container-low rounded-xl transition-all duration-500 hover:shadow-ambient-glow group">
                 <Search size={18} className="text-on-background/60 group-hover:text-primary transition-colors" />
@@ -120,7 +119,7 @@ const Header = () => {
         </div>
       </header>
 
-      {/* ── Mobile Sidebar Menu: Choreographed Sanctuary ── */}
+
       <div
         className={`fixed inset-0 z-[100] bg-on-background/20 backdrop-blur-md transition-all duration-700 md:hidden ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onClick={closeMenu}
@@ -129,7 +128,7 @@ const Header = () => {
           className={`fixed top-4 left-4 bottom-4 w-[calc(100%-2rem)] max-w-sm bg-white rounded-[2.5rem] shadow-2xl flex flex-col transition-all duration-700 ease-out-expo ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-[110%]'}`}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header Area */}
+
           <div className="flex items-center justify-between p-8">
             <Link to="/" className="group flex items-center gap-2" onClick={closeMenu}>
               <span className="text-2xl font-black text-on-background tracking-tighter">PetCare</span>

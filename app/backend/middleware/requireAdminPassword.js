@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
             return res.status(400).json({ message: 'Admin password is required for this action' });
         }
 
-        // req.user should be set by the previous auth middleware
+
         if (!req.user) {
             return res.status(401).json({ message: 'Unauthorized' });
         }

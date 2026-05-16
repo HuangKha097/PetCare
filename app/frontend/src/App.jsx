@@ -25,7 +25,7 @@ import { loadUser } from './store/slices/authSlice';
 import { fetchCart } from './store/slices/cartSlice';
 import { fetchWishlist } from './store/slices/wishlistSlice';
 
-// Admin Imports
+
 import AdminLayout from './admin/layout/AdminLayout';
 import AdminProtectedRoute from './admin/components/AdminProtectedRoute';
 import Dashboard from './admin/pages/Dashboard';
@@ -39,7 +39,7 @@ import InquiryManagement from './admin/pages/InquiryManagement';
 const UserLayout = () => {
     const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-    // Redirect admin trying to access user pages
+
     if (isAuthenticated && user?.role === 'admin') {
         return <Navigate to="/admin/dashboard" replace />;
     }
@@ -72,7 +72,7 @@ function App() {
         <Router>
             <ScrollToTop />
             <Routes>
-                {/* Admin Routes */}
+
                 <Route path="/admin" element={<AdminProtectedRoute><AdminLayout /></AdminProtectedRoute>}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="products" element={<ProductManagement />} />
@@ -84,7 +84,7 @@ function App() {
                     <Route path="inquiries" element={<InquiryManagement />} />
                 </Route>
 
-                {/* User Routes */}
+
                 <Route path="/" element={<UserLayout />}>
                     <Route index element={<Home />} />
                     <Route path="shop" element={<Shop />} />

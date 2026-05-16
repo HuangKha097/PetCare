@@ -8,7 +8,7 @@ exports.createOrder = async (req, res) => {
         const { items, totalAmount, paymentMethod, address, phone, city, note } = req.body;
         const userId = req.user;
 
-        // 1. Check stock for all items before proceeding
+
         for (const item of items) {
             const productId = item.id || item.product_id;
             const [product] = await connection.execute(
@@ -33,28 +33,28 @@ exports.createOrder = async (req, res) => {
             }
         }
 
-        // 2. Create Order record
+
         const [orderResult] = await connection.execute(
             'INSERT INTO orders (user_id, total_amount, payment_method, address, phone, city, note) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [userId, totalAmount, paymentMethod, address, phone, city, note || '']
         );
         const orderId = orderResult.insertId;
 
-        // 3. Create Order Items records and deduct stock
+
         for (const item of items) {
             const productId = item.id || item.product_id;
             await connection.execute(
                 'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
                 [orderId, productId, item.quantity, item.price]
             );
-            // Deduct stock
+
             await connection.execute(
                 'UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?',
                 [item.quantity, productId]
             );
         }
 
-        // 4. Clear Cart
+
         await connection.execute('DELETE FROM cart_items WHERE user_id = ?', [userId]);
 
         await connection.commit();
@@ -76,7 +76,7 @@ exports.getUserOrders = async (req, res) => {
             [userId]
         );
 
-        // Fetch items for each order
+
         const ordersWithItems = await Promise.all(
             orders.map(async (order) => {
                 const [items] = await db.execute(
@@ -99,7 +99,7 @@ exports.getUserOrders = async (req, res) => {
     }
 };
 
-// ── Admin: Get ALL orders ──
+
 exports.getAllOrders = async (req, res) => {
     try {
         const [orders] = await db.execute(
@@ -129,7 +129,7 @@ exports.getAllOrders = async (req, res) => {
     }
 };
 
-// ── Admin: Update Order Status ──
+
 exports.updateOrderStatus = async (req, res) => {
     try {
         const { status } = req.body;
@@ -144,12 +144,12 @@ exports.updateOrderStatus = async (req, res) => {
         
         const currentStatus = orderRows[0].status;
 
-        // Terminal State Check
+
         if (currentStatus === 'Delivered' || currentStatus === 'Cancelled') {
             return res.status(400).json({ message: `Order is already ${currentStatus}. Cannot modify terminal states.` });
         }
 
-        // Allowed Transitions
+
         const allowedTransitions = {
             'Pending': ['Confirmed', 'Cancelled'],
             'Confirmed': ['Processing', 'Cancelled'],
@@ -161,7 +161,7 @@ exports.updateOrderStatus = async (req, res) => {
             return res.status(400).json({ message: `Illegal transition from ${currentStatus} to ${status}` });
         }
 
-        // If cancelling, restore stock
+
         if (status === 'Cancelled') {
             const [orderItems] = await db.execute('SELECT product_id, quantity FROM order_items WHERE order_id = ?', [req.params.id]);
             for (const item of orderItems) {

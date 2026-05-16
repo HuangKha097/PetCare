@@ -75,7 +75,7 @@ const Account = () => {
     <div className="mt-28 mb-24 max-w-7xl mx-auto px-6 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-        {/* SIDEBAR NAVIGATION */}
+
         <aside className="lg:col-span-3 space-y-6">
           <div className="bg-white rounded-xl border border-surface-container-low p-6 shadow-sm overflow-hidden">
             <div className="mb-8 px-2">
@@ -114,10 +114,10 @@ const Account = () => {
           </div>
         </aside>
 
-        {/* MAIN DASHBOARD AREA */}
+
         <main className="lg:col-span-9 space-y-8 min-h-[600px]">
 
-          {/* TAB: PROFILE OVERVIEW */}
+
           {activeTab === 'profile' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -182,7 +182,7 @@ const Account = () => {
             </div>
           )}
 
-          {/* TAB: ORDERS */}
+
           {activeTab === 'orders' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {loading ? (
@@ -283,7 +283,7 @@ const Account = () => {
             </div>
           )}
 
-          {/* TAB: WISHLIST */}
+
           {activeTab === 'wishlist' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {wishlistItems.length === 0 ? (
@@ -303,7 +303,7 @@ const Account = () => {
             </div>
           )}
 
-          {/* TAB: SETTINGS */}
+
           {activeTab === 'settings' && (
             <div className="bg-white rounded-xl border border-surface-container-low p-20 text-center shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
               <Settings className="text-on-surface-variant opacity-20 mx-auto mb-6" size={64} />

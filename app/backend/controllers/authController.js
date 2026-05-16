@@ -8,23 +8,23 @@ const {
     revokeAllUserTokens,
 } = require('../utils/tokenUtils');
 
-// ─── Register ────────────────────────────────────────────────────────────────
+
 
 exports.register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         
-        // Check if user exists
+
         const [existing] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
         if (existing.length > 0) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Hash password
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Insert user with default role 'user'
+
         const [result] = await db.execute(
             'INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)',
             [name, email, hashedPassword, 'user']
@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
     }
 };
 
-// ─── Google Login ────────────────────────────────────────────────────────────
+
 
 exports.googleLogin = async (req, res) => {
     try {
@@ -118,7 +118,7 @@ exports.googleLogin = async (req, res) => {
     }
 };
 
-// ─── Login ───────────────────────────────────────────────────────────────────
+
 
 exports.login = async (req, res) => {
     try {
@@ -140,7 +140,7 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        // Generate tokens using tokenUtils
+
         const accessToken = generateAccessToken({
             userId: user.id,
             email: user.email,
@@ -169,7 +169,7 @@ exports.login = async (req, res) => {
     }
 };
 
-// ─── Refresh Token ───────────────────────────────────────────────────────────
+
 
 exports.refreshToken = async (req, res) => {
     try {
@@ -179,13 +179,13 @@ exports.refreshToken = async (req, res) => {
             return res.status(400).json({ message: 'Refresh token is required' });
         }
 
-        // Verify the refresh token exists and is not expired
+
         const storedToken = await verifyRefreshToken(refreshToken);
         if (!storedToken) {
             return res.status(401).json({ message: 'Invalid or expired refresh token' });
         }
 
-        // Get the user associated with this token
+
         const [users] = await db.execute(
             'SELECT id, email, role, is_active FROM users WHERE id = ?',
             [storedToken.user_id]
@@ -203,7 +203,7 @@ exports.refreshToken = async (req, res) => {
             return res.status(403).json({ message: 'Account is banned' });
         }
 
-        // Rotate: revoke old refresh token and generate new ones
+
         await revokeRefreshToken(refreshToken);
 
         const newAccessToken = generateAccessToken({
@@ -224,7 +224,7 @@ exports.refreshToken = async (req, res) => {
     }
 };
 
-// ─── Logout ──────────────────────────────────────────────────────────────────
+
 
 exports.logout = async (req, res) => {
     try {
@@ -241,7 +241,7 @@ exports.logout = async (req, res) => {
     }
 };
 
-// ─── Get Current User ────────────────────────────────────────────────────────
+
 
 exports.getMe = async (req, res) => {
     try {
@@ -256,7 +256,7 @@ exports.getMe = async (req, res) => {
     }
 };
 
-// ─── Update Profile ──────────────────────────────────────────────────────────
+
 
 exports.updateProfile = async (req, res) => {
     try {

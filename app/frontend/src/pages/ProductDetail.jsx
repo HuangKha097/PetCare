@@ -73,7 +73,7 @@ const ProductDetail = () => {
         comment: newReview.comment
       });
 
-      // Refresh reviews and product rating
+
       const revRes = await getReviewsByProduct(id);
       setReviews(revRes.data);
       const prodRes = await getProductById(id);
@@ -95,14 +95,14 @@ const ProductDetail = () => {
   );
   if (!product) return <div className="text-center py-20 text-error font-bold">Product not found</div>;
 
-  // Normalise image list
+
   const images = Array.isArray(product.images) && product.images.length > 0
     ? product.images
     : [product.image_url].filter(Boolean);
 
   return (
     <main className="pt-12 pb-20 max-w-7xl mx-auto px-6 lg:px-8">
-      {/* Breadcrumbs */}
+
       <nav className="mb-8 flex items-center gap-2 text-on-surface-variant text-sm uppercase tracking-widest font-semibold">
         <Link className="hover:text-primary transition-colors" to="/">{t('nav.home')}</Link>
         <ChevronRight size={14} />
@@ -113,7 +113,7 @@ const ProductDetail = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
-        {/* ── Image Gallery ── */}
+
         <section className="space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-xl bg-surface-container-low shadow-sm group">
             <img
@@ -166,7 +166,7 @@ const ProductDetail = () => {
           )}
         </section>
 
-        {/* ── Product Info ── */}
+
         <section className="flex flex-col">
           <header className="mb-6">
             <div className="flex items-center gap-2 mb-4">
@@ -191,7 +191,7 @@ const ProductDetail = () => {
           <div className="mb-8">
             <div className="text-3xl font-display font-black text-on-surface">${product.price}</div>
             <p className="text-on-surface-variant text-sm mt-1">{t('product.free_shipping_note')}</p>
-            {/* Stock Status */}
+
             {product.stock_quantity !== undefined && (
               <div className="mt-3">
                 {product.stock_quantity > 10 ? (
@@ -248,7 +248,7 @@ const ProductDetail = () => {
         </section>
       </div>
 
-      {/* ── Tabs ── */}
+
       <section className="mt-24">
         <div className="flex border-b border-surface-variant overflow-x-auto scrollbar-hide">
           {[{key:'Description', label: t('product.description')}, {key:'Ingredients', label: t('product.ingredients')}, {key:'Reviews', label: t('product.reviews')}].map(tab => (
@@ -294,7 +294,7 @@ const ProductDetail = () => {
 
           {activeTab === 'Reviews' && (
             <div className="space-y-12">
-              {/* Submit Review */}
+
               {isAuthenticated ? (
                 <div className="bg-white rounded-2xl shadow-sm border border-surface-container p-6 md:p-8">
                   <h3 className="text-xl font-bold mb-6">{t('product.write_review')}</h3>
@@ -337,7 +337,7 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              {/* Review List */}
+
               <div className="space-y-6">
                 <h3 className="text-xl font-bold">{t('product.testimonials')} ({reviews.length})</h3>
                 {reviews.length > 0 ? (

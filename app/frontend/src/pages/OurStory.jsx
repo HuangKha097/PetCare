@@ -22,7 +22,7 @@ const OurStory = () => {
   return (
     <div className="bg-surface">
 
-      {/* Hero */}
+
       <section className="relative bg-surface-container-low overflow-hidden py-24 px-6">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-20 -left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
@@ -40,7 +40,7 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* Stats Bar */}
+
       <section className="bg-primary py-10 px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((s, i) => {
@@ -56,7 +56,7 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* The Origin Story */}
+
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
@@ -79,7 +79,7 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* Our Values */}
+
       <section className="py-24 px-6 bg-surface-container-low">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -103,7 +103,7 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* Timeline / Milestones */}
+
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
@@ -111,20 +111,20 @@ const OurStory = () => {
             <h2 className="font-display font-black text-4xl text-on-background">{t('story.journey_title')}</h2>
           </div>
           <div className="relative">
-            {/* Vertical line */}
+
             <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-surface-container-high md:-translate-x-1/2" />
             <div className="space-y-12">
               {milestones.map((m, i) => (
                 <div key={i} className={`relative flex flex-col md:flex-row gap-8 items-start ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                   {/* Dot */}
                   <div className="absolute left-6 md:left-1/2 w-4 h-4 bg-primary rounded-full border-4 border-white shadow-md md:-translate-x-1/2 mt-1 z-10" />
-                  {/* Content */}
+
                   <div className={`ml-16 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16'}`}>
                     <span className="inline-block bg-primary/20 text-primary-dark text-xs font-black px-3 py-1 rounded-full mb-3">{m.year}</span>
                     <h3 className="font-bold text-xl text-on-background mb-2">{m.title}</h3>
                     <p className="text-sm text-on-surface-variant leading-relaxed">{m.desc}</p>
                   </div>
-                  {/* Spacer for alternating layout */}
+
                   <div className="hidden md:block md:w-1/2" />
                 </div>
               ))}
@@ -133,7 +133,7 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* CTA */}
+
       <section className="py-20 px-6 bg-surface-container-low">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-display font-black text-4xl text-on-background">{t('story.cta_title')}</h2>

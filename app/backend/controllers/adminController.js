@@ -4,17 +4,17 @@ exports.getDashboardAnalytics = async (req, res) => {
     try {
         const days = parseInt(req.query.days) || 30;
         
-        // 1. Overview Stats
+
         const [revenueRes] = await db.execute(`SELECT SUM(total_amount) as total FROM orders WHERE status != 'Cancelled' AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)`, [days]);
         const [ordersRes] = await db.execute(`SELECT COUNT(id) as total FROM orders WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)`, [days]);
         const [usersRes] = await db.execute(`SELECT COUNT(id) as total FROM users WHERE role = 'user' AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)`, [days]);
         const [productsRes] = await db.execute(`SELECT COUNT(id) as total FROM products WHERE is_active = TRUE`);
 
-        // Get Previous Period for Comparison
+
         const [prevRevenueRes] = await db.execute(`SELECT SUM(total_amount) as total FROM orders WHERE status != 'Cancelled' AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY) AND created_at < DATE_SUB(NOW(), INTERVAL ? DAY)`, [days * 2, days]);
         const [prevOrdersRes] = await db.execute(`SELECT COUNT(id) as total FROM orders WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY) AND created_at < DATE_SUB(NOW(), INTERVAL ? DAY)`, [days * 2, days]);
         
-        // 2. Chart Data (Revenue & Orders by Date)
+
         const [chartData] = await db.execute(`
             SELECT 
                 DATE(created_at) as date,
@@ -26,7 +26,7 @@ exports.getDashboardAnalytics = async (req, res) => {
             ORDER BY date ASC
         `, [days]);
 
-        // 3. Best Sellers
+
         const [bestSellers] = await db.execute(`
             SELECT 
                 p.id, p.name, 
@@ -53,7 +53,7 @@ exports.getDashboardAnalytics = async (req, res) => {
             },
             chartData: chartData.map(d => ({
                 ...d,
-                // Ensure date string formatting is clean for frontend
+
                 date: new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
             })),
             bestSellers
@@ -67,7 +67,7 @@ exports.getDashboardAnalytics = async (req, res) => {
 
 exports.getRecentNotifications = async (req, res) => {
     try {
-        // Fetch 5 most recent pending orders
+
         const [orders] = await db.execute(`
             SELECT o.id, o.total_amount, o.created_at, u.name as user_name
             FROM orders o
@@ -83,7 +83,7 @@ exports.getRecentNotifications = async (req, res) => {
     }
 };
 
-// ── User Management ──
+
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -139,10 +139,10 @@ exports.updateUserInfo = async (req, res) => {
 
         const { name, phone, address, city, role } = req.body;
         
-        // Prevent changing own role via this endpoint for safety
+
         let updateRole = role;
         if (req.params.id == req.user && role !== undefined) {
-            updateRole = undefined; // Don't update role if it's the current user
+
         }
 
         const updates = [];
@@ -209,14 +209,11 @@ exports.deleteUser = async (req, res) => {
             return res.status(400).json({ message: 'You cannot delete yourself.' });
         }
 
-        // Delete dependencies (cart items, reviews)
+
         await connection.execute('DELETE FROM cart_items WHERE user_id = ?', [userId]);
         await connection.execute('DELETE FROM reviews WHERE user_id = ?', [userId]);
         
-        // Note: For orders, we might want to keep them or anonymize them.
-        // If the DB has ON DELETE CASCADE it will handle it, otherwise we should leave orders intact 
-        // to preserve financial records, but maybe set user_id to NULL.
-        // Let's set user_id = NULL in orders to preserve revenue stats.
+
         await connection.execute('UPDATE orders SET user_id = NULL WHERE user_id = ?', [userId]);
 
         const [result] = await connection.execute('DELETE FROM users WHERE id = ?', [userId]);

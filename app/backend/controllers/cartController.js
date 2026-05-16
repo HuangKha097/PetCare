@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-// Helper: fetch full cart with stock info
+
 const getFullCart = async (userId) => {
     const [cartItems] = await db.execute(`
         SELECT c.id as cart_item_id, c.quantity, p.*, p.stock_quantity 
@@ -15,7 +15,7 @@ exports.getCart = async (req, res) => {
     try {
         const cartItems = await getFullCart(req.user);
 
-        // Check for out-of-stock items and auto-remove them
+
         const outOfStockItems = cartItems.filter(item => item.stock_quantity <= 0 || !item.is_active);
         const removedNames = [];
 
@@ -24,7 +24,7 @@ exports.getCart = async (req, res) => {
             removedNames.push(item.name);
         }
 
-        // Also check items where quantity exceeds stock and adjust
+
         const overStockItems = cartItems.filter(item => item.stock_quantity > 0 && item.is_active && item.quantity > item.stock_quantity);
         const adjustedNames = [];
 
@@ -33,10 +33,10 @@ exports.getCart = async (req, res) => {
             adjustedNames.push({ name: item.name, newQty: item.stock_quantity });
         }
 
-        // Re-fetch clean cart
+
         const updatedCart = await getFullCart(req.user);
 
-        // Build response with notifications
+
         const response = {
             items: updatedCart,
             notifications: []
@@ -70,7 +70,7 @@ exports.addToCart = async (req, res) => {
         const { productId, quantity } = req.body;
         const qty = parseInt(quantity) || 1;
 
-        // Check if product exists, is active, and has stock
+
         const [product] = await db.execute(
             'SELECT id, name, stock_quantity, is_active FROM products WHERE id = ?',
             [productId]
@@ -88,7 +88,7 @@ exports.addToCart = async (req, res) => {
             return res.status(400).json({ message: `"${product[0].name}" is currently out of stock` });
         }
         
-        // Check if item already in cart
+
         const [existing] = await db.execute(
             'SELECT * FROM cart_items WHERE user_id = ? AND product_id = ?',
             [req.user, productId]
@@ -97,7 +97,7 @@ exports.addToCart = async (req, res) => {
         const currentQty = existing.length > 0 ? existing[0].quantity : 0;
         const newTotalQty = currentQty + qty;
 
-        // Don't allow adding more than available stock
+
         if (newTotalQty > product[0].stock_quantity) {
             return res.status(400).json({ 
                 message: `Cannot add ${qty} items. Only ${product[0].stock_quantity - currentQty} more available.`,
@@ -118,7 +118,7 @@ exports.addToCart = async (req, res) => {
             );
         }
         
-        // Return updated cart
+
         const updatedCart = await getFullCart(req.user);
         res.status(200).json({ items: updatedCart, notifications: [] });
     } catch (error) {
@@ -131,7 +131,7 @@ exports.updateCartItem = async (req, res) => {
     try {
         const { quantity } = req.body;
 
-        // Check stock before updating
+
         const [cartItem] = await db.execute(
             `SELECT c.product_id, p.stock_quantity, p.name 
              FROM cart_items c 

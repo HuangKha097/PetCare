@@ -67,7 +67,7 @@ const FAQ = () => {
   return (
     <div className="bg-surface min-h-screen">
 
-      {/* Hero */}
+
       <section className="bg-surface-container-low py-20 px-6 text-center relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-64 h-64 bg-primary/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
@@ -82,11 +82,11 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* FAQ Body */}
+
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-12">
 
-          {/* Category Sidebar */}
+
           <aside className="md:w-64 flex-shrink-0">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-4">{t('faq.browse_topic')}</p>
             <div className="flex flex-row md:flex-col gap-2 flex-wrap">
@@ -110,7 +110,7 @@ const FAQ = () => {
             </div>
           </aside>
 
-          {/* Questions */}
+
           <div className="flex-grow">
             <div className="flex items-center gap-4 mb-8">
               {current && (() => {
@@ -135,7 +135,7 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* Still need help CTA */}
+
       <section className="py-16 px-6 bg-surface-container-low">
         <div className="max-w-3xl mx-auto text-center">
           <div className="w-16 h-16 bg-white shadow-md rounded-xl flex items-center justify-center mx-auto mb-6 text-primary-dark">

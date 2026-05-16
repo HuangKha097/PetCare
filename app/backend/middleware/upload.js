@@ -2,7 +2,7 @@ const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('../config/cloudinary');
 
-// Storage: upload to Cloudinary directly from memory
+
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {

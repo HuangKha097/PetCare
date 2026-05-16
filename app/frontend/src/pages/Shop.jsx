@@ -19,7 +19,7 @@ const Shop = () => {
     const [sort, setSort] = useState('');
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-    // Pagination State for Infinite Scroll
+
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [totalResults, setTotalResults] = useState(0);
@@ -100,7 +100,7 @@ const Shop = () => {
 
     return (
         <div className="pb-24">
-            {/* Page Header */}
+
             <div className="bg-surface-container-low/30 border-b border-surface-container-low mb-12 pt-8">
                 <div className="px-6 max-w-7xl mx-auto pb-12">
                     <nav className="flex items-center gap-2 text-[10px] text-on-surface-variant/60 mb-8 uppercase tracking-[0.2em] font-black">
@@ -151,20 +151,20 @@ const Shop = () => {
             <div className="px-6 max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row gap-12">
 
-                    {/* Mobile Backdrop Overlay */}
+
                     <div
                         className={`fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${showMobileFilters ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                         onClick={() => setShowMobileFilters(false)}
                     />
 
-                    {/* Filters Sidebar */}
+
                     <aside className={`fixed top-0 left-0 z-[101] h-full w-4/5 max-w-sm bg-white p-6 shadow-2xl flex flex-col gap-8 transition-all duration-300 ease-out overflow-y-auto md:relative md:z-0 md:h-auto md:w-[300px] shrink-0 md:max-w-none md:p-0 md:bg-transparent md:shadow-none md:overflow-visible md:flex md:gap-10 md:sticky md:top-[120px] md:self-start md:translate-x-0 md:opacity-100 md:visible ${showMobileFilters ? 'translate-x-0 opacity-100 visible' : '-translate-x-full opacity-0 invisible'}`}>
                         <div className="flex items-center justify-between md:hidden mb-2">
                             <h2 className="font-display font-black text-2xl">{t('shop.filters')}</h2>
                             <button onClick={() => setShowMobileFilters(false)} className="p-2 hover:bg-surface-container rounded-full text-on-surface-variant transition-colors"><X size={24} /></button>
                         </div>
 
-                        {/* Categories */}
+
                         <div className="flex flex-col gap-4">
                             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">{t('admin.category')}</h3>
                             <div className="flex flex-col gap-1">
@@ -181,7 +181,7 @@ const Shop = () => {
                             </div>
                         </div>
 
-                        {/* Price Range */}
+
                         <div className="flex flex-col gap-6">
                             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">{t('shop.price_range')}</h3>
                             <div className="px-2">
@@ -201,7 +201,7 @@ const Shop = () => {
                             </div>
                         </div>
 
-                        {/* Brands */}
+
                         <div className="flex flex-col gap-4">
                             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">{t('shop.popular_brands')}</h3>
                             <div className="flex flex-wrap gap-2">
@@ -229,9 +229,9 @@ const Shop = () => {
                         </Button>
                     </aside>
 
-                    {/* Product Grid Area */}
+
                     <div className="flex-grow">
-                        {/* Status Bar */}
+
                         <div className="flex items-center justify-between mb-8 pb-4 border-b border-surface-container-low">
                             <p className="text-sm font-bold text-on-surface-variant opacity-60">
                                 {t('shop.showing_results', {

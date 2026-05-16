@@ -65,9 +65,9 @@ const Home = () => {
 
   return (
     <>
-      {/* Hero Section */}
+
       <section className="relative bg-surface px-6 pt-16 pb-24 md:pt-32 md:pb-40 overflow-hidden">
-        {/* Background Blob */}
+
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] opacity-20 pointer-events-none">
           <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-primary">
             <path d="M856.5,296Q913,500,816.5,658.5Q720,817,500,883.5Q280,950,166.5,771Q53,592,93,391Q133,190,316.5,145Q500,100,700,150Q900,200,856.5,296Z" />
@@ -116,7 +116,7 @@ const Home = () => {
           </div>
 
           <div className="flex-1 w-full relative group animate-fade-in-up animation-delay-200">
-            {/* Visual elements around the image */}
+
             <div className="absolute -top-12 -left-12 w-32 h-32 bg-primary-container rounded-full opacity-50 blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
             <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-secondary-container rounded-full opacity-30 blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
 
@@ -129,7 +129,7 @@ const Home = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
 
-            {/* Floating Badge */}
+
             <div className="absolute -bottom-6 -left-6 z-20 glassmorphism p-5 rounded-2xl shadow-xl border border-white/50 animate-bounce transition-all">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-on-background">
@@ -145,7 +145,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Promo Banner */}
+
       <div className="bg-secondary text-on-secondary py-3 px-6 overflow-hidden whitespace-nowrap">
         <div className="flex justify-center items-center gap-12 animate-pulse text-sm font-bold tracking-widest uppercase">
           <div className="flex items-center gap-2"><Truck size={16} /> {t('home.free_shipping')}</div>
@@ -154,7 +154,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Categories */}
+
       <section className="py-16 bg-surface px-6">
         <div className="max-w-7xl mx-auto">
           <h3 className="text-2xl font-bold mb-10 text-center md:text-left">{t('home.shop_department')}</h3>
@@ -174,7 +174,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Popular Products */}
+
       <section className="py-16 bg-surface px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-10">
@@ -197,7 +197,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Meet Our Doctors */}
+
       <section className="py-16 bg-surface-container-low px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -230,7 +230,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Our Services */}
+
       <section className="py-16 bg-surface px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -253,7 +253,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Newsletter */}
+
       <section className="bg-secondary-container py-20 px-6 rounded-t-2xl">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-on-secondary-container font-bold tracking-widest uppercase mb-4 block">{t('home.join_pack')}</span>

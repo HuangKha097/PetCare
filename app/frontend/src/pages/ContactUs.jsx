@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { submitInquiry } from '../services/inquiryService';
 import Button from '../components/Button';
 
-// ── Brand SVG icons ──────────────────────────────────────────────────────────
+
 const TikTokIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
@@ -129,7 +129,7 @@ const ContactUs = () => {
   return (
     <div className="bg-surface min-h-screen">
 
-      {/* Hero */}
+
       <section className="relative bg-surface-container-low py-20 px-6 overflow-hidden">
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 -left-16 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
@@ -144,7 +144,7 @@ const ContactUs = () => {
         </div>
       </section>
 
-      {/* Direct Contact Cards */}
+
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-6 text-center">{t('contact.direct_title')}</p>
@@ -173,7 +173,7 @@ const ContactUs = () => {
         </div>
       </section>
 
-      {/* Social Channels */}
+
       <section className="py-8 px-6 pb-16">
         <div className="max-w-6xl mx-auto">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-50 mb-6 text-center">{t('contact.social_title')}</p>
@@ -203,7 +203,7 @@ const ContactUs = () => {
         </div>
       </section>
 
-      {/* Contact Form */}
+
       <section className="py-16 px-6 bg-surface-container-low">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-10">

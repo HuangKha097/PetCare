@@ -77,7 +77,7 @@ const Search = () => {
 
   return (
     <main className="pt-8 pb-32 bg-surface min-h-screen">
-      {/* ── Search Header ── */}
+
       <section className="px-6 py-12 md:py-24 max-w-5xl mx-auto text-center space-y-8 md:space-y-10">
         <div className="space-y-4 animate-fade-in-up">
           <span className="text-primary-dark font-black tracking-[0.2em] uppercase text-[10px] md:text-xs">
@@ -126,10 +126,10 @@ const Search = () => {
         )}
       </section>
 
-      {/* ── Filter Bar ── */}
+
       <section className="sticky top-[68px] md:top-[104px] z-40 bg-surface/90 backdrop-blur-md border-y border-surface-container-low shadow-sm transition-all duration-500">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
-          {/* Mobile Toggle Row */}
+
           <div className="md:hidden flex items-center justify-between gap-4">
             <button
               onClick={() => setShowFilters((v) => !v)}
@@ -150,7 +150,7 @@ const Search = () => {
             )}
           </div>
 
-          {/* Filters Content */}
+
           <div className={`${showFilters ? 'flex' : 'hidden'} md:flex flex-col md:flex-row md:items-center gap-4 mt-4 md:mt-0 overflow-hidden`}>
             <div className="flex flex-wrap items-center gap-2 md:gap-3">
               <FilterSelect value={filters.petType} onChange={(e) => setFilter('petType', e.target.value)}>
@@ -211,7 +211,7 @@ const Search = () => {
         </div>
       </section>
 
-      {/* ── Results Grid ── */}
+
       <section className="max-w-7xl mx-auto px-4 md:px-6 mt-12 md:mt-16">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-32 space-y-6">

@@ -5,13 +5,13 @@ const routes = require("./routes");
 
 const app = express();
 
-// COOP Header for Google Login
+
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
   next();
 });
 
-// CORS Configuration
+
 const allowedOrigins = [
   "https://petcarenow.netlify.app",
   "http://localhost:5173",
@@ -32,15 +32,15 @@ app.use(cors({
 
 app.use(express.json());
 
-// Base Route
+
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to PetCare API" });
 });
 
-// API Routes
+
 app.use("/api", routes);
 
-// Start Server
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

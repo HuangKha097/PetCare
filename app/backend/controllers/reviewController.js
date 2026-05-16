@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-// Get all reviews for a product
+
 exports.getProductReviews = async (req, res) => {
     try {
         const [reviews] = await db.execute(`
@@ -18,7 +18,7 @@ exports.getProductReviews = async (req, res) => {
     }
 };
 
-// Add a review
+
 exports.addReview = async (req, res) => {
     const { productId, rating, comment } = req.body;
     const userId = req.user;
@@ -28,7 +28,7 @@ exports.addReview = async (req, res) => {
     }
 
     try {
-        // Check if user already reviewed this product
+
         const [existing] = await db.execute(
             'SELECT id FROM reviews WHERE product_id = ? AND user_id = ?',
             [productId, userId]
@@ -43,7 +43,7 @@ exports.addReview = async (req, res) => {
             [productId, userId, rating, comment]
         );
 
-        // Update product average rating
+
         const [avgResult] = await db.execute(
             'SELECT AVG(rating) as avgRating FROM reviews WHERE product_id = ?',
             [productId]

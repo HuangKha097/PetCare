@@ -63,11 +63,6 @@ const Login = () => {
         setError('');
         setLoading(true);
         try {
-            // tokenResponse.access_token is for implicit flow, but we need ID token or just send access_token if backend supports it.
-            // However, @react-oauth/google's useGoogleLogin by default returns an access token.
-            // If we want an ID token, we should use the GoogleLogin component or configure useGoogleLogin for it.
-            // Let's use the simplest approach for now: custom button with useGoogleLogin.
-            
             const response = await googleLoginAPI(tokenResponse.access_token);
             
             dispatch(loginSuccess({ 
@@ -98,7 +93,7 @@ const Login = () => {
         <div className="min-h-[calc(100vh-68px)] bg-surface flex items-center justify-center py-12 px-6">
             <div className="max-w-5xl w-full flex flex-col md:flex-row gap-0 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.10)] border border-surface-container-low bg-surface-container-lowest md:h-[700px]">
 
-                {/* Visual Section */}
+
                 <div className="w-full md:w-5/12 relative overflow-hidden hidden md:block">
                     <img
                         alt="Happy Pets"
@@ -119,7 +114,7 @@ const Login = () => {
                     </div>
                 </div>
 
-                {/* Form Section */}
+
                 <div className="w-full md:w-7/12 p-8 md:p-16 flex flex-col md:overflow-y-auto custom-scrollbar">
                     <div className="max-w-md mx-auto w-full flex-grow flex flex-col justify-center">
                         <div className="text-center md:text-left mb-10">
@@ -131,7 +126,7 @@ const Login = () => {
                             </p>
                         </div>
 
-                        {/* Switcher */}
+
                         <div className="inline-flex p-1 bg-surface-container-low rounded-xl mb-8 w-full">
                             <button
                                 onClick={() => setIsLogin(true)}

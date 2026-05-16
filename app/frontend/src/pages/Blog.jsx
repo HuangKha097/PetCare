@@ -29,7 +29,7 @@ const Blog = () => {
     fetchBlogs();
   }, [t]);
 
-  // Extract unique categories
+
   const categories = ['All', ...new Set(blogPosts.map(post => getLocalizedText(post.category, i18n.language)))];
 
   const filteredPosts = selectedCategory === 'All' 
@@ -55,7 +55,7 @@ const Blog = () => {
 
   return (
     <div className="pt-12 pb-24 bg-surface min-h-screen">
-      {/* Header & Filter */}
+
       <header className="px-6 max-w-7xl mx-auto mb-16 space-y-10">
         <div className="text-center md:text-left space-y-4">
           <span className="text-primary-dark font-black tracking-[0.2em] uppercase text-xs">
@@ -66,7 +66,7 @@ const Blog = () => {
           </h1>
         </div>
 
-        {/* Category Filter - Sticky */}
+
         <div className="sticky top-20 z-30 py-4 -mx-6 px-6 bg-surface/80 backdrop-blur-md border-b border-surface-container-low overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-3">
             {categories.map((cat) => (
@@ -86,9 +86,9 @@ const Blog = () => {
         </div>
       </header>
 
-      {/* Blog Content */}
+
       <section className="px-6 max-w-7xl mx-auto">
-        {/* Featured Post - Only shown when 'All' or matches category */}
+
         {selectedCategory === 'All' && filteredPosts.length > 0 && (
           <div className="mb-16 animate-fade-in-up">
             <Link to={`/blog/${filteredPosts[0].id}`} className="group relative rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] transition-all duration-700 block h-[500px] md:h-[600px] border border-surface-container-low">
@@ -126,7 +126,7 @@ const Blog = () => {
           </div>
         )}
 
-        {/* Standard Posts Grid */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {(selectedCategory === 'All' ? filteredPosts.slice(1) : filteredPosts).map((post, index) => (
             <Link 

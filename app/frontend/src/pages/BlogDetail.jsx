@@ -66,7 +66,7 @@ const BlogDetail = () => {
 
   return (
     <article className="pb-24">
-      {/* Hero Header */}
+
       <div className="relative h-[50vh] md:h-[60vh] w-full bg-surface-container-highest">
         <img src={blog.image_url} alt={getLocalizedText(blog.title, i18n.language)} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/40"></div>
@@ -92,10 +92,10 @@ const BlogDetail = () => {
         </div>
       </div>
 
-      {/* Content */}
+
       <div className="max-w-3xl mx-auto px-6 -mt-8 relative z-10">
         <div className="bg-surface rounded-3xl p-8 md:p-12 shadow-sm border border-surface-container-low mb-12">
-          {/* Social Share (Optional) */}
+
           <div className="flex justify-end mb-8">
             <Button variant="ghost" className="uppercase tracking-widest text-on-surface-variant hover:text-primary">
               <Share2 size={16} /> {t('blog.share')}
@@ -109,7 +109,7 @@ const BlogDetail = () => {
         </div>
       </div>
 
-      {/* Related Blogs Section */}
+
       {relatedBlogs.length > 0 && (
         <div className="max-w-7xl mx-auto px-6 mt-16 pt-16 border-t border-surface-container-low">
           <div className="flex justify-between items-end mb-10">
