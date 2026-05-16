@@ -25,3 +25,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.agents/
+.impeccable/
+skills/
+node_modules/
