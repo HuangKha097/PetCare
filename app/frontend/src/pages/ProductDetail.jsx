@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { addToCart } from '../store/slices/cartSlice';
-import { getLocalizedText } from '../utils/i18nUtils';
+import { getLocalizedText, formatVND } from '../utils/i18nUtils';
 import Button from '../components/Button';
 
 const ProductDetail = () => {
@@ -15,6 +15,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const cartStatus = useSelector((state) => state.cart.status);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -189,7 +190,7 @@ const ProductDetail = () => {
           </header>
 
           <div className="mb-8">
-            <div className="text-3xl font-display font-black text-on-surface">${product.price}</div>
+            <div className="text-3xl font-display font-black text-on-surface">{formatVND(product.price)}</div>
             <p className="text-on-surface-variant text-sm mt-1">{t('product.free_shipping_note')}</p>
 
             {product.stock_quantity !== undefined && (
@@ -232,7 +233,8 @@ const ProductDetail = () => {
             <Button 
               onClick={handleAddToCart} 
               className={`w-full sm:flex-1 text-xl ${product.stock_quantity === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={product.stock_quantity === 0}
+              disabled={product.stock_quantity === 0 || cartStatus === 'loading'}
+              loading={cartStatus === 'loading'}
             >
               <ShoppingCart size={24} /> {product.stock_quantity === 0 ? t('product.out_of_stock') : t('product.add_to_cart')}
             </Button>
@@ -325,8 +327,8 @@ const ProductDetail = () => {
                         placeholder={t('product.review_placeholder')}
                       />
                     </div>
-                    <Button type="submit" disabled={submittingReview} className="w-full md:w-auto px-10">
-                      {submittingReview ? '...' : t('product.post_review')} <Send size={18} className="ml-2" />
+                    <Button type="submit" loading={submittingReview} className="w-full md:w-auto px-10">
+                      {t('product.post_review')} <Send size={18} className="ml-2" />
                     </Button>
                   </form>
                 </div>

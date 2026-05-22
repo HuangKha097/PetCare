@@ -1,0 +1,7 @@
+.stitch/
+DESIGN.md
+PRODUCT.md
+netlify.toml
+package-lock.json
+package.json
+skills-lock.json

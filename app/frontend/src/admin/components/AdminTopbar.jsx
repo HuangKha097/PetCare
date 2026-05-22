@@ -91,7 +91,7 @@ const AdminTopbar = () => {
                                             className="block p-4 border-b border-surface-container-low/50 hover:bg-surface-container/50 transition-colors"
                                         >
                                             <p className="text-sm font-bold text-on-background mb-1">{t('admin.new_order_notif', { id: n.id })}</p>
-                                            <p className="text-xs font-medium text-on-surface-variant line-clamp-1">{t('admin.from_user', { name: n.user_name })} - ${Number(n.total_amount).toFixed(2)}</p>
+                                            <p className="text-xs font-medium text-on-surface-variant line-clamp-1">{t('admin.from_user', { name: n.user_name })} - {new Intl.NumberFormat('vi-VN').format(n.total_amount)}đ</p>
                                             <p className="text-[10px] font-bold text-primary mt-2 uppercase tracking-widest">
                                                 {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                             </p>

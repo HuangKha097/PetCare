@@ -3,15 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   User, Package, Heart, LogOut, Settings,
   ChevronRight, ShoppingBag, Clock, CheckCircle,
-  MapPin, Phone, Mail, Calendar, Eye
+  MapPin, Phone, Mail, Calendar, Eye, QrCode
 } from 'lucide-react';
 import { logout } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { getMyOrders } from '../services/orderService';
 import { logoutAPI } from '../services/authService';
 import { useTranslation } from 'react-i18next';
-import { getLocalizedText } from '../utils/i18nUtils';
+import { getLocalizedText, formatVND } from '../utils/i18nUtils';
 import ProductCard from '../components/ProductCard';
+import BankTransferQR from '../components/BankTransferQR';
 
 
 const Account = () => {
@@ -124,7 +125,7 @@ const Account = () => {
                 {[
                   { label: t('account.total_orders'), value: orders.length, icon: Package, color: 'bg-blue-50 text-blue-600' },
                   { label: t('account.wishlist_items'), value: wishlistItems.length, icon: Heart, color: 'bg-red-50 text-red-600' },
-                  { label: t('account.recent_spending'), value: `$${orders.reduce((acc, o) => acc + parseFloat(o.total_amount), 0).toFixed(2)}`, icon: ShoppingBag, color: 'bg-primary/10 text-primary' },
+                  { label: t('account.recent_spending'), value: formatVND(orders.reduce((acc, o) => acc + parseFloat(o.total_amount), 0)), icon: ShoppingBag, color: 'bg-primary/10 text-primary' },
                 ].map((stat, idx) => (
                   <div key={idx} className="bg-white p-8 rounded-xl border border-surface-container-low shadow-sm hover:shadow-xl transition-all duration-500 group">
                     <div className={`w-12 h-12 rounded-xl ${stat.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
@@ -209,7 +210,7 @@ const Account = () => {
                         </div>
                         <div>
                           <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.order_total')}</p>
-                          <p className="text-sm font-black text-primary">${order.total_amount}</p>
+                          <p className="text-sm font-black text-primary">{formatVND(order.total_amount)}</p>
                         </div>
                         <div>
                           <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-50 mb-1">{t('account.order_number')}</p>
@@ -247,10 +248,10 @@ const Account = () => {
                                 </div>
                                 <div className="flex-grow min-w-0">
                                   <h4 className="text-sm font-bold truncate">{getLocalizedText(item.name, i18n.language)}</h4>
-                                  <p className="text-xs font-medium text-on-surface-variant opacity-60">{t('product.stock')}: {item.quantity} × ${item.price}</p>
+                                  <p className="text-xs font-medium text-on-surface-variant opacity-60">{t('product.stock')}: {item.quantity} × {formatVND(item.price)}</p>
                                 </div>
                                 <div className="text-right">
-                                  <p className="text-sm font-black">${(item.quantity * item.price).toFixed(2)}</p>
+                                  <p className="text-sm font-black">{formatVND(item.quantity * item.price)}</p>
                                 </div>
                               </div>
                             ))}
@@ -274,6 +275,21 @@ const Account = () => {
                               <p className="font-black text-xs uppercase text-primary">{order.payment_method}</p>
                             </div>
                           </div>
+
+                          {/* VietQR for pending banking orders */}
+                          {order.payment_method === 'banking' && order.status.toLowerCase() === 'pending' && (
+                            <div className="pt-6 mt-6 border-t border-surface-container-low">
+                              <div className="flex items-center gap-2 mb-4">
+                                <QrCode size={18} className="text-amber-500" />
+                                <p className="text-sm font-black text-amber-600">{t('bank_transfer.scan_to_pay')}</p>
+                              </div>
+                              <BankTransferQR
+                                orderId={order.id}
+                                totalAmount={parseFloat(order.total_amount)}
+                                phone={order.phone}
+                              />
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>

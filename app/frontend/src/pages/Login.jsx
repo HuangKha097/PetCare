@@ -192,8 +192,8 @@ const Login = () => {
                                 </button>
                             </div>
 
-                            <Button type="submit" className="w-full py-4 text-lg mt-4 shadow-xl shadow-primary/20" disabled={loading}>
-                                {loading ? t('auth.please_wait') : (isLogin ? t('auth.sign_in') : t('auth.create_account'))}
+                            <Button type="submit" className="w-full py-4 text-lg mt-4 shadow-xl shadow-primary/20" loading={loading}>
+                                {isLogin ? t('auth.sign_in') : t('auth.create_account')}
                             </Button>
                         </form>
 

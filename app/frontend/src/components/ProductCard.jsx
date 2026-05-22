@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../store/slices/cartSlice';
 import { toggleWishlist } from '../store/slices/wishlistSlice';
 import { useTranslation } from 'react-i18next';
-import { getLocalizedText } from '../utils/i18nUtils';
+import { getLocalizedText, formatVND } from '../utils/i18nUtils';
 import Button from './Button';
 
 const ProductCard = ({ product }) => {
@@ -129,7 +129,7 @@ const ProductCard = ({ product }) => {
                         <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-1 opacity-50">{t('product.member_price')}</span>
                         <div className="flex items-baseline gap-1">
                             <span className="text-2xl font-black text-on-background tracking-tight">
-                                ${price.toFixed(2)}
+                                {formatVND(price)}
                             </span>
                         </div>
                     </div>

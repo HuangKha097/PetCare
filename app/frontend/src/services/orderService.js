@@ -13,6 +13,10 @@ export const getMyOrders = () => {
   return API.get('/orders/my-orders');
 };
 
+export const getNextOrderId = () => {
+  return API.get('/orders/next-id');
+};
+
 // ── Admin ──
 
 export const getAllOrders = () => {

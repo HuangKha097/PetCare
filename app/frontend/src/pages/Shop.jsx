@@ -15,7 +15,7 @@ const Shop = () => {
     const [error, setError] = useState(null);
     const [category, setCategory] = useState('All Food');
     const [selectedBrand, setSelectedBrand] = useState('');
-    const [priceRange, setPriceRange] = useState(50);
+    const [priceRange, setPriceRange] = useState(1500000);
     const [sort, setSort] = useState('');
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
@@ -61,7 +61,7 @@ const Shop = () => {
                 };
                 if (category !== 'All Food') params.category = category;
                 if (selectedBrand) params.brand = selectedBrand;
-                if (priceRange < 99) params.maxPrice = priceRange;
+                if (priceRange < 1500000) params.maxPrice = priceRange;
 
                 const response = await getProducts(params);
                 const { products: newProducts, pagination } = response.data;
@@ -94,7 +94,7 @@ const Shop = () => {
     const resetFilters = () => {
         setCategory('All Food');
         setSelectedBrand('');
-        setPriceRange(50);
+        setPriceRange(1500000);
         setSort('');
     };
 
@@ -182,21 +182,28 @@ const Shop = () => {
                         </div>
 
 
-                        <div className="flex flex-col gap-6">
-                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">{t('shop.price_range')}</h3>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant opacity-60">
+                                    {t('shop.price_range')}
+                                </h3>
+                                <span className="text-xs font-black text-primary-dark px-3 py-1.5 bg-primary/20 rounded-full border border-primary/30 shadow-sm animate-in fade-in duration-200">
+                                    {new Intl.NumberFormat('vi-VN').format(priceRange)}đ
+                                </span>
+                            </div>
                             <div className="px-2">
                                 <input
                                     type="range"
                                     min="0"
-                                    max="99"
+                                    max="1500000"
+                                    step="50000"
                                     value={priceRange}
-                                    onChange={(e) => setPriceRange(e.target.value)}
+                                    onChange={(e) => setPriceRange(Number(e.target.value))}
                                     className="w-full h-2 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary"
                                 />
-                                <div className="flex justify-between mt-4 text-xs font-black text-on-surface-variant">
-                                    <span>$0</span>
-                                    <span className="text-primary-dark font-black text-lg">${priceRange}</span>
-                                    <span>$99</span>
+                                <div className="flex justify-between mt-3 text-[10px] font-black text-on-surface-variant/50">
+                                    <span>0đ</span>
+                                    <span>1.500.000đ</span>
                                 </div>
                             </div>
                         </div>

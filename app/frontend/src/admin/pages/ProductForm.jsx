@@ -4,6 +4,7 @@ import { ArrowLeft, UploadCloud, X, Plus, Save } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getProductById, createProduct, updateProduct } from '../../services/productService';
 import API from '../../api/axios';
+import Button from '../../components/Button';
 
 const CATEGORIES = ['Food', 'Toys', 'Accessories', 'Health', 'Grooming', 'Beds'];
 const PET_TYPES = ['Dog', 'Cat', 'Bird', 'Fish', 'Small Pet', 'Universal'];
@@ -331,18 +332,20 @@ const ProductForm = () => {
 
                 {/* Submit Action */}
                 <div className="flex justify-end gap-4 mt-8 border-t pt-6">
-                    <button 
-                        type="button" onClick={() => navigate('/admin/products')}
-                        className="px-6 py-3 rounded-xl font-bold text-on-surface-variant hover:bg-surface-container transition-colors"
+                    <Button 
+                        variant="ghost" onClick={() => navigate('/admin/products')}
+                        className="px-6 py-3"
                     >
                         Cancel
-                    </button>
-                    <button 
-                        type="submit" disabled={submitting || uploadingImage || formData.images.length === 0}
-                        className="px-8 py-3 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark transition-colors flex items-center gap-2 disabled:opacity-50"
+                    </Button>
+                    <Button 
+                        type="submit" 
+                        loading={submitting}
+                        disabled={uploadingImage || formData.images.length === 0}
+                        className="px-8 py-3 bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary-dark"
                     >
-                        {submitting ? 'Saving...' : <><Save size={20} /> Save Product</>}
-                    </button>
+                        <Save size={20} /> Save Product
+                    </Button>
                 </div>
             </form>
 
@@ -376,23 +379,25 @@ const ProductForm = () => {
                         />
 
                         <div className="flex justify-end gap-3">
-                            <button 
+                            <Button 
+                                variant="ghost"
                                 onClick={() => {
                                     setShowPasswordModal(false);
                                     setAdminPassword('');
                                     setPasswordError('');
                                 }}
-                                className="px-5 py-2.5 rounded-xl font-bold text-on-surface-variant hover:bg-surface-container transition-colors"
+                                className="px-5 py-2.5"
                             >
                                 {t('admin.cancel')}
-                            </button>
-                            <button 
+                            </Button>
+                            <Button 
                                 onClick={() => executeSubmit(adminPassword)}
-                                disabled={!adminPassword || submitting}
-                                className="px-5 py-2.5 bg-primary text-white rounded-xl font-bold shadow-md shadow-primary/20 hover:bg-primary-dark disabled:opacity-50 transition-colors"
+                                loading={submitting}
+                                disabled={!adminPassword}
+                                className="px-5 py-2.5 bg-primary text-white shadow-md shadow-primary/20 hover:bg-primary-dark"
                             >
-                                {submitting ? t('admin.verifying') : t('admin.confirm_update')}
-                            </button>
+                                {t('admin.confirm_update')}
+                            </Button>
                         </div>
                     </div>
                 </div>

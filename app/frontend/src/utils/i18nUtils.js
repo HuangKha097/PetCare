@@ -10,3 +10,15 @@ export const getLocalizedText = (field, currentLang) => {
     if (typeof field === 'string') return field;
     return field[currentLang] || field.en || '';
 };
+
+/**
+ * Formats a number to Vietnamese Dong (VNĐ) representation.
+ * 
+ * @param {number} price - The price value to format
+ * @returns {string} The formatted currency string
+ */
+export const formatVND = (price) => {
+    if (price === undefined || price === null || isNaN(price)) return '0đ';
+    return new Intl.NumberFormat('vi-VN').format(Math.round(price)) + 'đ';
+};
+

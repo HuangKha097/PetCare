@@ -179,3 +179,26 @@ exports.updateOrderStatus = async (req, res) => {
         res.status(500).json({ message: 'Failed to update order status' });
     }
 };
+
+exports.getNextOrderId = async (req, res) => {
+    try {
+        const [rows] = await db.execute(
+            `SELECT AUTO_INCREMENT 
+             FROM information_schema.TABLES 
+             WHERE TABLE_SCHEMA = ? 
+             AND TABLE_NAME = 'orders'`,
+            [process.env.DB_NAME]
+        );
+        if (rows.length > 0 && rows[0].AUTO_INCREMENT !== null) {
+            res.json({ nextOrderId: rows[0].AUTO_INCREMENT });
+        } else {
+            const [maxRows] = await db.execute('SELECT MAX(id) as maxId FROM orders');
+            const nextId = (maxRows[0].maxId || 0) + 1;
+            res.json({ nextOrderId: nextId });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to get next order ID' });
+    }
+};
+

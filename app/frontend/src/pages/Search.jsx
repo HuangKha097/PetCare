@@ -177,25 +177,25 @@ const Search = () => {
 
             <div className="flex items-center gap-2 bg-surface-container-low p-1.5 rounded-2xl border border-surface-container-high w-full md:w-auto">
               <div className="flex-grow flex items-center px-4 py-2.5 gap-2 bg-surface rounded-xl shadow-inner border border-surface-container-high/50">
-                <span className="text-[10px] font-black text-on-surface-variant opacity-40">$</span>
                 <input
                   type="number" 
                   placeholder={t('search.min')}
-                  className="w-full md:w-16 bg-transparent border-none p-0 text-sm font-black focus:ring-0 focus:outline-none"
+                  className="w-full md:w-20 bg-transparent border-none p-0 text-sm font-black focus:ring-0 focus:outline-none"
                   value={filters.minPrice}
                   onChange={(e) => setFilter('minPrice', e.target.value)}
                 />
+                <span className="text-[10px] font-black text-on-surface-variant opacity-40">đ</span>
               </div>
               <span className="text-on-surface-variant opacity-20 font-black px-1">/</span>
               <div className="flex-grow flex items-center px-4 py-2.5 gap-2 bg-surface rounded-xl shadow-inner border border-surface-container-high/50">
-                <span className="text-[10px] font-black text-on-surface-variant opacity-40">$</span>
                 <input
                   type="number" 
                   placeholder={t('search.max')}
-                  className="w-full md:w-16 bg-transparent border-none p-0 text-sm font-black focus:ring-0 focus:outline-none"
+                  className="w-full md:w-20 bg-transparent border-none p-0 text-sm font-black focus:ring-0 focus:outline-none"
                   value={filters.maxPrice}
                   onChange={(e) => setFilter('maxPrice', e.target.value)}
                 />
+                <span className="text-[10px] font-black text-on-surface-variant opacity-40">đ</span>
               </div>
             </div>
 

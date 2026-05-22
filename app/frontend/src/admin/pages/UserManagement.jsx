@@ -247,7 +247,7 @@ const UserManagement = () => {
                                             <div className="font-medium text-on-background">{user.email}</div>
                                             <div className="flex items-center gap-4 mt-1 text-xs text-on-surface-variant font-medium">
                                                 <span className="flex items-center gap-1"><ShoppingBag size={12} /> {t('admin_users.orders_count', { count: user.total_orders || 0 })}</span>
-                                                <span className="flex items-center gap-1 text-primary font-bold">{t('admin_users.spent_amount', { amount: Number(user.total_spent || 0).toFixed(2) })}</span>
+                                                <span className="flex items-center gap-1 text-primary font-bold">{t('admin_users.spent_amount', { amount: new Intl.NumberFormat('vi-VN').format(user.total_spent || 0) + 'đ' })}</span>
                                             </div>
                                         </td>
                                         <td className="p-4">
@@ -390,7 +390,7 @@ const UserManagement = () => {
                                                             order.status === 'Cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
                                                         }`}>{t(`admin_orders.${order.status.toLowerCase()}`)}</span>
                                                     </td>
-                                                    <td className="p-4 text-right font-black text-primary">${Number(order.total_amount).toFixed(2)}</td>
+                                                    <td className="p-4 text-right font-black text-primary">{new Intl.NumberFormat('vi-VN').format(order.total_amount)}đ</td>
                                                 </tr>
                                             )) : <tr><td colSpan="4" className="p-8 text-center text-on-surface-variant opacity-50">{t('admin_users.no_orders')}</td></tr>}
                                         </tbody>

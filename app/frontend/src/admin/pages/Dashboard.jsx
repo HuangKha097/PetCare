@@ -5,7 +5,7 @@ import { DollarSign, ShoppingBag, Users, Package, ArrowUpRight, ArrowDownRight }
 import { useTranslation } from 'react-i18next';
 import { getLocalizedText } from '../../utils/i18nUtils';
 
-const StatCard = ({ title, value, prevValue, icon: Icon, prefix = '' }) => {
+const StatCard = ({ title, value, prevValue, icon: Icon, prefix = '', isCurrency = false }) => {
     const isIncrease = value >= prevValue;
     const percentage = prevValue === 0 ? 100 : Math.round(Math.abs((value - prevValue) / prevValue) * 100);
 
@@ -22,7 +22,7 @@ const StatCard = ({ title, value, prevValue, icon: Icon, prefix = '' }) => {
             </div>
             <h3 className="text-on-surface-variant font-medium text-sm mb-1">{title}</h3>
             <div className="text-3xl font-black text-on-background">
-                {prefix}{value.toLocaleString()}
+                {isCurrency ? new Intl.NumberFormat('vi-VN').format(value) + 'đ' : prefix + value.toLocaleString()}
             </div>
         </div>
     );
@@ -82,7 +82,7 @@ const Dashboard = () => {
 
             {/* Stat Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard title={t('admin.revenue')} value={overview.revenue} prevValue={overview.prevRevenue} icon={DollarSign} prefix="$" />
+                <StatCard title={t('admin.revenue')} value={overview.revenue} prevValue={overview.prevRevenue} icon={DollarSign} prefix="" isCurrency={true} />
                 <StatCard title={t('admin.orders')} value={overview.orders} prevValue={overview.prevOrders} icon={ShoppingBag} />
                 <StatCard title={t('admin.customers')} value={overview.users} prevValue={0} icon={Users} />
                 <StatCard title={t('admin.active_products')} value={overview.activeProducts} prevValue={0} icon={Package} />
@@ -97,10 +97,10 @@ const Dashboard = () => {
                             <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
                                 <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} dy={10} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} tickFormatter={(val) => `$${val}`} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} tickFormatter={(val) => new Intl.NumberFormat('vi-VN').format(val) + 'đ'} />
                                 <Tooltip 
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}
-                                    formatter={(value) => [`$${Number(value).toFixed(2)}`, 'Revenue']}
+                                    formatter={(value) => [`${new Intl.NumberFormat('vi-VN').format(value)}đ`, 'Revenue']}
                                 />
                                 <Line type="monotone" dataKey="revenue" stroke="#f06126" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
                             </LineChart>
@@ -154,7 +154,7 @@ const Dashboard = () => {
                                             <span className="font-bold text-on-background line-clamp-1">{getLocalizedText(product.name, i18n.language)}</span>
                                         </div>
                                     </td>
-                                    <td className="p-4">${Number(product.price).toFixed(2)}</td>
+                                    <td className="p-4">{new Intl.NumberFormat('vi-VN').format(product.price)}đ</td>
                                     <td className="p-4">
                                         {product.stock_quantity > 10 ? (
                                             <span className="text-green-600">{product.stock_quantity}</span>

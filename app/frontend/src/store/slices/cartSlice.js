@@ -98,22 +98,40 @@ export const cartSlice = createSlice({
                 state.error = action.payload;
             })
             // Add To Cart
+            .addCase(addToCart.pending, (state) => {
+                state.status = 'loading';
+            })
             .addCase(addToCart.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 handleCartResponse(state, action.payload);
             })
             .addCase(addToCart.rejected, (state, action) => {
+                state.status = 'failed';
                 state.error = action.payload;
             })
             // Update Item
+            .addCase(updateCartItem.pending, (state) => {
+                state.status = 'loading';
+            })
             .addCase(updateCartItem.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 handleCartResponse(state, action.payload);
             })
             .addCase(updateCartItem.rejected, (state, action) => {
+                state.status = 'failed';
                 state.error = action.payload;
             })
             // Remove Item
+            .addCase(removeFromCart.pending, (state) => {
+                state.status = 'loading';
+            })
             .addCase(removeFromCart.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 handleCartResponse(state, action.payload);
+            })
+            .addCase(removeFromCart.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
             });
     }
 });

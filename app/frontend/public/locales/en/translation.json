@@ -81,7 +81,7 @@
     "taxes": "Taxes (Estimated)",
     "total": "Total",
     "checkout": "Checkout Now",
-    "currency_note": "All prices in USD",
+    "currency_note": "All prices in VNĐ",
     "items_removed": "Items removed",
     "quantities_adjusted": "Quantities adjusted",
     "review_selection": "Reviewing {{count}} premium selections.",
@@ -128,6 +128,18 @@
     "success_desc": "Thank you for your purchase, {{name}}. Your pet's treats are being prepared and will be sent to {{city}} soon.",
     "track_order": "Track Order",
     "place_order_failed": "Order failed. Please try again."
+  },
+  "bank_transfer": {
+    "scan_to_pay": "Scan QR code to pay",
+    "open_app": "Open banking app → Scan QR",
+    "bank": "Bank",
+    "account_no": "Account Number",
+    "account_holder": "Account Holder",
+    "amount": "Amount",
+    "content": "Transfer Details",
+    "warning_note": "Please do not modify the transfer details to ensure the fastest order confirmation.",
+    "generating_qr": "Generating dynamic payment QR code...",
+    "please_wait": "Please wait a moment"
   },
   "footer": {
     "desc": "Trusted purveyors to the furry. We only source the finest, ethically produced goods for dogs and cats.",
@@ -386,7 +398,7 @@
           },
           {
             "q": "Do you offer free shipping?",
-            "a": "Yes! Orders over $50 qualify for free standard shipping. We also frequently have free shipping promos for new customers — check the homepage banner for the latest offer."
+            "a": "Yes! Orders over 1.250.000đ qualify for free standard shipping. We also frequently have free shipping promos for new customers — check the homepage banner for the latest offer."
           },
           {
             "q": "Can I track my order?",
@@ -476,7 +488,7 @@
     "write_review": "Write Review",
     "post_review": "Post Review",
     "premium_selection": "Premium Selection",
-    "free_shipping_note": "Free shipping on orders over $50",
+    "free_shipping_note": "Free shipping on orders over 1.250.000đ",
     "natures_purest": "Nature's Purest Nutrition",
     "key_benefits": "Key Benefits",
     "benefit_1": "High-quality protein source",

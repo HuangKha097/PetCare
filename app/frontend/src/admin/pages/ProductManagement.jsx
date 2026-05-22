@@ -185,7 +185,7 @@ const ProductManagement = () => {
                                                 <span>{getLocalizedText(product.category, i18n.language)}</span>
                                             </div>
                                         </td>
-                                        <td className="p-4 font-bold text-on-background">${Number(product.price).toFixed(2)}</td>
+                                        <td className="p-4 font-bold text-on-background">{new Intl.NumberFormat('vi-VN').format(product.price)}đ</td>
                                         <td className="p-4">
                                             {product.stock_quantity > 10 ? (
                                                 <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-green-50 text-green-700 font-bold text-xs">{product.stock_quantity} {t('admin.in_stock')}</span>

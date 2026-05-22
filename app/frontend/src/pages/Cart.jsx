@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
     Trash2, Minus, Plus, ShoppingBag, ArrowRight, ShieldCheck,
     RotateCcw, Headphones, MapPin, CreditCard as CardIcon,
-    CheckCircle2, ChevronLeft, Truck, PackageCheck, AlertTriangle, X
+    CheckCircle2, ChevronLeft, Truck, PackageCheck, AlertTriangle, X, QrCode
 } from 'lucide-react';
 import { fetchCart, updateCartItem, removeFromCart, clearCartLocal, clearNotifications } from '../store/slices/cartSlice';
 import { loginSuccess } from '../store/slices/authSlice';
 import Button from '../components/Button';
 import { updateProfile } from '../services/authService';
-import { createOrder } from '../services/orderService';
-import { getLocalizedText } from '../utils/i18nUtils';
+import { createOrder, getNextOrderId } from '../services/orderService';
+import { getLocalizedText, formatVND } from '../utils/i18nUtils';
+import BankTransferQR from '../components/BankTransferQR';
 
 const Cart = () => {
     const { i18n, t } = useTranslation();
@@ -22,6 +23,10 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const [step, setStep] = useState(1); // 1: Cart, 2: Details, 3: Payment, 4: Success
+    const [completedOrderId, setCompletedOrderId] = useState(null);
+    const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+    const fetchedRef = useRef(false);
     const [orderInfo, setOrderInfo] = useState({
         name: user?.name || '',
         email: user?.email || '',
@@ -49,6 +54,39 @@ const Cart = () => {
             .then(data => setProvinces(data))
             .catch(console.error);
     }, [dispatch]);
+
+    useEffect(() => {
+        if (step !== 3 || orderInfo.paymentMethod !== 'banking') {
+            fetchedRef.current = false;
+            setCompletedOrderId(null);
+            return;
+        }
+
+        const fetchNextOrder = async () => {
+            if (!fetchedRef.current && !isCreatingOrder) {
+                console.log("[Checkout] Fetching next order ID...");
+                fetchedRef.current = true;
+                setIsCreatingOrder(true);
+                try {
+                    const response = await getNextOrderId();
+                    console.log("[Checkout] getNextOrderId response:", response);
+                    if (response.data?.nextOrderId) {
+                        console.log("[Checkout] Setting completedOrderId to:", response.data.nextOrderId);
+                        setCompletedOrderId(response.data.nextOrderId);
+                    } else {
+                        console.warn("[Checkout] nextOrderId not found in response data:", response.data);
+                        fetchedRef.current = false; // Reset to allow retry
+                    }
+                } catch (error) {
+                    console.error('[Checkout] Failed to fetch next order ID:', error);
+                    fetchedRef.current = false; // Reset to allow retry
+                } finally {
+                    setIsCreatingOrder(false);
+                }
+            }
+        };
+        fetchNextOrder();
+    }, [step, orderInfo.paymentMethod]);
 
     const handleUpdateQuantity = (cartItemId, currentQty, change) => {
         const newQty = Math.max(1, currentQty + change);
@@ -126,7 +164,7 @@ const Cart = () => {
     };
 
     const validatePayment = () => {
-        if (orderInfo.paymentMethod === 'cash') return true;
+        if (orderInfo.paymentMethod === 'cash' || orderInfo.paymentMethod === 'banking') return true;
         const { cardNumber, expiry, cvv } = orderInfo;
         return cardNumber && expiry && cvv;
     };
@@ -145,10 +183,11 @@ const Cart = () => {
 
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
-        if (!validatePayment()) {
+        if (!validatePayment() || isPlacingOrder) {
             alert(t('checkout.place_order_failed'));
             return;
         }
+        setIsPlacingOrder(true);
         try {
             // Save as default if checked
             if (orderInfo.saveDefault) {
@@ -175,8 +214,10 @@ const Cart = () => {
                 }
             }
 
-            // Place real order
-            await createOrder({
+
+
+            // Place real order (for COD, Card, or as a fallback for banking)
+            const orderResponse = await createOrder({
                 items: items,
                 totalAmount: totalAmount * 1.08,
                 paymentMethod: orderInfo.paymentMethod,
@@ -186,11 +227,18 @@ const Cart = () => {
                 note: orderInfo.note
             });
 
+            // Capture orderId for bank transfer QR
+            if (orderResponse.data?.orderId) {
+                setCompletedOrderId(orderResponse.data.orderId);
+            }
+
             setStep(4);
             dispatch(clearCartLocal());
         } catch (error) {
             console.error(error);
             alert(t('checkout.place_order_failed'));
+        } finally {
+            setIsPlacingOrder(false);
         }
     };
 
@@ -217,6 +265,7 @@ const Cart = () => {
 
 
     if (step === 4) {
+        // Default success (COD / Card / Banking)
         return (
             <div className="min-h-[80vh] flex items-center justify-center px-6">
                 <div className="max-w-lg w-full text-center bg-white p-12 rounded-[2.5rem] shadow-xl border border-surface-container-low">
@@ -311,21 +360,21 @@ const Cart = () => {
                                                 <h3 className="text-xl font-bold text-on-background leading-tight">{getLocalizedText(item.name, i18n.language)}</h3>
                                                 <p className="text-sm text-on-surface-variant mt-1 font-medium opacity-60">{getLocalizedText(item.category, i18n.language)}</p>
                                             </div>
-                                            <Button variant="ghost" onClick={() => handleRemove(item.cart_item_id)} className="p-2 text-on-surface-variant hover:text-red-500 transition-colors">
+                                            <Button variant="ghost" onClick={() => handleRemove(item.cart_item_id)} className="p-2 text-on-surface-variant hover:text-red-500 transition-colors" disabled={status === 'loading'}>
                                                 <Trash2 size={20} />
                                             </Button>
                                         </div>
                                         <div className="flex justify-between items-center mt-6">
                                             <div className="flex items-center bg-surface-container-low rounded-full p-1 border border-surface-container-high/50">
-                                                <Button variant="custom" onClick={() => handleUpdateQuantity(item.cart_item_id, item.quantity, -1)} className="w-8 h-8 rounded-full flex items-center justify-center bg-white hover:bg-primary hover:text-on-primary transition-all shadow-sm">
+                                                <Button variant="custom" onClick={() => handleUpdateQuantity(item.cart_item_id, item.quantity, -1)} className="w-8 h-8 rounded-full flex items-center justify-center bg-white hover:bg-primary hover:text-on-primary transition-all shadow-sm" disabled={status === 'loading'}>
                                                     <Minus size={14} />
                                                 </Button>
                                                 <span className="px-6 font-bold text-sm">{item.quantity}</span>
-                                                <Button variant="custom" onClick={() => handleUpdateQuantity(item.cart_item_id, item.quantity, 1)} className="w-8 h-8 rounded-full flex items-center justify-center bg-white hover:bg-primary hover:text-on-primary transition-all shadow-sm">
+                                                <Button variant="custom" onClick={() => handleUpdateQuantity(item.cart_item_id, item.quantity, 1)} className="w-8 h-8 rounded-full flex items-center justify-center bg-white hover:bg-primary hover:text-on-primary transition-all shadow-sm" disabled={status === 'loading'}>
                                                     <Plus size={14} />
                                                 </Button>
                                             </div>
-                                            <span className="text-2xl font-black text-on-background">${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}</span>
+                                            <span className="text-2xl font-black text-on-background">{formatVND(parseFloat(item.price) * parseInt(item.quantity))}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -431,7 +480,9 @@ const Cart = () => {
                                 ].map((method) => (
                                     <div
                                         key={method.id}
-                                        onClick={() => setOrderInfo({ ...orderInfo, paymentMethod: method.id })}
+                                        onClick={() => {
+                                            setOrderInfo({ ...orderInfo, paymentMethod: method.id });
+                                        }}
                                         className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${orderInfo.paymentMethod === method.id ? 'border-primary bg-primary/5 shadow-md' : 'border-surface-container-high hover:border-primary/30'}`}
                                     >
                                         <method.icon className={`mb-4 ${orderInfo.paymentMethod === method.id ? 'text-primary' : 'text-on-surface-variant'}`} size={28} />
@@ -459,26 +510,20 @@ const Cart = () => {
                             )}
 
                             {orderInfo.paymentMethod === 'banking' && (
-                                <div className="mt-10 p-8 rounded-xl bg-primary/5 border border-primary/20 animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <h4 className="font-bold mb-4">{t('checkout.bank_info')}</h4>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">{t('checkout.bank_name')}:</span>
-                                            <span className="font-bold">MB Bank</span>
+                                <div className="mt-10 animate-in fade-in slide-in-from-top-2 duration-300">
+                                    {!completedOrderId || isCreatingOrder ? (
+                                        <div className="flex flex-col items-center justify-center p-12 bg-white rounded-[2rem] border border-surface-container-low shadow-lg max-w-md mx-auto">
+                                            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary/20 border-t-primary mb-4"></div>
+                                            <p className="text-sm font-black text-on-surface-variant">{t('bank_transfer.generating_qr')}</p>
+                                            <p className="text-xs font-semibold text-on-surface-variant/60 mt-1">{t('bank_transfer.please_wait')}</p>
                                         </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">{t('checkout.acc_number')}:</span>
-                                            <span className="font-bold text-primary">1234 5678 9999</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">{t('checkout.acc_holder')}:</span>
-                                            <span className="font-bold uppercase">PETCARE VIETNAM</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm">
-                                            <span className="opacity-60">{t('checkout.transfer_content')}:</span>
-                                            <span className="font-bold text-sm">ORD{Math.floor(Math.random() * 10000)}</span>
-                                        </div>
-                                    </div>
+                                    ) : (
+                                        <BankTransferQR
+                                            orderId={completedOrderId}
+                                            totalAmount={totalAmount * 1.08}
+                                            phone={orderInfo.phone}
+                                        />
+                                    )}
                                 </div>
                             )}
 
@@ -511,7 +556,7 @@ const Cart = () => {
                                             <p className="text-sm font-bold truncate">{getLocalizedText(item.name, i18n.language)}</p>
                                             <p className="text-xs font-medium text-on-surface-variant">{t('product.stock')}: {item.quantity}</p>
                                         </div>
-                                        <p className="text-sm font-black">${(item.price * item.quantity).toFixed(2)}</p>
+                                        <p className="text-sm font-black">{formatVND(item.price * item.quantity)}</p>
                                     </div>
                                 ))}
                                 <div className="h-px bg-surface-container-low my-4"></div>
@@ -521,7 +566,7 @@ const Cart = () => {
                         <div className="space-y-4 mb-8">
                             <div className="flex justify-between text-base">
                                 <span className="text-on-surface-variant font-medium">{t('cart.subtotal')}</span>
-                                <span className="font-bold text-on-surface">${totalAmount.toFixed(2)}</span>
+                                <span className="font-bold text-on-surface">{formatVND(totalAmount)}</span>
                             </div>
                             <div className="flex justify-between text-base">
                                 <span className="text-on-surface-variant font-medium">{t('cart.shipping')}</span>
@@ -529,13 +574,13 @@ const Cart = () => {
                             </div>
                             <div className="flex justify-between text-base">
                                 <span className="text-on-surface-variant font-medium">{t('cart.taxes')}</span>
-                                <span className="font-bold text-on-surface">${(totalAmount * 0.08).toFixed(2)}</span>
+                                <span className="font-bold text-on-surface">{formatVND(totalAmount * 0.08)}</span>
                             </div>
                         </div>
                         <div className="flex justify-between items-end mb-8 pt-6 border-t border-surface-container-low">
                             <span className="text-lg font-bold">{t('cart.total')}</span>
                             <div className="text-right">
-                                <span className="text-3xl font-black text-on-background block leading-none">${(totalAmount * 1.08).toFixed(2)}</span>
+                                <span className="text-3xl font-black text-on-background block leading-none">{formatVND(totalAmount * 1.08)}</span>
                                 <span className="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest mt-1 block">{t('cart.currency_note')}</span>
                             </div>
                         </div>
@@ -557,15 +602,23 @@ const Cart = () => {
                             )}
                             {step === 3 && (
                                 <Button
-                                    className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validatePayment() ? 'bg-green-500 hover:bg-green-600 shadow-green-500/30' : 'bg-green-500/50 cursor-not-allowed opacity-60'} text-white`}
+                                    className={`w-full py-4 rounded-2xl text-base font-bold shadow-xl transition-all ${validatePayment() && !isPlacingOrder ? 'bg-green-500 hover:bg-green-600 shadow-green-500/30' : 'bg-green-500/50 cursor-not-allowed opacity-60'} text-white`}
                                     onClick={handlePlaceOrder}
+                                    loading={isPlacingOrder}
+                                    disabled={!validatePayment() || isPlacingOrder}
                                 >
                                     {t('checkout.confirm_order')} <CheckCircle2 size={20} />
                                 </Button>
                             )}
 
                             {step > 1 && (
-                                <button onClick={() => setStep(step - 1)} className="flex items-center justify-center gap-2 text-sm font-bold text-on-surface-variant hover:text-on-background transition-colors">
+                                <button
+                                    onClick={() => {
+                                        setStep(step - 1);
+                                        setCompletedOrderId(null);
+                                    }}
+                                    className="flex items-center justify-center gap-2 text-sm font-bold text-on-surface-variant hover:text-on-background transition-colors"
+                                >
                                     <ChevronLeft size={16} /> {t('common.back')} {step === 2 ? t('checkout.step_cart') : t('checkout.step_details')}
                                 </button>
                             )}

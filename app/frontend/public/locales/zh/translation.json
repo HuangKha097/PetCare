@@ -18,7 +18,7 @@
     "support": "专家支持",
     "organic": "有机选择",
     "member_choice": "会员之选",
-    "free_shipping": "满 $50 免运费",
+    "free_shipping": "满 1.250.000đ 免运费",
     "new_customer_off": "新客户 8 折优惠",
     "flash_sale": "闪购：顶级品牌 7 折优惠",
     "shop_department": "按部门购物",
@@ -50,7 +50,7 @@
     "taxes": "预估税费",
     "total": "总金额",
     "checkout": "立即结账",
-    "currency_note": "币种：美元",
+    "currency_note": "币种：越南盾",
     "items_removed": "商品已移除",
     "quantities_adjusted": "数量已调整",
     "review_selection": "正在检查 {{count}} 项优质宠物选择。",
@@ -97,6 +97,18 @@
     "success_desc": "感谢您的购买，{{name}}。您的宠物零食正在准备中，很快将寄往 {{city}}。",
     "track_order": "追踪我的订单",
     "place_order_failed": "下单失败。请重试。"
+  },
+  "bank_transfer": {
+    "scan_to_pay": "扫描二维码支付",
+    "open_app": "打开手机银行App → 扫描二维码",
+    "bank": "银行",
+    "account_no": "账号",
+    "account_holder": "开户名",
+    "amount": "金额",
+    "content": "转账备注",
+    "warning_note": "请勿更改转账备注，以确保您的订单能以最快速度获得确认。",
+    "generating_qr": "正在生成动态支付二维码...",
+    "please_wait": "请稍候片刻"
   },
   "footer": {
     "desc": "为您毛茸茸的朋友精心挑选。我们只为猫狗提供最优质、来源道德且经过测试的产品。",
@@ -286,7 +298,7 @@
         "label": "订单与配送",
         "items": [
           { "q": "配送需要多长时间？", "a": "标准配送需要 2–4 个工作日。对于胡志明市和河内中午 12 点前下的订单，我们提供次日达快递服务。全国范围内的配送通常在 5 个工作日内送达所有 63 个省份。" },
-          { "q": "你们提供包邮吗？", "a": "是的！订单金额超过 $50 即可享受标准包邮服务。我们还会针对新客户的首单推出包邮活动——请查看首页横幅了解最新优惠。" },
+          { "q": "你们提供包邮吗？", "a": "是的！订单金额超过 1.250.000đ 即可享受标准包邮服务。我们还会针对新客户的首单推出包邮活动——请查看首页横幅了解最新优惠。" },
           { "q": "我可以跟踪我的订单吗？", "a": "当然可以。订单发货后，您将收到一封包含跟踪链接的确认邮件。您也可以随时在“账户 → 订单”选项卡中查看订单状态。" },
           { "q": "如果收到的订单有损坏怎么办？", "a": "如果发生这种情况，我们深表歉意。请拍摄损坏物品的照片，并在送达后 48 小时内联系我们。我们将免费为您补发或全额退款——无需任何理由。" }
         ]
@@ -326,7 +338,7 @@
     "reviews": "评论", "description": "描述", "ingredients": "成分", 
     "write_review": "写评论", "post_review": "提交评论",
     "premium_selection": "精选精品",
-    "free_shipping_note": "订单满 $50 免运费",
+    "free_shipping_note": "订单满 1.250.000đ 免运费",
     "natures_purest": "纯天然营养",
     "key_benefits": "核心优势",
     "benefit_1": "高质量蛋白质来源",
@@ -442,7 +454,7 @@
     "joined_date": "加入日期",
     "actions": "操作",
     "orders_count": "{{count}} 个订单",
-    "spent_amount": "已消费 ${{amount}}",
+    "spent_amount": "已消费 {{amount}}",
     "active": "活跃",
     "banned": "已禁用",
     "no_users": "未找到符合条件的用户。",

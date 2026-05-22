@@ -35,7 +35,7 @@
     "support": "Hỗ trợ chuyên gia",
     "organic": "Lựa chọn hữu cơ",
     "member_choice": "Lựa chọn thành viên",
-    "free_shipping": "MIỄN PHÍ VẬN CHUYỂN TRÊN $50",
+    "free_shipping": "MIỄN PHÍ VẬN CHUYỂN TRÊN 1.250.000đ",
     "new_customer_off": "GIẢM 20% CHO KHÁCH HÀNG MỚI",
     "flash_sale": "FLASH SALE: CÁC THƯƠNG HIỆU HÀNG ĐẦU GIẢM 30%",
     "shop_department": "Mua sắm theo danh mục",
@@ -81,7 +81,7 @@
     "taxes": "Thuế (Dự kiến)",
     "total": "Tổng cộng",
     "checkout": "Thanh toán ngay",
-    "currency_note": "Đơn vị tính: USD",
+    "currency_note": "Đơn vị tính: VNĐ",
     "items_removed": "Sản phẩm đã bị xóa",
     "quantities_adjusted": "Số lượng đã được điều chỉnh",
     "review_selection": "Đang xem lại {{count}} lựa chọn cao cấp.",
@@ -128,6 +128,18 @@
     "success_desc": "Cảm ơn bạn đã mua hàng, {{name}}. Những món quà cho thú cưng của bạn đang được chuẩn bị và sẽ sớm được gửi đến {{city}}.",
     "track_order": "Theo dõi đơn hàng",
     "place_order_failed": "Đặt hàng thất bại. Vui lòng thử lại."
+  },
+  "bank_transfer": {
+    "scan_to_pay": "Quét mã QR để thanh toán",
+    "open_app": "Mở app ngân hàng → Quét QR",
+    "bank": "Ngân hàng",
+    "account_no": "Số tài khoản",
+    "account_holder": "Chủ tài khoản",
+    "amount": "Số tiền",
+    "content": "Nội dung CK",
+    "warning_note": "Vui lòng không thay đổi nội dung chuyển khoản để đơn hàng được xác nhận nhanh nhất.",
+    "generating_qr": "Đang tạo mã QR thanh toán động...",
+    "please_wait": "Vui lòng chờ trong giây lát"
   },
   "footer": {
     "desc": "Nhà cung cấp uy tín cho những người bạn lông xù. Chúng tôi chỉ cung cấp những sản phẩm tốt nhất, có nguồn gốc đạo đức cho Cún và mèo.",
@@ -381,7 +393,7 @@
           },
           {
             "q": "Có miễn phí vận chuyển không?",
-            "a": "Có! Đơn hàng trên $50 sẽ được miễn phí vận chuyển tiêu chuẩn. Chúng tôi cũng thường xuyên có các chương trình khuyến mãi miễn phí vận chuyển cho khách hàng mới — hãy kiểm tra biểu ngữ trang chủ để biết ưu đãi mới nhất."
+            "a": "Có! Đơn hàng trên 1.250.000đ sẽ được miễn phí vận chuyển tiêu chuẩn. Chúng tôi cũng thường xuyên có các chương trình khuyến mãi miễn phí vận chuyển cho khách hàng mới — hãy kiểm tra biểu ngữ trang chủ để biết ưu đãi mới nhất."
           },
           {
             "q": "Tôi có thể theo dõi đơn hàng không?",
@@ -471,7 +483,7 @@
     "write_review": "Viết Đánh Giá",
     "post_review": "Gửi Đánh Giá",
     "premium_selection": "Lựa Chọn Cao Cấp",
-    "free_shipping_note": "Miễn phí vận chuyển cho đơn hàng trên $50",
+    "free_shipping_note": "Miễn phí vận chuyển cho đơn hàng trên 1.250.000đ",
     "natures_purest": "Dinh Dưỡng Thuần Khiết",
     "key_benefits": "Lợi Ích Chính",
     "benefit_1": "Nguồn protein chất lượng cao",
@@ -635,7 +647,7 @@
     "joined_date": "Ngày Tham Gia",
     "actions": "Hành Động",
     "orders_count": "{{count}} đơn hàng",
-    "spent_amount": "Đã chi ${{amount}}",
+    "spent_amount": "Đã chi {{amount}}",
     "active": "Hoạt động",
     "banned": "Đã chặn",
     "no_users": "Không tìm thấy người dùng nào phù hợp.",

@@ -7,6 +7,7 @@ const adminAuth = require('../middleware/adminAuth');
 // User routes
 router.post('/', auth, orderController.createOrder);
 router.get('/my-orders', auth, orderController.getUserOrders);
+router.get('/next-id', auth, orderController.getNextOrderId);
 
 // Admin routes
 router.get('/', auth, adminAuth, orderController.getAllOrders);

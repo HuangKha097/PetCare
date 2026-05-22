@@ -208,7 +208,7 @@ const OrderManagement = () => {
                                             <div className="text-on-surface-variant font-medium text-xs mt-0.5 line-clamp-1 max-w-[200px]">{order.city}</div>
                                         </td>
                                         <td className="p-4">
-                                            <div className="font-black text-on-background text-base">${Number(order.total_amount).toFixed(2)}</div>
+                                            <div className="font-black text-on-background text-base">{new Intl.NumberFormat('vi-VN').format(order.total_amount)}đ</div>
                                             <div className="text-on-surface-variant font-medium mt-1 text-xs uppercase tracking-widest">{order.payment_method}</div>
                                         </td>
                                         <td className="p-4">
@@ -375,8 +375,8 @@ const OrderManagement = () => {
                                                         <span className="font-bold text-sm text-on-background line-clamp-2">{getLocalizedText(item.name, i18n.language)}</span>
                                                     </td>
                                                     <td className="p-4 text-center font-bold">{item.quantity}</td>
-                                                    <td className="p-4 text-right font-medium text-on-surface-variant">${Number(item.price).toFixed(2)}</td>
-                                                    <td className="p-4 text-right font-black text-on-background">${(Number(item.price) * item.quantity).toFixed(2)}</td>
+                                                    <td className="p-4 text-right font-medium text-on-surface-variant">{new Intl.NumberFormat('vi-VN').format(item.price)}đ</td>
+                                                    <td className="p-4 text-right font-black text-on-background">{new Intl.NumberFormat('vi-VN').format(Number(item.price) * item.quantity)}đ</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -393,7 +393,7 @@ const OrderManagement = () => {
                                     </div>
                                     <div className="flex justify-between items-center pt-3 border-t">
                                         <span className="text-lg font-bold text-on-background">{t('admin_orders.total_amount')}</span>
-                                        <span className="text-2xl font-black text-primary">${Number(selectedOrder.total_amount).toFixed(2)}</span>
+                                        <span className="text-2xl font-black text-primary">{new Intl.NumberFormat('vi-VN').format(selectedOrder.total_amount)}đ</span>
                                     </div>
                                 </div>
                             </div>

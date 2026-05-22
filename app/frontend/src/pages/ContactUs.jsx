@@ -257,10 +257,10 @@ const ContactUs = () => {
               </div>
               <Button
                 type="submit"
-                disabled={submitting}
+                loading={submitting}
                 className="w-full flex items-center justify-center gap-2 bg-primary text-on-background px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark hover:scale-[1.02] active:scale-95 transition-all text-base"
               >
-                {submitting ? '...' : t('contact.send_btn')} <Send size={18} />
+                {t('contact.send_btn')} <Send size={18} />
               </Button>
             </form>
           )}
